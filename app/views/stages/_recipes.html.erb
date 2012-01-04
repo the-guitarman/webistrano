@@ -1,7 +1,10 @@
 <% if @stage.recipes.empty? %>
   <br/>
-    No recipes configured yet.<br />
+    No recipes configured yet.
+  <% if current_user.admin? %>
+    <br />
     <%= link_to 'Recipes', recipes_path %> are custom Capistrano tasks and variables that can be used across stages.
+  <% end %>
   <br/>
 <% else %>
   <table class="sortable">

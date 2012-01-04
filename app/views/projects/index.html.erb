@@ -1,10 +1,9 @@
 <fieldset class="fieldset">
-  <legend> <%=h pluralize(Project.count, 'Project')%> listed</legend>
+  <legend> <%=h pluralize(Project.count, 'Project')%> listed for you</legend>
 
 <% if @projects.empty? %>
-<br/>
-    No projects configured yet.<br />
-    Please add a project.
+  <br/>
+    No projects listed for you.
   <br/>
 <% else %>
   <table class="sortable">
@@ -22,17 +21,20 @@
         <td><%=h project.stages.count %></td>
         <td><%=h project.deployments.count %></td>
         <td><%=h project.created_at.to_s(:date_with_day) %></td>
+      <% if current_user.admin? %>
         <td><%= link_to 'Edit', edit_project_path(project) %></td>
         <td><%= link_to 'Clone', clone_form_path(project) %></td>
         <td><%= link_to 'Delete', project_path(project), :confirm => 'Are you sure?', :method => :delete %></td>
+      <% end %>
       </tr>
     <% end %>
   </table>
 <% end %>
 
-<br />
-
-<%= link_to 'New project', new_project_path, :class => 'arrow_link' %>
+<% if current_user.admin? %>
+  <br />
+  <%= link_to 'New project', new_project_path, :class => 'arrow_link' %>
+<% end %>
 
 </fieldset>
 

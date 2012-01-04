@@ -1,6 +1,7 @@
 class DeploymentsController < ApplicationController
-  
+
   before_filter :load_stage
+  before_filter :ensure_user_access, :except => [:show, :latest, :index]
   before_filter :ensure_deployment_possible, :only => [:new, :create]
 
   # GET /projects/1/stages/1/deployments
@@ -19,7 +20,7 @@ class DeploymentsController < ApplicationController
   def show
     @deployment = @stage.deployments.find(params[:id])
     set_auto_scroll
-    
+
     respond_to do |format|
       format.html # show.rhtml
       format.xml  { render :xml => @deployment.to_xml }
@@ -34,7 +35,7 @@ class DeploymentsController < ApplicationController
 
     # Allow description to be passed in via a URL parameter
     @deployment.description = params[:description]
-    
+
     if params[:repeat]
       @original = @stage.deployments.find(params[:repeat])
       @deployment = @original.repeat
@@ -45,10 +46,10 @@ class DeploymentsController < ApplicationController
   # POST /projects/1/stages/1/deployments.xml
   def create
     @deployment = Deployment.new
-    
+
     respond_to do |format|
       if populate_deployment_and_fire
-        
+
         @deployment.deploy_in_background!
 
         format.html { redirect_to project_stage_deployment_url(@project, @stage, @deployment)}
@@ -76,7 +77,7 @@ class DeploymentsController < ApplicationController
       end
     end
   end
-  
+
   # POST /projects/1/stages/1/deployments/1/cancel
   def cancel
     redirect_to "/" and return unless request.post?
@@ -85,7 +86,7 @@ class DeploymentsController < ApplicationController
     respond_to do |format|
       begin
         @deployment.cancel!
-        
+
         flash[:notice] = "Cancelled deployment by killing it"
         format.html { redirect_to project_stage_deployment_url(@project, @stage, @deployment)}
         format.xml  { head :ok }
@@ -94,18 +95,27 @@ class DeploymentsController < ApplicationController
         format.html { redirect_to project_stage_deployment_url(@project, @stage, @deployment)}
         format.xml  do
           @deployment.errors.add("base", e.message)
-          render :xml => @deployment.errors.to_xml 
+          render :xml => @deployment.errors.to_xml
         end
       end
     end
   end
-  
+
   protected
+  def ensure_user_access
+    if current_user.admin? || (current_user.stages.include?(@stage) && !current_user.read_only(@stage))
+      true
+    else
+      flash[:notice] = "Action not allowed"
+      false
+    end
+  end
+
   def ensure_deployment_possible
     if current_stage.deployment_possible?
-        true
+      true
     else
-      respond_to do |format|  
+      respond_to do |format|
         flash[:error] = 'A deployment is currently not possible.'
         format.html { redirect_to project_stage_url(@project, @stage) }
         format.xml  { render :xml => current_stage.deployment_problems.to_xml }
@@ -113,7 +123,7 @@ class DeploymentsController < ApplicationController
       end
     end
   end
-  
+
   def set_auto_scroll
     if params[:auto_scroll].to_s == "true"
       @auto_scroll = true
@@ -121,7 +131,7 @@ class DeploymentsController < ApplicationController
       @auto_scroll = false
     end
   end
-  
+
   # sets @deployment
   def populate_deployment_and_fire
     return Deployment.lock_and_fire do |deployment|
@@ -132,5 +142,5 @@ class DeploymentsController < ApplicationController
       @deployment.user = current_user
     end
   end
-  
+
 end

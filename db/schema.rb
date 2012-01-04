@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110512144542) do
+ActiveRecord::Schema.define(:version => 20120104004050) do
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(:version => 20110512144542) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "projects_users", :id => false, :force => true do |t|
+    t.integer "project_id"
+    t.integer "user_id"
+  end
+
+  add_index "projects_users", ["project_id"], :name => "index_projects_users_on_project_id"
+  add_index "projects_users", ["user_id"], :name => "index_projects_users_on_user_id"
 
   create_table "recipe_versions", :force => true do |t|
     t.integer  "recipe_id"
@@ -115,6 +123,15 @@ ActiveRecord::Schema.define(:version => 20110512144542) do
   end
 
   add_index "stages", ["project_id"], :name => "index_stages_on_project_id"
+
+  create_table "stages_users", :id => false, :force => true do |t|
+    t.integer "stage_id"
+    t.integer "user_id"
+    t.boolean "read_only"
+  end
+
+  add_index "stages_users", ["stage_id"], :name => "index_stages_users_on_stage_id"
+  add_index "stages_users", ["user_id"], :name => "index_stages_users_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"

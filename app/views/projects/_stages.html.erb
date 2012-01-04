@@ -9,13 +9,16 @@
       <th width="33%">#Hosts</th>
       <th width="33%">#Deployments</th>
     </tr>
-  <% for stage in @project.stages %>
+  <% stages = current_user.admin? ? @project.stages : current_user.project_stages(@project) %>
+  <% for stage in stages %>
     <tr class="<%= cycle :even, :odd, :name => 'stages' %>">
       <td><%= link_to h(stage.name), project_stage_path(@project, stage) %></td>
       <td><%=h stage.hosts.count  %></td>
       <td><%=h stage.deployments.count  %></td>
+    <% if current_user.admin? %>
       <td><%= link_to 'Edit', edit_project_stage_path(@project, stage) %></td>
       <td><%= link_to 'Delete', project_stage_path(@project, stage), :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
     </tr>
   <% end %>
   </table>

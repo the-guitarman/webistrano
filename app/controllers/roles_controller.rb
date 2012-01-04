@@ -1,8 +1,9 @@
 class RolesController < ApplicationController
-  
+
   before_filter :load_stage
   before_filter :load_host_choices, :only => [:new, :edit, :update, :create]
-  
+  before_filter :ensure_admin, :only => [:new, :edit, :destroy, :create, :update]
+
   # GET /projects/1/stages/1/roles/1
   # GET /projects/1/stages/1/roles/1.xml
   def show
@@ -70,7 +71,7 @@ class RolesController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   protected
   def load_host_choices
     @host_choices = Host.find(:all, :order => "name ASC").collect {|h| [ h.name, h.id ] }

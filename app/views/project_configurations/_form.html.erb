@@ -26,7 +26,7 @@
 
 <% content_for(:page_scripts) do %>
   <script type="text/javascript">
-  
+
    Event.observe(window, 'load', function(){
       Event.observe('configuration_prompt_on_deploy', 'change', function(){
 
@@ -35,11 +35,9 @@
         } else {
           $('configuration_value').enable();
         }
-      
+
       });
     });
-  
-  
-  
+
   </script>
 <% end %>

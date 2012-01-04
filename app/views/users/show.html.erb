@@ -22,7 +22,7 @@
 			  <b>Email:</b>
 			  <%=h @user.email %>
 			</p>
-      
+
 			<p>
 			  <b>Timezone:</b> <%=h @user.time_zone.to_s %>
 			</p>
@@ -31,12 +31,12 @@
 			</p>
 			<br/>
 			<% if current_user.admin? || current_user == @user %>
-			  <%= link_to 'Edit & change password', edit_user_path(@user), :class => 'arrow_link' %> | 
+			  <%= link_to 'Edit & change password', edit_user_path(@user), :class => 'arrow_link' %><% if current_user.admin? %> |
 			  <% if @user.disabled? %>
 			    <%= link_to 'Enable', enable_user_path(@user), :confirm => 'Are you sure?', :method => :post, :class => 'arrow_link'  %>
 			  <% else %>
 			    <%= link_to 'Disable', user_path(@user), :confirm => 'Are you sure? Disabled users can no longer login.', :method => :delete, :class => 'arrow_link'  %>
-			  <% end %>
+			  <% end %><% end %>
 			<% end %>
   </div>
   <div class="box_bottom"></div>
@@ -54,8 +54,8 @@
 <% content_for(:breadcrumb) do %>
   <% breadcrumb_box do %>
     <%= link_to "Manage users", users_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Users", users_path %> &gt; 
-    User <%= link_to @user.login, user_path(@user) %> 
+    <%= link_to "Users", users_path %> &gt;
+    User <%= link_to @user.login, user_path(@user) %>
   <% end %>
 <% end %>
 

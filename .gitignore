@@ -1,7 +1,11 @@
+.idea
 config/*.yml
-config/webistrano_config.rb
+db/*sqlite*
 tmp/*
 log/*
+templates
+vendor/bundler
+.bundle
 *~
 .DS_Store
 *.tmproj

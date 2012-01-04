@@ -20,10 +20,10 @@
         <td><%=h recipe.description %></td>
         <td><%=h recipe.stages.count %></td>
         <td><%=h recipe.created_at.to_s(:date_with_day) rescue nil %></td>
-        <% if current_user.admin? %>
-          <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-          <td><%= link_to 'Delete', recipe_path(recipe), :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end %>
+      <% if current_user.admin? %>
+        <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
+        <td><%= link_to 'Delete', recipe_path(recipe), :confirm => 'Are you sure?', :method => :delete %></td>
+      <% end %>
       </tr>
     <% end %>
   </table>

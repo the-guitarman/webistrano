@@ -1,3 +1,4 @@
+<% if current_user.admin? %>
 <fieldset class="fieldset">
   <legend>Introduction and help</legend>
   <div style="float: right; padding: 10px 5px 5px 5px;">
@@ -10,16 +11,17 @@
    For help and more documentation, see
    <br />
    <ul>
-     <li><a href="https://github.com/peritor/webistrano/wiki">Wiki</a></li>
-     <li><a href="https://github.com/peritor/webistrano/wiki/Configuration-Parameters">Configuration Parameters</a></li>
-     <li><a href="https://github.com/peritor/webistrano/wiki/FAQ---Frequently-Asked-Questions">FAQ</a></li>
+      <li><a href="https://github.com/peritor/webistrano/wiki">Wiki</a></li>
+      <li><a href="https://github.com/peritor/webistrano/wiki/Configuration-Parameters">Configuration Parameters</a></li>
+      <li><a href="https://github.com/peritor/webistrano/wiki/FAQ---Frequently-Asked-Questions">FAQ</a></li>
    </ul>
    <br />
-   Webistrano is Open Source. Paid support is available by <a href="http://www.peritor.com">Peritor Consulting</a>.
+   Webistrano is Open Source. Paid support is available by <a href="http://www.peritor.com/en/consulting/">Peritor Consulting</a>.
   </div>
 </fieldset>
 
 <br />
+<% end %>
 
 <fieldset class="fieldset">
   <legend>Recent deployments</legend>

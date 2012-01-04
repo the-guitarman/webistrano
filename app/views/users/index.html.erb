@@ -10,27 +10,31 @@
     <tr>
       <th width="1%">Login</th>
       <th width="96%">Email</th>
+    <% if current_user.admin? %>
       <th width="1%">Admin</th>
       <th width="1%">Disabled</th>
+    <% end %>
       <th width="1%">Created At</th>
     </tr>
     <% for user in @users %>
       <tr class="<%= cycle :even, :odd, :name => 'users'  %>">
         <td nowrap><%= link_to h(user.login), user_path(user) %></td>
         <td><%=h user.email %></td>
+      <% if current_user.admin? %>
         <td><%=h user.admin? ? 'Admin' : '' %></td>
         <td>
           <% if user.disabled? %>
             <span style="color:red">disabled</span>
           <% end %>
         </td>
+      <% end %>
         <td><%=h user.created_at.to_s(:date_with_day) %></td>
-        <% if current_user.admin? || current_user == user -%>
-          <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <% end -%>
-        <% if current_user.admin? -%>
-          <td><%= link_to 'Delete', user_path(user), :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end -%>
+      <% if current_user.admin? || current_user == user -%>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+      <% end -%>
+      <% if current_user.admin? -%>
+        <td><%= link_to 'Delete', user_path(user), :confirm => 'Are you sure?', :method => :delete %></td>
+      <% end -%>
       </tr>
     <% end %>
   </table>
