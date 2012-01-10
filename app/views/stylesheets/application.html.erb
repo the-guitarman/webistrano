@@ -1,5 +1,5 @@
 /* GENERAL */
-
+<% base_color = "#A40008" %>
 body {
 	background-color: #F0F0F0;
 	background: url(<%= image_path('peritor_theme/background.gif')%>) repeat;
@@ -37,17 +37,17 @@ pre {
 }
 
 .redtext {
-	color: #A40008;
+	color: <%= base_color %>;
 }
 
 a {
-	color: #A40008;
+	color: <%= base_color %>;
 	font-weight: bold;
 	text-decoration: none
 }
 
 a:hover {
-	color: #A40008;
+	color: <%= base_color %>;
 	font-weight: bold;
 	text-decoration: underline
 }
@@ -261,19 +261,19 @@ a.menu_link {
 }
 
 a.menu_link:hover {
-	color: #A40008;
+	color: <%= base_color %>;
 	background-color: #EEEEEE;
 	font-weight: bold;
 	text-decoration: none;
 }
 
 a.active_menu_link {
-	color: #A40008;
+	color: <%= base_color %>;
 	background-color: #EEEEEE;
 }
 
 a.active_menu_link:hover {
-	color: #A40008;
+	color: <%= base_color %>;
 	background-color: #EEEEEE;
 }
 
@@ -435,14 +435,14 @@ div.small_box_bottom {
 }
 
 .flash_text_error {
-	color: #A40008;
+	color: <%= base_color %>;
 	padding: 15px 5px 12px 70px;
 	background: url(<%= image_path('peritor_theme/warning.gif')%>) left center no-repeat;
   background-position: 20px 0px;
 }
 
 .flash_text_locking {
-	color: #A40008;
+	color: <%= base_color %>;
 	padding: 15px 5px 12px 70px;
 	background: url(<%= image_path('peritor_theme/locked.gif')%>) left center no-repeat;
   background-position: 20px 0px;
@@ -498,7 +498,7 @@ div.flash_box_bottom {
 	margin-bottom: 0px;
 	font-size: 28px;
 	font-weight: bold;
-	color: #A40008;
+	color: <%= base_color %>;
 }
 
 .content h2 {
@@ -515,7 +515,7 @@ div.flash_box_bottom {
 	font-size: 18px;
 	font-weight: bold;
 	text-align: left;
-	color: #A40008
+	color: <%= base_color %>
 }
 
 .clear {
@@ -596,7 +596,7 @@ div.log_output {
 
 .fieldWithErrors input, .fieldWithErrors select, .fieldWithErrors textarea {
   background-color: #FFDFDF;
-  border: 1px solid #A40008;
+  border: 1px solid <%= base_color %>;
   display: inline;
   margin-bottom: 7px;
 }
@@ -681,7 +681,7 @@ tr.disabled_host {
 }
 
 tr.enabled_host {
-	color: #A40008;
+	color: <%= base_color %>;
 }
 
 
