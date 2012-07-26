@@ -1,48 +1,46 @@
-<fieldset class="fieldset">
-  <legend> <%= pluralize(Project.count, 'Project')%> listed</legend>
-
-<% if @projects.empty? %>
-<br/>
-    No projects configured yet.<br />
-    Please add a project.
-  <br/>
-<% else %>
-  <table class="sortable">
-    <tr>
-      <th width="1%">Name</th>
-      <th width="96%">Description</th>
-      <th width="1%">#Stages</th>
-      <th width="1%">#Deploy.</th>
-      <th width="1%">Created At</th>
-    </tr>
-    <% for project in @projects %>
-      <tr class="<%= cycle :even, :odd, :name => 'projects'  %>">
-        <td><%= link_to project.name, project_path(project) %></td>
-        <td><%= project.description %></td>
-        <td><%= project.stages.count %></td>
-        <td><%= project.deployments.count %></td>
-        <td><%= project.created_at.to_s(:date_with_day) %></td>
-        <td><%= link_to 'Edit', edit_project_path(project) %></td>
-        <td><%= link_to 'Clone', clone_form_path(project) %></td>
-        <td><%= link_to 'Delete', project_path(project), :confirm => 'Are you sure?', :method => :delete %></td>
-      </tr>
-    <% end %>
-  </table>
+<% content_for(:page_title) do %>
+  <% @page_title = "Projects" %>
+  <h1>Projects</h1>
 <% end %>
-
-<br />
-
-<%= link_to 'New project', new_project_path, :class => 'arrow_link' %>
-
-</fieldset>
-
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Projects", projects_path %>
+    <li class="active">Projects</li>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Projects" %>
-  <h2>Projects</h2>
-<% end %>
+<section>
+  <h2><%= pluralize(Project.count, 'Project')%> listed</h2>
+
+  <% if @projects.empty? %>
+    No projects configured yet.<br />
+    <%= link_to 'New project', new_project_path %>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Stages</th>
+          <th>Deploy</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= link_to project.name, project_path(project) %></td>
+            <td><%= project.description %></td>
+            <td><%= project.stages.count %></td>
+            <td><%= project.deployments.count %></td>
+            <td><%= project.created_at.to_s(:date_with_day) %></td>
+            <td><%= link_to 'Edit', edit_project_path(project) %></td>
+            <td><%= link_to 'Clone', clone_form_path(project) %></td>
+            <td><%= link_to 'Delete', project_path(project), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <p><%= link_to 'New project', new_project_path, :class => 'arrow_link' %></p>
+</section>

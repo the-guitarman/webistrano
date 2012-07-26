@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110113085919) do
+ActiveRecord::Schema.define(:version => 20120614061529) do
+
+  create_table "activities", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.string   "tag"
+    t.text     "data"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -66,8 +77,8 @@ ActiveRecord::Schema.define(:version => 20110113085919) do
     t.string   "name"
     t.text     "body"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "recipes", :force => true do |t|
@@ -111,22 +122,21 @@ ActiveRecord::Schema.define(:version => 20110113085919) do
 
   create_table "users", :force => true do |t|
     t.string   "login"
-    t.boolean  "admin",                               :default => false
-    t.string   "time_zone",                           :default => "UTC"
+    t.boolean  "admin",                  :default => false
+    t.string   "time_zone",              :default => "UTC"
     t.datetime "disabled_at"
-    t.string   "email",                               :default => "",    :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "",    :null => false
-    t.string   "password_salt",                       :default => "",    :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
-    t.string   "remember_token"
+    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                       :default => 0
+    t.integer  "sign_in_count",          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   add_index "users", ["disabled_at"], :name => "index_users_on_disabled_at"

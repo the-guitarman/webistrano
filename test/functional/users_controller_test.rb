@@ -20,6 +20,18 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
+  test "activity_should_be_created_when_a_user_creted" do
+    admin_login
+
+    assert_difference 'Activity.count', 1 do
+      create_user
+    end
+
+    activity = Activity.where('target_id = ? and target_type = "User"', assigns(:user).id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'user.created'
+  end
+
   test "should_require_login_on_signup" do
     admin_login
 
@@ -186,6 +198,19 @@ class UsersControllerTest < ActionController::TestCase
 
     other.reload
     assert other.disabled?
+  end
+
+  test "activity_should_be_created_when_a_user_updated" do
+    admin = admin_login
+    user  = FactoryGirl.create(:user)
+
+    assert_difference 'Activity.count', 1 do
+      post :update, :id => user.id, :user => {:login => 'foobarrr'}
+    end
+
+    activity = Activity.where('target_id = ? and target_type = "User"', user.id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'user.updated'
   end
 
   test "should_logout_if_disabled_after_login" do

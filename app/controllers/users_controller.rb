@@ -23,6 +23,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
+      add_activity_for(@user, 'user.created')
       flash[:notice] = "Account created"
       respond_with(@user, :location => @user)
     else
@@ -54,6 +55,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update_attributes(params[:user])
+      add_activity_for(@user, 'user.updated')
       flash[:notice] = 'User was successfully updated.'
       respond_with(@user, :location => @user)
     else

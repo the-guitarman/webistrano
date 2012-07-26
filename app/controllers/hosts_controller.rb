@@ -1,8 +1,7 @@
 class HostsController < ApplicationController
   respond_to :html, :xml, :json
-  
   before_filter :ensure_admin, :only => [:new, :edit, :destroy, :create, :update]
-  
+
   # GET /hosts
   # GET /hosts.xml
   def index
@@ -14,10 +13,10 @@ class HostsController < ApplicationController
   # GET /hosts/1.xml
   def show
     @host = Host.find(params[:id])
-    
+
     # TODO - Why not in the model?
     @stages = @host.stages.uniq.sort_by{|x| x.project.name}
-    
+
     respond_with(@host)
   end
 
@@ -39,6 +38,7 @@ class HostsController < ApplicationController
     @host = Host.new(params[:host])
 
     if @host.save
+      add_activity_for(@host, 'host.created')
       flash[:notice] = 'Host was successfully created.'
       respond_with(@host, :location => @host)
     else
@@ -52,6 +52,7 @@ class HostsController < ApplicationController
     @host = Host.find(params[:id])
 
     if @host.update_attributes(params[:host])
+      add_activity_for(@host, 'host.updated')
       flash[:notice] = 'Host was successfully updated.'
       respond_with(@host, :location => @host)
     else

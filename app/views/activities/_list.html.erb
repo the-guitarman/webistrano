@@ -1,0 +1,37 @@
+<% if activities.empty? %>
+  <p>No recent activities.</p>
+<% else %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Tag</th>
+        <th>User</th>
+        <th>Date</th>
+        <th>Changes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% activities.each do |activity| %>
+        <tr>
+          <td><%= activity.tag %></td>
+          <td><%= link_to activity.user.login, user_path(activity.user) %></td>
+          <td><%= activity.created_at.to_s(:log) %></td>
+          <td>
+            <%- if activity.tag !~ /created\Z/ && activity.data['changes'] %>
+              <ul class="unstyled">
+                <%- activity.data['changes'].keys.each do |key| %>
+                  <li><%= key %>
+                    <ul>
+                      <li>Old: <%= activity.data['changes'][key][0] || 'nil' %></li>
+                      <li>New: <%= activity.data['changes'][key][1] || 'nil' %></li>
+                    </ul>
+                  </li>
+                <%- end %>
+              </ul>
+            <%- end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

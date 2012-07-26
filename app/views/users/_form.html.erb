@@ -1,0 +1,45 @@
+<%= flashed_errors(:user) %>
+
+<div class="control-group">
+  <%= form.label :login, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :login, class: "text_field" %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= form.label :email, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :email, class: "text_field" %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= form.label :password, class: "control-label" %>
+  <div class="controls">
+    <%= form.password_field :password, class: "text_field" %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= form.label :password_confirmation, class: "control-label" %>
+  <div class="controls">
+    <%= form.password_field :password_confirmation, class: "text_field" %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= form.label :time_zone, class: "control-label" %>
+  <div class="controls">
+    <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all %>
+  </div>
+</div>
+
+<% if user_signed_in? && current_user.admin? %>
+  <div class="control-group">
+    <%= form.label :admin, class: "control-label" %>
+    <div class="controls">
+      <%= form.check_box :admin %>
+    </div>
+  </div>
+<% end %>

@@ -1,21 +1,22 @@
-<fieldset class="fieldset">
-  <legend>Complete deployment history</legend>
-  <%= render(:partial => 'deployments', :locals => {:deployments => @deployments, :user => @user})%>
-</fieldset>
+<% content_for :page_title do %>
+  <% @page_title = "Deployments of user #{@user.login}" %>
+  <h1>Deployments of user <%= link_to  @user.login, user_path(@user) %></h1>
+<% end %>
 
-<br />
-<%= link_to 'Back to user', user_path(@user), :class => 'arrow_link' %>
-
-<% content_for(:breadcrumb) do %>
+<% content_for :breadcrumb do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to user", user_path(@user), :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Users", users_path %> &gt; 
-    User <%= link_to @user.login, user_path(@user) %> &gt; 
-    Deployments of user <%= link_to @user.login, user_path(@user) %> 
+    <%= link_to "Users", users_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @user.login, user_path(@user) %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @user.login, user_path(@user) %>
+    <span class="divider">&raquo;</span>
+    Deployments
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Deployments of user #{@user.login}" %>
-  <h2>Deployments of user <%= link_to  @user.login, user_path(@user) %></h2>
-<% end %>
+<section>
+  <h2>Complete deployment history</h2>
+  <%= render partial: 'deployments', locals: { deployments: @deployments, user: @user } %>
+  <%= link_to 'Back to user', user_path(@user), :class => 'arrow_link' %>
+</section>

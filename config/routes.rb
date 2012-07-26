@@ -1,5 +1,4 @@
 Webistrano::Application.routes.draw do
-  
   devise_for :users
 
   root :to => 'projects#dashboard'
@@ -43,6 +42,4 @@ Webistrano::Application.routes.draw do
       get :deployments
     end
   end
-
-  # match '/:controller(/:action(/:id))'
 end

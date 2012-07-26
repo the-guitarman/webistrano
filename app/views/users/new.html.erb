@@ -1,14 +1,14 @@
-<%= form_for @user do |f| -%>
-  <%= render('form', :f => f) %>
-
-  <%= link_to 'Back to users', users_path, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
-
-  <p>
-    <%= f.submit "Create user" %>
-  </p>
-<% end -%>
-
 <% content_for(:page_title) do %>
   <% @page_title = "New user" %>
-  <h2>New user</h2>
+  <h1>New user</h1>
 <% end %>
+
+<section>
+  <%= form_for @user, html: { class: "form-horizontal" } do |f| -%>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to users', users_path, :class => 'btn' %>
+  </div>
+<% end -%>
+</section>

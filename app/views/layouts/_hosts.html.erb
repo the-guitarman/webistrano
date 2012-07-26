@@ -1,24 +1,10 @@
-<div class="open" style="<%= show_if_opened(status) %>">
-  <% if Host.count > 0 %>
-    <% for host in Host.find(:all, :order => "name ASC") %>
-      <a href="<%= host_path(host) %>" class="menu_link <%= active_link_class(host) %>" title="<%= host.name %>">
-        <div class="menu_link_title">
-          <%= host.name %>
-        </div>
-      </a>
-    <% end %>
-  <% else %>
-    <div class="menu_item">No host created yet</div>
-    <a href="<%= new_host_path %>" class="menu_link  menu_link_create">
-      <div class="menu_link_title">
-        New host
-      </div>
-    </a>
+<% if Host.count > 0 %>
+  <% for host in Host.find(:all, :order => "name ASC") %>
+    <li><%= link_to host.name, host_path(host) %></li>
   <% end %>
-</div>
-
-<div class="closed" style="<%= show_if_closed(status) %>">
-  <div class="menu_link_title">
-    <%= pluralize(Host.count, 'host')%>
-  </div>
-</div>
+<% else %>
+  <li>
+    No host created yet<br />
+    <%= link_to 'New host', new_host_path%>
+  </li>
+<% end %>

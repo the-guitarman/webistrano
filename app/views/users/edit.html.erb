@@ -1,24 +1,24 @@
-<%= form_for(@user) do |f| %>
-
-  <%= render('form', :f => f)%>
-
-  <%= link_to 'Back to user', @user, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
-
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+<% content_for :page_title do %>
+  <% @page_title = "Edit user #{@user.login}" %>
+  <h1>Edit user <%= user_info(@user)%></h1>
 <% end %>
 
-<% content_for(:breadcrumb) do %>
+<% content_for :breadcrumb do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to user", user_path(@user), :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Users", users_path %> &gt;
-    User <%= link_to @user.login, user_path(@user) %> &gt;
-    Edit user <%= link_to @user.login, user_path(@user) %>
+    <%= link_to "Users", users_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @user.login, user_path(@user) %>
+    <span class="divider">&raquo;</span>
+    Edit
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Edit user #{@user.login}" %>
-  <h2>Edit user <%= user_info(@user)%></h2>
+<section>
+<%= form_for @user, html: { class: "form-horizontal" } do |f| %>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to users', users_path, :class => 'btn' %>
+  </div>
 <% end %>
+</section>

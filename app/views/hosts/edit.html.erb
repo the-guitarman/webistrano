@@ -1,28 +1,26 @@
-<% flashed_errors(:host) %>
-
-<%= form_for(:host, :url => host_path(@host), :html => { :method => :put }) do |f| %>
-  <p>
-    <b>Name (DNS name or IP address)</b><br />
-    <%= f.text_field :name, :style => 'width: 330px' %>
-  </p>
-
-  <%= link_to 'Back to host', @host, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
-
-  <p>
-    <%= submit_tag "Update" %>
-  </p>
+<% content_for :page_title do %>
+  <% @page_title = "Edit host #{@host.name}" %>
+  <h1>Edit host <%= @host.name %></h1>
 <% end %>
 
-<% content_for(:breadcrumb) do %>
+<% content_for :breadcrumb do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to host", @host, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Hosts", hosts_path %> &gt;
-    Host <%= link_to @host.name, @host %>  &gt;
+    <%= link_to "Hosts", hosts_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @host.name, @host %>
+    <span class="divider">&raquo;</span>
     Edit
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Edit host #{@host.name}" %>
-  <h2>Edit host <%= @host.name %></h2>
-<% end %>
+<% flashed_errors(:host) %>
+
+<section>
+  <%= form_for @host, html: { class: "form-horizontal" } do |f| %>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to host', host_path(@host), :class => 'btn' %>
+  </div>
+  <% end %>
+</section>

@@ -2,7 +2,8 @@ class Role < ActiveRecord::Base
   belongs_to :stage
   belongs_to :host
   has_and_belongs_to_many :deployments
-  
+  has_many :activities, :as => :target, :dependent => :destroy
+
   validates :stage, :host,
     :presence => true
   validates :name,

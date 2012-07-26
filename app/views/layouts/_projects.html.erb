@@ -1,37 +1,10 @@
-<div class="open" style="<%= show_if_opened(status) %>">
-  <% if Project.count > 0 %>
-    <% for project in Project.find(:all, :order => "name ASC") %>
-      <a href="<%= project_path(project) %>" class="menu_link <%= active_link_class(project) %>" title="<%= project.name %>">
-        <div class="menu_icons">
-      
-      <%= image_tag('peritor_theme/arrow_menu_right.gif', :width => '20', :height => '20', :border => '0', :style => "#{h( do_not_show_stages_of_project(project))}", :id => "#{h(dom_id(project))}_arrow_right", :onclick => "open_menu('#{h( dom_id(project))}'); return false;" )%>
-      
-      <%= image_tag('peritor_theme/arrow_menu_down.gif', :width => '20', :height => '20', :border => '0', :style => "#{h( show_stages_of_project(project))}", :id => "#{h(dom_id(project))}_arrow_down", :onclick => "close_menu('#{h( dom_id(project))}'); return false;" )%></div>
-        <div class="menu_link_title has_submenu">
-          <%= project.name %>
-        </div>
-      </a>
-      <div id="<%= dom_id(project) %>_stages" style="<%= show_stages_of_project(project) %>">
-      <% if project.stages.count > 0 %>
-        <% for stage in project.stages %>
-          <a href="<%= project_stage_path(project, stage) %>" class="menu_link <%= active_link_class(stage) %>" title="<%= stage.name %>">
-            <div class="menu_link_title" style="padding-left: 30px; *padding-left: 33px"><%= stage.name %></div>
-          </a>
-        <% end %>
-    <% else %>
-      <a href="<%= new_project_stage_path(project) %>" class="menu_link menu_link_new">
-        <div class="menu_link_title" style="padding-left: 30px; *padding-left: 33px">New stage</div>
-      </a>
-    <% end %>
-      </div>
-    <% end %>
-  <% else %>
-    <div class="menu_item">No project created yet</div>
-   <a href="<%= new_project_path %>" class="menu_link  menu_link_create">New project</a>
+<% if Project.count > 0 %>
+  <% for project in Project.find(:all, :order => "name ASC") %>
+    <li><%= link_to project.name, project_path(project) %></li>
   <% end %>
-</div>
-<div class="closed" style="<%= show_if_closed(status) %>">
-  <div class="menu_link_title">
-    <%= pluralize(Project.count, 'project')%>
-  </div>
-</div>
+<% else %>
+  <li>
+    No project created yet<br />
+    <%= link_to 'New project', new_project_path%>
+  </li>
+<% end %>

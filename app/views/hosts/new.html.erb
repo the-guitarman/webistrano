@@ -1,27 +1,24 @@
-<% flashed_errors(:host) %>
-
-<%= form_for(:host, :url => hosts_path) do |f| %>
-  <p>
-    <b>Name (DNS name or IP address)</b><br />
-    <%= f.text_field :name, :style => 'width: 330px' %>
-  </p>
-
-  <%= link_to 'Back to hosts', hosts_path, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
-
-  <p>
-    <%= submit_tag "Create host" %>
-  </p>
-<% end %>
-
-<% content_for(:breadcrumb) do %>
+<% content_for :breadcrumb do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Manage hosts", hosts_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Hosts", hosts_path %> &gt; 
+    <%= link_to "Hosts", hosts_path %>
+    <span class="divider">&raquo;</span>
     New
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
+<% content_for :page_title do %>
   <% @page_title = "New host" %>
-  <h2>New host</h2>
+  <h1>New host</h1>
 <% end %>
+
+<% flashed_errors(:host) %>
+
+<section>
+  <%= form_for @host, html: { class: "form-horizontal" } do |f| %>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to host', hosts_path, :class => 'btn' %>
+  </div>
+  <% end %>
+</section>

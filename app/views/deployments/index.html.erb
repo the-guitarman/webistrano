@@ -1,34 +1,29 @@
-<fieldset class="fieldset">
-  <legend>Complete Deployment history</legend>
-
-<% if @stage.deployments.empty? %>
-  <br/>
-    This stage was never deployed.
-  <br/>
-<% else %>
-  <% @stage.deployments.each do |deployment| %>
-    <%= render(:partial => 'deployments/list_item', :locals => {:deployment => deployment}) %>
-  <% end %>
+<% content_for :page_title do %>
+  <% @page_title = "Deployment history: Project #{current_project.name} - Stage #{current_stage.name} " %>
+  <h1>Deployment history of <%= link_to current_stage.name, [current_project, current_stage] %></h1>
 <% end %>
-<br />
-
-</fieldset>
-
-<br />
-
-<%= link_to "Back", [current_project, current_stage], :class => 'arrow_link' %>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Projects", projects_path %> &gt;
-    Project <%= link_to current_project.name, current_project %> &gt;
-    Stage <%= link_to current_stage.name, [current_project, current_stage] %> &gt;
+    <%= link_to "Projects", projects_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to current_project.name, current_project %>
+    <span class="divider">&raquo;</span>
+    <%= link_to current_stage.name, [current_project, current_stage] %>
+    <span class="divider">&raquo;</span>
     Deployments
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Deployment history: Project #{current_project.name} - Stage #{current_stage.name} " %>
-  <h2>Deployment history of <%= link_to current_stage.name, [current_project, current_stage] %></h2>
-<% end %>
+<section>
+  <h2>Complete Deployment history</h2>
 
+  <% if @stage.deployments.empty? %>
+    <p>This stage was never deployed.</p>
+  <% else %>
+    <%= render partial: 'deployments/list', locals: { deployments: @stage.deployments } %>
+  <% end %>
+<br />
+</section>
+
+<%= link_to "Back", [current_project, current_stage] %>

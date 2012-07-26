@@ -44,6 +44,7 @@ class StagesController < ApplicationController
     @stage = current_project.stages.build(params[:stage])
 
     if @stage.save
+      add_activity_for(@stage, 'stage.created')
       flash[:notice] = 'Stage was successfully created.'
       respond_with(@stage, :location => [current_project, @stage])
     else
@@ -57,6 +58,7 @@ class StagesController < ApplicationController
     @stage = current_project.stages.find(params[:id])
 
     if @stage.update_attributes(params[:stage])
+      add_activity_for(@stage, 'stage.updated')
       flash[:notice] = 'Stage was successfully updated.'
       respond_with(@stage, :location => [current_project, @stage])
     else

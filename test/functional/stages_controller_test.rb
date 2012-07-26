@@ -26,6 +26,16 @@ class StagesControllerTest < ActionController::TestCase
     assert_redirected_to project_stage_path(assigns(:project), assigns(:stage))
   end
 
+  test "activity_should_be_created_when_a_stage_created" do
+    old_count = Activity.count
+    post :create, :stage => { :name => 'Beta' }, :project_id => @project.id
+    assert_equal old_count + 1, Activity.count
+
+    activity = Activity.where('target_id = ? and target_type = "Stage"', assigns(:stage).id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'stage.created'
+  end
+
   test "should_show_stage" do
     get :show, :id => @stage.id, :project_id => @project.id
     assert_response :success
@@ -39,6 +49,16 @@ class StagesControllerTest < ActionController::TestCase
   test "should_update_stage" do
     put :update, :id => @stage.id, :project_id => @project.id, :stage => { :name => 'Gamma' }
     assert_redirected_to project_stage_path(assigns(:project), assigns(:stage))
+  end
+
+  test "activity_should_be_created_when_a_stage_updated" do
+    old_count = Activity.count
+    put :update, :id => @stage.id, :project_id => @project.id, :stage => { :name => 'Gamma' }
+    assert_equal old_count + 1, Activity.count
+
+    activity = Activity.where('target_id = ? and target_type = "Stage"', @stage.id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'stage.updated'
   end
 
   test "should_destroy_stage" do

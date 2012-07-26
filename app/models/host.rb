@@ -1,6 +1,7 @@
 class Host < ActiveRecord::Base
   has_many :roles,  :dependent => :destroy, :uniq => true
   has_many :stages, :through   => :roles,   :uniq => true # XXX uniq does not seem to work! You get all stages, even doubles
+  has_many :activities, :as => :target, :dependent => :destroy
 
   validates :name,
     :uniqueness => true,

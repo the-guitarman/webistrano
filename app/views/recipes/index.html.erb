@@ -22,7 +22,7 @@
         <td><%= recipe.created_at.to_s(:date_with_day) rescue nil %></td>
         <% if current_user.admin? %>
           <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-          <td><%= link_to 'Delete', recipe_path(recipe), :confirm => 'Are you sure?', :method => :delete %></td>
+          <td><%= link_to 'Delete', recipe_path(recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
         <% end %>
       </tr>
     <% end %>

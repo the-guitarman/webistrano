@@ -1,29 +1,20 @@
 <% flashed_errors(:project) %>
-<p>
-  <b>Name</b><br />
-  <%= text_field 'project', 'name', :style =>'width:330px;' %>
-</p>
-<p>
-  <b>Project Type</b><br />
-  <%= select('project', 'template', @templates, { :include_blank => false }) %>
-</p>
-<p>
-  <b>Description</b><br />
-  <%= text_area 'project', 'description', :style =>'width:330px; height: 100px' %>
-</p>
 
-<% content_for(:action_box) do %>
-<div class="small_box">
-  <div class="small_box_top"></div>
-  <div class="small_box_middle" style="min-height: 230px; *height: 230px;">
-     <h3>Project Type:</h3>
-       <% for template in @template_infos %>
-         <div id="<%= template.first %>_desc" class="template_info" style="display:none;">
-             <b><%= template.first.to_s.titleize %>:</b><br />
-             <%= template.last %>
-         </div>
-       <% end %>
+<div class="control-group">
+  <%= form.label :name, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :name, class: "text_field" %>
   </div>
-  <div class="small_box_bottom"></div>
 </div>
-<% end %>
+<div class="control-group">
+  <%= form.label :template, class: "control-label" %>
+  <div class="controls">
+    <%= form.select(:template, @templates, { include_blank: false }) %>
+  </div>
+</div>
+<div class="control-group">
+  <%= form.label :description, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_area :description, class: "input-xlarge" %>
+  </div>
+</div>

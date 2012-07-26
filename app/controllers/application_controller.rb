@@ -58,4 +58,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def add_activity_for(target, tag, data = {})
+    data['changes'] = target.previous_changes.keep_if{ |k,v| k !~ /_at$/ }
+    target.activities.create(user_id: current_user.id, tag: tag, data: data)
+  end
 end

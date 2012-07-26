@@ -30,6 +30,7 @@ class RolesController < ApplicationController
     @role = @stage.roles.build(params[:role])
 
     if @role.save
+      add_activity_for(@role, 'role.created')
       flash[:notice] = 'Role was successfully created.'
       respond_with(@role, :location => [@project, @stage])
     else
@@ -43,6 +44,7 @@ class RolesController < ApplicationController
     @role = @stage.roles.find(params[:id])
 
     if @role.update_attributes(params[:role])
+      add_activity_for(@role, 'role.updated')
       flash[:notice] = 'Role was successfully updated.'
       respond_with(@role, :location => [@project, @stage])
     else

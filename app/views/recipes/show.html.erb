@@ -21,7 +21,7 @@
     </p>
     <% if current_user.admin? %>
       <%= link_to 'Edit latest version', edit_recipe_path(@recipe), :class => 'arrow_link' %> |
-      <%= link_to 'Delete all versions', recipe_path(@recipe), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
+      <%= link_to 'Delete all versions', recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'arrow_link' %>
     <% end %>
 </div>
 

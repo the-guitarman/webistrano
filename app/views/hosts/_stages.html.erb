@@ -1,24 +1,27 @@
 <% if @stages.empty? %>
-  No deployments for this host.
+  <p>No deployments for this host.</p>
 <% else %>
-  <table class="sortable">
-    <tr>
-      <th>Project</th>
-      <th>Stage</th>
-      <th>Role</th>
-    </tr>
-    <% for stage in @stages %>
-      <tr class="<%= cycle :even, :odd, :name => 'stages' %>">
-        <td valign="top"><%= link_to stage.project.name, stage.project %></td>
-        <td valign="top"><%= link_to stage.name, [stage.project, stage] %></td>
-        <td valign="top">
-          <% for role in stage.roles.find(:all, :conditions => ['host_id = ?', @host.id]) %>
-            <%= role.name %>
-            <%= role.role_attribute_hash.inspect unless role.role_attribute_hash.blank?  %>
-            <br />
-          <% end %>
-        </td>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Stage</th>
+        <th>Role</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% @stages.each do |stage| %>
+        <tr>
+          <td><%= link_to stage.project.name, stage.project %></td>
+          <td><%= link_to stage.name, [stage.project, stage] %></td>
+          <td>
+            <% stage.roles.find(:all, :conditions => ['host_id = ?', @host.id]).each do |role| %>
+              <%= role.name %>
+              <%= role.role_attribute_hash.inspect unless role.role_attribute_hash.blank? %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 <% end %>

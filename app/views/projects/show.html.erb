@@ -1,73 +1,78 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle stages_box">
-    <% if @project.stages.count > 0 %>
-      <p><strong>Choose a stage:</strong></p>
-      <% for stage in @project.stages %>
-          <p><%= link_to stage.name, project_stage_path(@project, stage), :class => 'arrow_link'  %></p>
-      <% end %>
-    <% else %>
-      <p><strong>No stage configured yet</strong></p>
-      <%= link_to 'New stage', new_project_stage_path(@project), :class => 'arrow_link' %>
-    <% end %>
-  </div>
-  <div class="special_box_bottom"></div>
-</div>
-
-<div class="box">
-    <p>
-    <b>Description:</b>
-      <%= @project.description %>
-    </p>
-    <p>
-      <b>Project Type:</b>
-      <%= @project.template %>
-    </p>
-    <p>
-    <b>#Deployments:</b>
-    <%= @project.deployments.count %>
-     </p><br />
-    <%= link_to 'Edit project', edit_project_path(@project), :class => 'arrow_link' %> |
-    <%= link_to 'Clone project', clone_form_path(@project), :class => 'arrow_link' %> |
-     <%= link_to 'Delete project', project_path(@project), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
-</div>
-
-<div class="clear"></div>
-<br>
-
-<fieldset class="fieldset">
-  <legend>Project configuration</legend>
-  <%= render(:partial => 'configs')%>
-  <br />
-  <%= link_to 'New configuration', new_project_project_configuration_path(@project), :class => 'arrow_link' %>
-</fieldset>
-
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Stages</legend>
-  <%= render(:partial => 'stages')%>
-  <br />
-  <%= link_to 'New stage', new_project_stage_path(@project), :class => 'arrow_link' %>
-</fieldset>
-
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Recent Deployments</legend>
-  <%= render(:partial => 'deployments')%>
-  <br />
-</fieldset>
+<% content_for(:page_title) do %>
+  <% @page_title = "Project #{current_project.name}" %>
+  <h1>Project <%= link_to current_project.name, project_path(current_project) %></h1>
+<% end %>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Manage projects", projects_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Projects", projects_path %> &gt;
-    Project <%= link_to current_project.name, project_path(current_project) %>
+    <%= link_to "Projects", projects_path %>
+    <span class="divider">&raquo;</span>
+    <%= current_project.name %>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Project #{current_project.name}" %>
-  <h2>Project <%= link_to current_project.name, project_path(current_project) %></h2>
-<% end %>
+<section>
+  <div class="row-fluid">
+    <div class="span5">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th>Description</th>
+            <td><%= @project.description %></td>
+          </tr>
+          <tr>
+            <th>Project Type</th>
+            <td><%= @project.template %></td>
+          </tr>
+          <tr>
+            <th>Deployments</th>
+            <td><%= @project.deployments.count %></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="pull-right">
+        <%= link_to 'Edit project', edit_project_path(@project), :class => 'arrow_link' %> |
+        <%= link_to 'Clone project', clone_form_path(@project), :class => 'arrow_link' %> |
+        <%= link_to 'Delete project', project_path(@project), :data => { :confirm => 'Are you sure?' }, :method => :delete %>
+      </p>
+    </div>
+
+    <div class="span4">
+      <% if @project.stages.count > 0 %>
+        <dl class="dl-horizontal">
+          <dt>Choose a stage:</dt>
+          <% for stage in @project.stages %>
+            <dd><%= link_to stage.name, project_stage_path(@project, stage), :class => 'arrow_link'  %></dd>
+          <% end %>
+        </dl>
+      <% else %>
+        <p>No stage configured yet.</p>
+        <%= link_to 'New stage', new_project_stage_path(@project) %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Project configuration</h2>
+  <%= render(:partial => 'configs')%>
+  <p><%= link_to 'New configuration', new_project_project_configuration_path(@project) %></p>
+</section>
+
+<section>
+  <h2>Stages</h2>
+  <%= render(:partial => 'stages')%>
+  <p><%= link_to 'New stage', new_project_stage_path(@project) %></p>
+</section>
+
+<section>
+  <h2>Recent Deployments</h2>
+  <%= render(:partial => 'deployments')%>
+  <br />
+</section>
+
+<section>
+  <h2>Recent Activities</h2>
+  <%= render partial: 'activities/list', locals: { activities: @project.activities } %>
+  <br />
+</section>

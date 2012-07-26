@@ -1,0 +1,32 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Result</th>
+      <th>Project</th>
+      <th>Stage</th>
+      <th>Task</th>
+      <th>Rev</th>
+      <th>User</th>
+      <th>Started</th>
+      <th>Time</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% deployments.each do |deployment| %>
+      <tr>
+        <td>
+          <a href="<%= project_stage_deployment_path(deployment.stage.project, deployment.stage, deployment) %>"><%= image_tag("peritor_theme/status_#{deployment.status}_small.gif", width: '26', height: '20', border: '0') %></a>
+        </td>
+        <td><%= link_to deployment.stage.project.name, project_path(deployment.stage.project) %></td>
+        <td><%= link_to deployment.stage.name, project_stage_path(deployment.stage.project, deployment.stage) %></td>
+        <td><%= deployment.task %></td>
+        <td><%= truncate(deployment.revision, 6) rescue "" %></td>
+        <td><%= link_to deployment.user.login, user_path(deployment.user) %></td>
+        <td><%= deployment.created_at.to_s(:log) %></td>
+        <td><%= distance_of_time_in_words(deployment.created_at, deployment.completed_at, true) rescue "" %></td>
+        <td><%= deployment.description %></td>
+      </tr>
+    <% end -%>
+  </tbody>
+</table>

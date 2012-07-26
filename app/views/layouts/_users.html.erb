@@ -1,23 +1,10 @@
-<div class="open" style="<%= show_if_opened(status) %>">
-  <% if User.count > 0 %>
-    <% for user in User.find(:all, :order => "login ASC") %>
-      <a href="<%= user_path(user) %>" class="menu_link <%= active_link_class(user) %>" title="<%= user.login %>">
-        <div class="menu_link_title">
-          <%= user.login %>
-        </div>
-      </a>
-    <% end %>
-  <% else %>
-    <div class="menu_item">No user created yet</div>
-    <a href="<%= new_user_path %>" class="menu_link  menu_link_create">
-      <div class="menu_link_title">
-        New user
-      </div>
-    </a>
+<% if User.count > 0 %>
+  <% for user in User.find(:all, :order => "login ASC") %>
+    <li><%= link_to user.login, user_path(user) %></li>
   <% end %>
-</div>
-<div class="closed" style="<%= show_if_closed(status) %>">
-  <div class="menu_link_title">
-    <%= pluralize(User.count, 'user')%>
-  </div>
-</div>
+<% else %>
+  <li>
+    No user created yet<br />
+    <%= link_to 'New user', new_user_path%>
+  </li>
+<% end %>

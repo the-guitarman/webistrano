@@ -1,92 +1,63 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle" style="min-height: 175px; height: 163px;">
-    <div style="padding: 7px 50px 0px 50px; *padding: 0px 50px;"><%= image_tag('peritor_theme/status_' + @deployment.status + '.gif', :title => @deployment.status) %></div>
-      <div class="deployment_status">
-        <b>Status:</b> <%= @deployment.status %>
-        <% if @deployment.cancelling_possible? %>
-          &nbsp; &nbsp;
-          <%= link_to "Cancel", [:cancel, current_project, current_stage, @deployment], :confirm => "Are you sure? Killing this deployment will not cleanup and rollback.", :method => "post", :class => 'arrow_link' %>
-        <% end %>
-        <% if @deployment.completed? %>
-          &nbsp; &nbsp;
-          <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage, :repeat => @deployment.id), :class => 'arrow_link'  %>
-        <% end %>
-      </div>
+<div class="row-fluid">
+  <div class="span5">
+    <dl class="dl-horizontal">
+      <dt>Task:</dt>
+      <dd><%= @deployment.task %></dd>
+
+      <dt>Stage:</dt>
+      <dd><%= link_to @deployment.stage.name, [@project, @stage] %></dd>
+
+      <dt>Deployed by:</dt>
+      <dd><%= user_info(@deployment.user) rescue '' %></dd>
+
+      <dt>Revision:</dt>
+      <dd><%= @deployment.revision %></dd>
+
+      <dt>Started:</dt>
+      <dd><%= @deployment.created_at.to_s(:log) %> (<%= current_user.time_zone rescue 'UTC' %>)</dd>
+
+      <dt>Completed:</dt>
+      <dd><%= "#{@deployment.completed_at.to_s(:log)} (#{current_user.time_zone})" rescue nil %></dd>
+    </dl>
   </div>
-  <div class="special_box_bottom"></div>
+
+  <div class="span4" style="text-align: center">
+    <div><%= image_tag('peritor_theme/status_' + @deployment.status + '.gif', :title => @deployment.status) %></div>
+    <div class="deployment_status">
+      <b>Status:</b> <%= @deployment.status %>
+      <% if @deployment.cancelling_possible? %>
+        <%= link_to "Cancel", [:cancel, current_project, current_stage, @deployment], data: { confirm: "Are you sure? Killing this deployment will not cleanup and rollback." }, method: "post" %>
+      <% end %>
+      <% if @deployment.completed? %>
+        <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage, repeat: @deployment.id) %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<div class="box">
-  <dl>
-    <dt>Task:</dt>
-    <dd><%= @deployment.task %></dd>
+<section>
+  <h2>Comment</h2>
+  <%=web_friendly_text @deployment.description %>
+</sectin>
 
-    <dt>Stage:</dt>
-    <dd><%= link_to @deployment.stage.name, [@project, @stage] %></dd>
+<section>
+  <h2>Log</h2>
+  <div>
+    <input type="checkbox" class="noframe" id="auto_scroll_log" <%= @auto_scroll ? 'checked="checked"' : ''%> >
+    <label for="auto_scroll_log" class="redtext">auto scroll</label>
+  </div>
 
-    <dt>Deployed by:</dt>
-    <dd><%= user_info(@deployment.user) rescue '' %></dd>
-
-    <dt>Revision:</dt>
-    <dd><%= @deployment.revision %></dd>
-
-    <dt>Started:</dt>
-    <dd><%= @deployment.created_at.to_s(:log) %> (<%= current_user.time_zone rescue 'UTC' %>)</dd>
-
-    <dt>Completed:</dt>
-    <dd><%= "#{@deployment.completed_at.to_s(:log)} (#{current_user.time_zone})" rescue nil %></dd>
-  </dl>
-</div>
-
-<div class="clear"></div>
-
-<br />
-
-<fieldset class="fieldset">
-  <legend>Comment</legend>
-  <%= simple_format @deployment.description %>
-</fieldset>
-<br /> <br />
-
-<fieldset class="fieldset">
-  <legend>Log</legend>
-  <div style="float:right; padding: 0px 5px 10px 0px; *padding: 0px"><input type="checkbox" class="noframe" id="auto_scroll_log" <%= @auto_scroll ? 'checked="checked"' : ''%> > <label for="auto_scroll_log" class="redtext"><b>auto scroll</b></label></div>
   <div class="log_output">
     <pre><%= @deployment.log.gsub('\n', "\n") rescue '' %></pre>
   </div>
-</fieldset>
 
-<br />
-
-<table width="100%">
-  <tr>
-    <td width="">
-      <a href="#" onclick="scroll_to_top()" class="arrow_link">Scroll to top</a> | <%= link_to 'Back to stage', [@project, @stage], :class => 'arrow_link', :id => 'back_link_at_the_bottom' %>
-    </td>
-    <td align="right" width="120px">
-      <%= image_tag('peritor_theme/status_' + @deployment.status + '_small.gif', :title => @deployment.status, :width => 20, :heigth => 15, :style => 'vertical-align:middle;') %>
-      <b>Status:</b> <%= @deployment.status %>
-    </td>
-    <td align="right" width="70px">
-      <% if @deployment.completed? %>
-      &nbsp; &nbsp;
-      <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage, :repeat => @deployment.id), :class => 'arrow_link' %>
-      <% end %>
-      <% if @deployment.cancelling_possible? %>
-        &nbsp; &nbsp;
-        <%= link_to "Cancel", [:cancel, current_project, current_stage, @deployment], :confirm => "Are you sure? Killing this deployment will not cleanup and rollback.", :method => "post", :class => 'arrow_link' %>
-      <% end %>
-    </td>
-  </tr>
-</table>
-
-
-
+  <div>
+    <a href="#" onclick="scroll_to_top()" class="arrow_link">Scroll to top</a>
+  </div>
+</section>
 
 <% unless @deployment.completed? %>
   <script type="text/javascript">
-
     function update_status(){
       new Ajax.Updater('status_info','<%= project_stage_deployment_path(@project, @stage, @deployment) %>.js',{
         method: 'get',

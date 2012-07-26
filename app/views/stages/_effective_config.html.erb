@@ -1,23 +1,24 @@
 <h3>Effective Configuration</h3>
 
 <% if @stage.effective_configuration.empty? %>
-  <br/>
-    No effective configuration present. The effective configuration is the result of the stage 
-    specific configuration entries overriding the project configuration entries. 
-  <br/>
+  <p>No effective configuration present. The effective configuration is the result of the stage specific configuration entries overriding the project configuration entries.</p>
 <% else %>
-  <table class="sortable">
-    <tr>
-      <th width="1%">Name</th>
-      <th width="98%">Value</th>
-      <th width="1%">Prompt</th>
-    </tr>
-  <% @stage.effective_configuration.each do |conf| %>
-    <tr class="<%= cycle :even, :odd, :name => 'effective_conf' %>">
-      <td title="<%= conf.name %>"><%= truncate(conf.name, :length => 25) %></td>
-      <td title="<%= conf.value %>"><%= truncate(hide_password_in_value(conf), :length => 45) %></td>
-      <td><%= conf.prompt_status_in_html %></td>
-    </tr>
-  <% end %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Prompt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @stage.effective_configuration.each do |conf| %>
+        <tr>
+          <td><%= truncate(conf.name, length: 25) %></td>
+          <td><%= truncate(hide_password_in_value(conf), length: 45) %></td>
+          <td><%= conf.prompt_status_in_html %></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 <% end %>

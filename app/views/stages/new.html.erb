@@ -1,26 +1,26 @@
-<% flashed_errors(:stage) %>
-
-<%= form_for(:stage, :url => project_stages_path(current_project)) do |f| %>
-  
-  <%= render(:partial => 'form' ) %>
-  
-  <%= link_to 'Back to project', project_path(current_project), :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
-
-  <p>
-    <%= submit_tag "Create" %>
-  </p>
+<% content_for(:page_title) do %>
+  <% @page_title = "New stage for project #{@project.name}" %>
+  <h1>New stage</h1>
 <% end %>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to project", project_path(current_project), :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Projects", projects_path %> &gt; 
-    Project <%= link_to current_project.name, project_path(current_project) %> &gt;  
+    <%= link_to "Projects", projects_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @project.name, project_path(@project) %>
+    <span class="divider">&raquo;</span>
     New
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "New stage for project #{current_project.name}" %>
-  <h2>New stage</h2>
+<% flashed_errors(:stage) %>
+
+<section>
+  <%= form_for @stage, url: project_stages_path(@project), html: { class: "form-horizontal" } do |f| %>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to 'Back to project', project_path(@project), :class => 'btn' %>
+  </div>
 <% end %>
+</section>

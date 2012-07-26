@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :remember_me, :time_zone, :tz, :admin
 
   has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
-
+  has_many :activities, :as => :target, :dependent => :destroy
 
   validates_presence_of   :login
   validates_length_of     :login, :within => 3..40

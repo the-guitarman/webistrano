@@ -1,0 +1,8 @@
+<% if @deployments.empty? %>
+  <p>This user has never deployed any stages.</p>
+<% else %>
+  <%= render partial: 'deployments/list', locals: { deployments: @deployments } %>
+  <% if @deployments.size != @user.deployments.count %>
+    <p><% link_to "Complete deployment history", deployments_user_path(@user) %></p>
+  <% end -%>
+<% end %>

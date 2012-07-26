@@ -1,26 +1,22 @@
-<%= form_for(:project, :url => projects_path) do |f| %>
-<div style="width:335px;">
-
-  <%= render(:partial => 'form')%>
-  
-  <%= link_to 'Back to projects', projects_path, :class => 'arrow_link ontheright' %>
-
-  <p>
-    <%= submit_tag "Create" %>
-  </p>
-</div>
-<% end %>
-
-
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Manage Projects", projects_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Projects", projects_path %> &gt; 
+    <%= link_to "Projects", projects_path %>
+    <span class="divider">&raquo;</span>
     New
   <% end %>
 <% end %>
 
 <% content_for(:page_title) do %>
   <% @page_title = "New project" %>
-  <h2>New project</h2>
+  <h1>New project</h1>
 <% end %>
+
+<section>
+  <%= form_for @project, html: { class: "form-horizontal" } do |f| %>
+  <%= render partial: 'form', locals: { form: f } %>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to "Back to project", projects_path, class: "btn" %>
+  </div>
+  <% end %>
+</section>
