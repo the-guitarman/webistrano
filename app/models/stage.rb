@@ -123,15 +123,15 @@ class Stage < ActiveRecord::Base
   def lock
     # other_self is fetched with an update lock
     other_self = self.class.find(self.id, :lock => true)
-    other_self.update_attribute(:locked, 1)
+    other_self.update_column(:locked, 1)
     self.reload
   end
 
   def unlock
     # other_self is fetched with an update lock
     other_self = self.class.find(self.id, :lock => true)
-    other_self.update_attribute(:locked, 0)
-    other_self.update_attribute(:locked_by_deployment_id, nil)
+    other_self.update_column(:locked, 0)
+    other_self.update_column(:locked_by_deployment_id, nil)
     self.reload
   end
 
@@ -146,7 +146,7 @@ class Stage < ActiveRecord::Base
 
     # other_self is fetched with an update lock
     other_self = self.class.find(self.id, :lock => true)
-    other_self.update_attribute(:locked_by_deployment_id, deployment.id)
+    other_self.update_column(:locked_by_deployment_id, deployment.id)
     self.reload
   end
 
