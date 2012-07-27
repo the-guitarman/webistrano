@@ -21,23 +21,12 @@
 
 <% content_for :page_scripts do %>
   <script type="text/javascript">
-
-    function check_auto_scroll_log(){
-      var scroller = $("auto_scroll_log");
-      var bottom_marker = $('back_link_at_the_bottom');
-
-      if(scroller && scroller.checked && bottom_marker){
-        bottom_marker.scrollTo();
-      }
-    }
-
     function scroll_to_top(){
-      if ( $('auto_scroll_log').checked ){
+      if ( $('#auto_scroll_log').checked ){
         $('auto_scroll_log').checked = false;
       }
 
       $('header').scrollTo();
     }
-
   </script>
 <% end %>
