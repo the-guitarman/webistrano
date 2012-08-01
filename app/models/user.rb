@@ -35,12 +35,12 @@ class User < ActiveRecord::Base
   end
 
   def disable!
-    self.update_attribute(:disabled_at, Time.now)
+    self.update_column(:disabled_at, Time.now)
     self.forget_me!
   end
 
   def enable!
-    self.update_attribute(:disabled_at, nil)
+    self.update_column(:disabled_at, nil)
   end
 
 protected
