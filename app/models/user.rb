@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include LogicallyDeletable
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :registerable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable,

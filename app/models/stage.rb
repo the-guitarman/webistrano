@@ -1,4 +1,6 @@
 class Stage < ActiveRecord::Base  
+  include LogicallyDeletable
+
   belongs_to :project
   has_and_belongs_to_many :recipes
   has_many :roles, :dependent => :destroy, :order => "name ASC"

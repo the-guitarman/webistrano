@@ -1,4 +1,6 @@
 class StageConfiguration < ConfigurationParameter
+  include LogicallyDeletable
+
   belongs_to :stage
   
   validates :stage,

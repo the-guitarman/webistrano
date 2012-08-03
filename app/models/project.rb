@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  include LogicallyDeletable
+
   has_many :stages, :dependent => :destroy, :order => 'name ASC'
   has_many :deployments, :through => :stages
   has_many :configuration_parameters, :dependent => :destroy, :class_name => "ProjectConfiguration", :order => 'name ASC'

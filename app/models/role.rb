@@ -1,4 +1,6 @@
 class Role < ActiveRecord::Base
+  include LogicallyDeletable
+
   belongs_to :stage
   belongs_to :host
   has_and_belongs_to_many :deployments
