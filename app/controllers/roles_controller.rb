@@ -30,7 +30,7 @@ class RolesController < ApplicationController
     @role = @stage.roles.build(params[:role])
 
     if @role.save
-      add_activity_for(@role, 'role.created')
+      add_activity_for(@role, 'created')
       flash[:notice] = 'Role was successfully created.'
       respond_with(@role, :location => [@project, @stage])
     else
@@ -44,7 +44,7 @@ class RolesController < ApplicationController
     @role = @stage.roles.find(params[:id])
 
     if @role.update_attributes(params[:role])
-      add_activity_for(@role, 'role.updated')
+      add_activity_for(@role, 'updated')
       flash[:notice] = 'Role was successfully updated.'
       respond_with(@role, :location => [@project, @stage])
     else
@@ -57,6 +57,7 @@ class RolesController < ApplicationController
   def destroy
     @role = @stage.roles.find(params[:id])
     @role.delete_logically_with_asscociation
+    add_activity_for(@role, 'deleted')
 
     respond_with(@role, :location => [@project, @stage], :notice => 'Role was successfully deleted.')
   end

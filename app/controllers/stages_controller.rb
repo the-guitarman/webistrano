@@ -44,7 +44,7 @@ class StagesController < ApplicationController
     @stage = current_project.stages.build(params[:stage])
 
     if @stage.save
-      add_activity_for(@stage, 'stage.created')
+      add_activity_for(@stage, 'created')
       flash[:notice] = 'Stage was successfully created.'
       respond_with(@stage, :location => [current_project, @stage])
     else
@@ -58,7 +58,7 @@ class StagesController < ApplicationController
     @stage = current_project.stages.find(params[:id])
 
     if @stage.update_attributes(params[:stage])
-      add_activity_for(@stage, 'stage.updated')
+      add_activity_for(@stage, 'updated')
       flash[:notice] = 'Stage was successfully updated.'
       respond_with(@stage, :location => [current_project, @stage])
     else
@@ -71,6 +71,7 @@ class StagesController < ApplicationController
   def destroy
     @stage = current_project.stages.find(params[:id])
     @stage.delete_logically_with_asscociation
+    add_activity_for(@stage, 'deleted')
 
     respond_with(@stage, :location => current_project, :notice => 'Stage was successfully deleted.')
   end

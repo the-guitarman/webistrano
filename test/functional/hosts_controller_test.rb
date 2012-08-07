@@ -57,7 +57,7 @@ class HostsControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Host"', assigns(:host).id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'host.created'
+    assert_equal activity.tag, 'created'
   end
 
   test "should_show_host" do
@@ -108,7 +108,7 @@ class HostsControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Host"', @host.id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'host.updated'
+    assert_equal activity.tag, 'updated'
   end
 
   test "non_admin_should_not_destroy_host" do
@@ -129,5 +129,17 @@ class HostsControllerTest < ActionController::TestCase
     assert_equal old_count - 1, Host.count_logically
 
     assert_redirected_to hosts_path
+  end
+
+  test "activity_should_be_created_when_a_host_destroyed" do
+    @user = admin_login
+
+    old_count = Activity.count
+    delete :destroy, :id => @host.id
+    assert_equal old_count + 1, Activity.count
+
+    activity = Activity.where('target_id = ? and target_type = "Host"', @host.id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'deleted'
   end
 end

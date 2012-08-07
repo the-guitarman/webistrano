@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
     if @project.save
       @project.clone(@original) if load_clone_original
 
-      add_activity_for(@project, 'project.created')
+      add_activity_for(@project, 'created')
       flash[:notice] = 'Project was successfully created.'
       respond_with(@project, :location => @project)
     else
@@ -74,7 +74,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     if @project.update_attributes(params[:project])
-      add_activity_for(@project, 'project.updated')
+      add_activity_for(@project, 'updated')
       flash[:notice] = 'Project was successfully updated.'
       respond_with(@project, :location => @project)
     else
@@ -87,6 +87,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project = Project.find(params[:id])
     @project.delete_logically_with_asscociation
+    add_activity_for(@project, 'deleted')
 
     redirect_to projects_path, :notice => 'Project was successfully deleted.'
   end

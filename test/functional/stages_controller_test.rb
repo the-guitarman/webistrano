@@ -33,7 +33,7 @@ class StagesControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Stage"', assigns(:stage).id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'stage.created'
+    assert_equal activity.tag, 'created'
   end
 
   test "should_show_stage" do
@@ -58,7 +58,7 @@ class StagesControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Stage"', @stage.id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'stage.updated'
+    assert_equal activity.tag, 'updated'
   end
 
   test "should_destroy_stage" do
@@ -67,6 +67,16 @@ class StagesControllerTest < ActionController::TestCase
     assert_equal old_count-1, Stage.count
 
     assert_redirected_to project_path(@project)
+  end
+
+  test "activity_should_be_created_when_a_stage_deleted" do
+    old_count = Activity.count
+    delete :destroy, :id => @stage.id, :project_id => @project.id
+    assert_equal old_count + 1, Activity.count
+
+    activity = Activity.where('target_id = ? and target_type = "Stage"', @stage.id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'deleted'
   end
 
   test "capfile" do
