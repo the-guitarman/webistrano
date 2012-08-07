@@ -1,4 +1,5 @@
 class Deployment < ActiveRecord::Base
+  include LogicallyDeletable
 
   DEPLOY_TASKS    = ['deploy', 'deploy:default', 'deploy:migrations']
   SETUP_TASKS     = ['deploy:setup']

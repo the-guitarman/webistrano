@@ -64,9 +64,8 @@ class HostsController < ApplicationController
   # DELETE /hosts/1.xml
   def destroy
     @host = Host.find(params[:id])
-    @host.destroy
+    @host.delete_logically_with_asscociation
 
-    flash[:notice] = 'Host was successfully deleted.'
-    respond_with(@host)
+    redirect_to hosts_path, :notice => 'Host was successfully deleted.'
   end
 end

@@ -1,4 +1,6 @@
 class ProjectConfiguration < ConfigurationParameter
+  include LogicallyDeletable
+
   belongs_to :project
 
   validates :project,

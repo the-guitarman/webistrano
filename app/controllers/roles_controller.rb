@@ -56,10 +56,9 @@ class RolesController < ApplicationController
   # DELETE /projects/1/stages/1/roles/1.xml
   def destroy
     @role = @stage.roles.find(params[:id])
-    @role.destroy
+    @role.delete_logically_with_asscociation
 
-    flash[:notice] = 'Role was successfully deleted.'
-    respond_with(@role, :location => [@project, @stage])
+    respond_with(@role, :location => [@project, @stage], :notice => 'Role was successfully deleted.')
   end
   
 private

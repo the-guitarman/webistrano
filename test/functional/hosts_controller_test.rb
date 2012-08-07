@@ -124,9 +124,9 @@ class HostsControllerTest < ActionController::TestCase
   test "should_destroy_host" do
     @user = admin_login
 
-    old_count = Host.count
+    old_count = Host.count_logically
     delete :destroy, :id => @host.id
-    assert_equal old_count-1, Host.count
+    assert_equal old_count - 1, Host.count_logically
 
     assert_redirected_to hosts_path
   end
