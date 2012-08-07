@@ -86,10 +86,9 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.xml
   def destroy
     @project = Project.find(params[:id])
-    @project.destroy
+    @project.delete_logically_with_asscociation
 
-    flash[:notice] = 'Project was successfully deleted.'
-    respond_with(@project)
+    redirect_to projects_path, :notice => 'Project was successfully deleted.'
   end
 
 private

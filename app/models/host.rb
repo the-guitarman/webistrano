@@ -15,6 +15,11 @@ class Host < ActiveRecord::Base
 
   before_validation :strip_whitespace
 
+  def delete_logically_with_asscociation
+    delete_logically
+    roles.each { |role| role.delete_logically }
+  end
+
 private
 
   def guard_valid_hostname_or_ip

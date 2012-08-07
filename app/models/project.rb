@@ -65,6 +65,12 @@ class Project < ActiveRecord::Base
     self.reload
   end
 
+  def delete_logically_with_asscociation
+    delete_logically
+    stages.each { |stage| stage.delete_logically }
+    configuration_parameters.each { |param| param.delete_logically }
+  end
+
 private
 
   # creates the default configuration parameters based on the template

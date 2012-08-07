@@ -70,10 +70,9 @@ class StagesController < ApplicationController
   # DELETE /projects/1/stages/1.xml
   def destroy
     @stage = current_project.stages.find(params[:id])
-    @stage.destroy
+    @stage.delete_logically_with_asscociation
 
-    flash[:notice] = 'Stage was successfully deleted.'
-    respond_with(@stage, :location => current_project)
+    respond_with(@stage, :location => current_project, :notice => 'Stage was successfully deleted.')
   end
 
   # GET /projects/1/stages/1/capfile

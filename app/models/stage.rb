@@ -152,6 +152,13 @@ class Stage < ActiveRecord::Base
     self.reload
   end
 
+  def delete_logically_with_asscociation
+    delete_logically
+    roles.each { |role| role.delete_logically }
+    configuration_parameters.each { |param| param.delete_logically }
+    deployments.each { |deployment| deployment.delete_logically }
+  end
+
 protected
 
   def add_deployment_problem(key, desc)
