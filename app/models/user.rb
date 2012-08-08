@@ -22,6 +22,10 @@ class User < ActiveRecord::Base
 
   validate :guard_last_admin, :on => :update
 
+  def name
+    login
+  end
+
   def revoke_admin!
     self.admin = false
     self.save!
