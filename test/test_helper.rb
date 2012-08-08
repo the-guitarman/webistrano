@@ -17,14 +17,6 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   #
 
-  def setup
-    DatabaseCleaner.start
-  end
-
-  def setup
-    DatabaseCleaner.clean
-  end
-
   def prepare_email
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -65,4 +57,12 @@ end
 
 class ActionController::TestCase
   include Devise::TestHelpers
+
+  def setup
+    DatabaseCleaner.start
+  end
+
+  def teardown
+    DatabaseCleaner.clean
+  end
 end

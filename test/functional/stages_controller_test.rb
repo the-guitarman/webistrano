@@ -19,9 +19,9 @@ class StagesControllerTest < ActionController::TestCase
   end
 
   test "should_create_stage" do
-    old_count = Stage.count
+    old_count = Stage.count_logically
     post :create, :stage => { :name => 'Beta' }, :project_id => @project.id
-    assert_equal old_count+1, Stage.count
+    assert_equal old_count+1, Stage.count_logically
 
     assert_redirected_to project_stage_path(assigns(:project), assigns(:stage))
   end
@@ -62,9 +62,9 @@ class StagesControllerTest < ActionController::TestCase
   end
 
   test "should_destroy_stage" do
-    old_count = Stage.count
+    old_count = Stage.count_logically
     delete :destroy, :id => @stage.id, :project_id => @project.id
-    assert_equal old_count-1, Stage.count
+    assert_equal old_count-1, Stage.count_logically
 
     assert_redirected_to project_path(@project)
   end

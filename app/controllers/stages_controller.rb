@@ -41,9 +41,13 @@ class StagesController < ApplicationController
   # POST /projects/1/stages
   # POST /projects/1/stages.xml
   def create
-    @stage = current_project.stages.build(params[:stage])
+    @stage = Stage.unscoped.where(
+      params[:stage].merge(:project_id => current_project.id)
+    ).first_or_create
 
-    if @stage.save
+    if @stage
+      @stage.tap { |s| s.deleted_at = nil }.save
+
       add_activity_for(@stage, 'created')
       flash[:notice] = 'Stage was successfully created.'
       respond_with(@stage, :location => [current_project, @stage])

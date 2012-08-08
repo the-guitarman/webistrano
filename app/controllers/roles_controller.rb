@@ -27,12 +27,17 @@ class RolesController < ApplicationController
   # POST /projects/1/stages/1/roles
   # POST /projects/1/stages/1/roles.xml
   def create
-    @role = @stage.roles.build(params[:role])
+    @role = Role.unscoped.where(
+      :name     => params[:role][:name],
+      :host_id  => params[:role][:host_id],
+      :stage_id => @stage.id
+    ).first_or_create(params[:role].merge(:stage_id => @stage_id))
 
-    if @role.save
+    if @role
+      @role.tap { |r| r.deleted_at = nil }.save
+
       add_activity_for(@role, 'created')
-      flash[:notice] = 'Role was successfully created.'
-      respond_with(@role, :location => [@project, @stage])
+      respond_with(@role, :location => [@project, @stage], :notice => 'Role was successfully created.')
     else
       respond_with(@role)
     end

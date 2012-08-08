@@ -47,7 +47,7 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.xml
   def create
-    @project = Project.new(params[:project])
+    @project = Project.unscoped.where(params[:project]).first_or_create
 
     if load_clone_original
       action_to_render = 'clone'
@@ -55,8 +55,9 @@ class ProjectsController < ApplicationController
       action_to_render = 'new'
     end
 
-    if @project.save
+    if @project
       @project.clone(@original) if load_clone_original
+      @project.tap { |p| p.deleted_at = nil }.save
 
       add_activity_for(@project, 'created')
       flash[:notice] = 'Project was successfully created.'
@@ -106,7 +107,7 @@ private
 
   def load_clone_original
     if params[:clone]
-      @original = Project.find(params[:clone])
+      @original = Project.unscoped.find(params[:clone])
     else
       false
     end
