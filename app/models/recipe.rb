@@ -1,4 +1,6 @@
 class Recipe < ActiveRecord::Base
+  include LogicallyDeletable
+
   has_and_belongs_to_many :stages
   
   validates :name,

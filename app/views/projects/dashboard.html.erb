@@ -30,7 +30,9 @@
       <tbody>
         <% @activities.each do |activity| %>
         <tr>
-          <td><%= link_to truncate(activity.target_type, :length => 21), any_path(activity.target) %></td>
+          <td>
+            <%= activity.target_type %> (<% if activity.target.deleted? -%><%= activity.target.name %><% else -%><%= link_to truncate(activity.target.name, :length => 21), any_path(activity.target) %><% end -%>)
+          </td>
           <td><%= activity.tag %></td>
           <td><%= link_to activity.user.login, user_path(activity.user) %></td>
           <td><%= activity.created_at.to_s(:log) %></td>

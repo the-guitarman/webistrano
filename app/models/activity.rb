@@ -5,4 +5,8 @@ class Activity < ActiveRecord::Base
   belongs_to :target, :polymorphic => true
 
   serialize :data
+
+  def target
+    target_type.constantize.unscoped{ super }
+  end
 end

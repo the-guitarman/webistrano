@@ -1,4 +1,6 @@
 class Host < ActiveRecord::Base
+  include LogicallyDeletable
+
   has_many :roles,  :dependent => :destroy, :uniq => true
   has_many :stages, :through   => :roles,   :uniq => true # XXX uniq does not seem to work! You get all stages, even doubles
   has_many :activities, :as => :target, :dependent => :destroy
@@ -12,6 +14,11 @@ class Host < ActiveRecord::Base
   attr_accessible :name
 
   before_validation :strip_whitespace
+
+  def delete_logically_with_asscociation
+    delete_logically
+    roles.each { |role| role.delete_logically }
+  end
 
 private
 

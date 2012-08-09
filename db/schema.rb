@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614061529) do
+ActiveRecord::Schema.define(:version => 20120803083647) do
 
   create_table "activities", :force => true do |t|
     t.integer  "user_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "prompt_on_deploy", :default => 0
+    t.datetime "deleted_at"
   end
 
   create_table "deployments", :force => true do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.string   "revision"
     t.integer  "pid"
     t.string   "status",            :default => "running"
+    t.datetime "deleted_at"
   end
 
   create_table "deployments_roles", :id => false, :force => true do |t|
@@ -58,9 +60,11 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
   create_table "project_configurations", :force => true do |t|
+    t.datetime "deleted_at"
   end
 
   create_table "projects", :force => true do |t|
@@ -69,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.string   "template"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
   create_table "recipe_versions", :force => true do |t|
@@ -88,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "version",     :default => 1
+    t.datetime "deleted_at"
   end
 
   create_table "recipes_stages", :id => false, :force => true do |t|
@@ -105,9 +111,11 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.integer  "no_release", :default => 0
     t.integer  "ssh_port"
     t.integer  "no_symlink", :default => 0
+    t.datetime "deleted_at"
   end
 
   create_table "stage_configurations", :force => true do |t|
+    t.datetime "deleted_at"
   end
 
   create_table "stages", :force => true do |t|
@@ -118,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.text     "alert_emails"
     t.integer  "locked_by_deployment_id"
     t.integer  "locked",                  :default => 0
+    t.datetime "deleted_at"
   end
 
   create_table "users", :force => true do |t|
@@ -137,6 +146,7 @@ ActiveRecord::Schema.define(:version => 20120614061529) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["disabled_at"], :name => "index_users_on_disabled_at"

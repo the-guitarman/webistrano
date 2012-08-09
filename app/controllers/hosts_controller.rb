@@ -35,10 +35,12 @@ class HostsController < ApplicationController
   # POST /hosts
   # POST /hosts.xml
   def create
-    @host = Host.new(params[:host])
+    @host = Host.unscoped.where(params[:host]).first_or_create
 
-    if @host.save
-      add_activity_for(@host, 'host.created')
+    if @host
+      @host.tap { |h| h.deleted_at = nil }.save
+
+      add_activity_for(@host, 'created')
       flash[:notice] = 'Host was successfully created.'
       respond_with(@host, :location => @host)
     else
@@ -52,7 +54,7 @@ class HostsController < ApplicationController
     @host = Host.find(params[:id])
 
     if @host.update_attributes(params[:host])
-      add_activity_for(@host, 'host.updated')
+      add_activity_for(@host, 'updated')
       flash[:notice] = 'Host was successfully updated.'
       respond_with(@host, :location => @host)
     else
@@ -64,9 +66,9 @@ class HostsController < ApplicationController
   # DELETE /hosts/1.xml
   def destroy
     @host = Host.find(params[:id])
-    @host.destroy
+    @host.delete_logically_with_asscociation
+    add_activity_for(@host, 'deleted')
 
-    flash[:notice] = 'Host was successfully deleted.'
-    respond_with(@host)
+    redirect_to hosts_path, :notice => 'Host was successfully deleted.'
   end
 end

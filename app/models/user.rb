@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include LogicallyDeletable
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :registerable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable,
@@ -19,6 +21,10 @@ class User < ActiveRecord::Base
   scope :admins,   where(:admin => true, :disabled_at => nil)
 
   validate :guard_last_admin, :on => :update
+
+  def name
+    login
+  end
 
   def revoke_admin!
     self.admin = false

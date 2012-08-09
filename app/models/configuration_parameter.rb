@@ -1,4 +1,6 @@
 class ConfigurationParameter < ActiveRecord::Base
+  include LogicallyDeletable
+
   attr_accessible :name, :value, :prompt_on_deploy
 
   validates :name,

@@ -41,10 +41,14 @@ class StagesController < ApplicationController
   # POST /projects/1/stages
   # POST /projects/1/stages.xml
   def create
-    @stage = current_project.stages.build(params[:stage])
+    @stage = Stage.unscoped.where(
+      params[:stage].merge(:project_id => current_project.id)
+    ).first_or_create
 
-    if @stage.save
-      add_activity_for(@stage, 'stage.created')
+    if @stage
+      @stage.tap { |s| s.deleted_at = nil }.save
+
+      add_activity_for(@stage, 'created')
       flash[:notice] = 'Stage was successfully created.'
       respond_with(@stage, :location => [current_project, @stage])
     else
@@ -58,7 +62,7 @@ class StagesController < ApplicationController
     @stage = current_project.stages.find(params[:id])
 
     if @stage.update_attributes(params[:stage])
-      add_activity_for(@stage, 'stage.updated')
+      add_activity_for(@stage, 'updated')
       flash[:notice] = 'Stage was successfully updated.'
       respond_with(@stage, :location => [current_project, @stage])
     else
@@ -70,10 +74,10 @@ class StagesController < ApplicationController
   # DELETE /projects/1/stages/1.xml
   def destroy
     @stage = current_project.stages.find(params[:id])
-    @stage.destroy
+    @stage.delete_logically_with_asscociation
+    add_activity_for(@stage, 'deleted')
 
-    flash[:notice] = 'Stage was successfully deleted.'
-    respond_with(@stage, :location => current_project)
+    respond_with(@stage, :location => current_project, :notice => 'Stage was successfully deleted.')
   end
 
   # GET /projects/1/stages/1/capfile

@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
-      add_activity_for(@user, 'user.created')
+      add_activity_for(@user, 'created')
       flash[:notice] = "Account created"
       respond_with(@user, :location => @user)
     else
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update_attributes(params[:user])
-      add_activity_for(@user, 'user.updated')
+      add_activity_for(@user, 'updated')
       flash[:notice] = 'User was successfully updated.'
       respond_with(@user, :location => @user)
     else
@@ -73,6 +73,7 @@ class UsersController < ApplicationController
     else
       @user.disable!
       flash[:notice] = 'User was successfully disabled.'
+      add_activity_for(@user, 'deleted')
     end
 
     respond_with(@user)

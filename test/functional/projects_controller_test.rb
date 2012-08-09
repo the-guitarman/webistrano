@@ -60,7 +60,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Project"', assigns(:project).id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'project.created'
+    assert_equal activity.tag, 'created'
   end
 
   test "should_show_project" do
@@ -111,7 +111,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "Project"', @project.id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'project.updated'
+    assert_equal activity.tag, 'updated'
   end
 
   test "non_admin_should_not_destroy_project" do
@@ -132,6 +132,18 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal old_count-1, Project.count
 
     assert_redirected_to projects_path
+  end
+
+  test "activity_should_be_created_when_a_project_deleted" do
+    @user = admin_login
+
+    old_count = Activity.count
+    delete :destroy, :id => @project.id
+    assert_equal old_count + 1, Activity.count
+
+    activity = Activity.where('target_id = ? and target_type = "Project"', @project.id).first
+    assert_not_nil activity
+    assert_equal activity.tag, 'deleted'
   end
 
   test "clone" do

@@ -2,6 +2,10 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
+require 'database_cleaner'
+DatabaseCleaner.strategy = :truncation
+DatabaseCleaner.clean_with(:truncation)
+
 class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -53,4 +57,12 @@ end
 
 class ActionController::TestCase
   include Devise::TestHelpers
+
+  def setup
+    DatabaseCleaner.start
+  end
+
+  def teardown
+    DatabaseCleaner.clean
+  end
 end

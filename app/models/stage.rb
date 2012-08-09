@@ -1,4 +1,6 @@
 class Stage < ActiveRecord::Base  
+  include LogicallyDeletable
+
   belongs_to :project
   has_and_belongs_to_many :recipes
   has_many :roles, :dependent => :destroy, :order => "name ASC"
@@ -148,6 +150,13 @@ class Stage < ActiveRecord::Base
     other_self = self.class.find(self.id, :lock => true)
     other_self.update_column(:locked_by_deployment_id, deployment.id)
     self.reload
+  end
+
+  def delete_logically_with_asscociation
+    delete_logically
+    roles.each { |role| role.delete_logically }
+    configuration_parameters.each { |param| param.delete_logically }
+    deployments.each { |deployment| deployment.delete_logically }
   end
 
 protected

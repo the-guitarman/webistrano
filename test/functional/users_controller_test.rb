@@ -29,7 +29,7 @@ class UsersControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "User"', assigns(:user).id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'user.created'
+    assert_equal activity.tag, 'created'
   end
 
   test "should_require_login_on_signup" do
@@ -210,7 +210,7 @@ class UsersControllerTest < ActionController::TestCase
 
     activity = Activity.where('target_id = ? and target_type = "User"', user.id).first
     assert_not_nil activity
-    assert_equal activity.tag, 'user.updated'
+    assert_equal activity.tag, 'updated'
   end
 
   test "should_logout_if_disabled_after_login" do

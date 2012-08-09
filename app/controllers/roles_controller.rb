@@ -27,12 +27,17 @@ class RolesController < ApplicationController
   # POST /projects/1/stages/1/roles
   # POST /projects/1/stages/1/roles.xml
   def create
-    @role = @stage.roles.build(params[:role])
+    @role = Role.unscoped.where(
+      :name     => params[:role][:name],
+      :host_id  => params[:role][:host_id],
+      :stage_id => @stage.id
+    ).first_or_create(params[:role].merge(:stage_id => @stage_id))
 
-    if @role.save
-      add_activity_for(@role, 'role.created')
-      flash[:notice] = 'Role was successfully created.'
-      respond_with(@role, :location => [@project, @stage])
+    if @role
+      @role.tap { |r| r.deleted_at = nil }.save
+
+      add_activity_for(@role, 'created')
+      respond_with(@role, :location => [@project, @stage], :notice => 'Role was successfully created.')
     else
       respond_with(@role)
     end
@@ -44,7 +49,7 @@ class RolesController < ApplicationController
     @role = @stage.roles.find(params[:id])
 
     if @role.update_attributes(params[:role])
-      add_activity_for(@role, 'role.updated')
+      add_activity_for(@role, 'updated')
       flash[:notice] = 'Role was successfully updated.'
       respond_with(@role, :location => [@project, @stage])
     else
@@ -56,10 +61,10 @@ class RolesController < ApplicationController
   # DELETE /projects/1/stages/1/roles/1.xml
   def destroy
     @role = @stage.roles.find(params[:id])
-    @role.destroy
+    @role.delete_logically_with_asscociation
+    add_activity_for(@role, 'deleted')
 
-    flash[:notice] = 'Role was successfully deleted.'
-    respond_with(@role, :location => [@project, @stage])
+    respond_with(@role, :location => [@project, @stage], :notice => 'Role was successfully deleted.')
   end
   
 private

@@ -52,9 +52,8 @@ class StageConfigurationsController < ApplicationController
   # DELETE /project/1/stage/1/stage_configurations/1.xml
   def destroy
     @configuration = @stage.configuration_parameters.find(params[:id])
-    @configuration.destroy
+    @configuration.delete_logically_with_asscociation
 
-    flash[:notice] = 'StageConfiguration was successfully deleted.'
-    respond_with(@configuration, :location => [@project, @stage])
+    respond_with(@configuration, :location => [@project, @stage], :notice => 'StageConfiguration was successfully deleted.')
   end
 end
