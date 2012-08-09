@@ -6,7 +6,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects/dashboard
   def dashboard
-    @deployments = Deployment.find(:all, :limit => 3, :order => 'created_at DESC')
+    @deployments = Deployment.find(:all, :limit => 10, :order =>
+      'created_at DESC')
     @activities = Activity.find(:all, :limit => 10, :order => 'created_at DESC')
     respond_with(@deployments)
   end
