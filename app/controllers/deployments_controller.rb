@@ -99,7 +99,11 @@ class DeploymentsController < ApplicationController
   # sets @deployment
   def populate_deployment_and_fire
     return Deployment.lock_and_fire do |deployment|
-      deployment_params = params[:deployment] || {}
+      host_ids = params[:deployment].delete(:host_ids) || []
+      excluded_host_ids = current_stage.hosts.map { |h| h.id.to_s } - host_ids
+      params[:deployment][:excluded_host_ids] = excluded_host_ids
+
+      deployment_params = params[:deployment]
       prompt_config     = deployment_params[:prompt_config] || {}
 
       @deployment = deployment
