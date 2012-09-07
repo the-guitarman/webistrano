@@ -57,8 +57,8 @@
       <h3>Deploying hosts</h3>
       <% if @stage.roles.count > 0 %>
         <% for host in @stage.hosts.sort_by{|x| x.name} %>
-          <input type="checkbox" value="<%= host.id %>" name="deployment[excluded_host_ids][]" id="deployment_excluded_host_ids_<%= host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? '' : 'checked="checked"' rescue '')%>/>
-          <label for="deployment_excluded_host_ids_<%= host.id %>"><%= host.name %></label>
+          <input type="checkbox" value="<%= host.id %>" name="deployment[host_ids][]" id="deployment_host_ids_<%= host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? '' : 'checked="checked"' rescue '')%>/>
+          <label for="deployment_host_ids_<%= host.id %>"><%= host.name %></label>
         <% end %>
       <% else %>
         No hosts for this stage!<br /><br />
