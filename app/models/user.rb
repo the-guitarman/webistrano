@@ -2,6 +2,35 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
   has_and_belongs_to_many :projects
+    
+	has_many :stages_user
+
+	has_many :stages , :through => :stages_user
+
+	def read_only(stage)
+
+  		su = stages_user.find_by_stage_id(stage.id)
+
+		return su.read_only? if su
+
+		return false
+
+  	end
+
+	def access(stage)
+
+		(stages_user.find_by_stage_id(stage.id).read_only?)? 'read only' : 'full access'
+
+	end
+
+	def project_stages(project)
+
+		return stages if !stages
+
+	  	stages.select{|stage| stage.project.id == project.id}
+
+	end
+
   has_many :stages_user
   has_many :stages, :through => :stages_user
 

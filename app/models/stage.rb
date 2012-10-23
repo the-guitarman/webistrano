@@ -1,4 +1,9 @@
 class Stage < ActiveRecord::Base
+    
+	has_many :stages_user
+
+	has_many :users , :through => :stages_user
+
   belongs_to :project
   belongs_to :locking_deployment, :class_name => 'Deployment', :foreign_key => :locked_by_deployment_id
   has_many :stages_user, :dependent => :destroy

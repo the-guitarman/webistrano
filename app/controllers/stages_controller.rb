@@ -1,6 +1,11 @@
 class StagesController < ApplicationController
 
   before_filter :load_project
+    
+		before_filter :ensure_user, :only => [:show]
+
+		before_filter :ensure_user_access, :only => [:edit, :update, :destroy, :capfile, :recipes]
+
   before_filter :ensure_admin, :only => [:new, :edit, :destroy, :create, :update]
   before_filter :ensure_user, :only => [:index, :show]
 
@@ -106,7 +111,43 @@ class StagesController < ApplicationController
 
   # GET | PUT /projects/1/stages/1/recipes
   # GET /projects/1/stages/1/recipes.xml
-  def recipes
+  
+    
+	def ensure_user
+
+		if current_user.stages.include?( Stage.find(params[:id])) || ensure_admin
+ 
+			return true
+
+		else
+     	
+			flash[:notice] = "Action not allowed"
+
+			return false
+
+		end
+
+	end
+
+	def ensure_user_access
+
+		@stage = Stage.find(params[:id])
+
+		if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
+ 
+			return true
+
+		else
+     	
+				flash[:notice] = "Action not allowed"
+
+				return false
+
+		end
+
+	end
+
+	def recipes
     @stage = current_project.stages.find(params[:id])
     if request.put?
       @stage.recipe_ids = params[:stage][:recipe_ids] rescue []

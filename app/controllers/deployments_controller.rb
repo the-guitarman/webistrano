@@ -2,6 +2,8 @@ class DeploymentsController < ApplicationController
 
   before_filter :load_stage
   before_filter :ensure_user_access, :except => [:show, :latest, :index]
+
+  before_filter :ensure_user_access, :except => [:show, :latest, :index]
   before_filter :ensure_deployment_possible, :only => [:new, :create]
 
   # GET /projects/1/stages/1/deployments
@@ -102,6 +104,23 @@ class DeploymentsController < ApplicationController
   end
 
   protected
+
+		def ensure_user_access
+
+			if (current_user.stages.include?( @stage) && !current_user.read_only(@stage)) || ensure_admin
+
+				return true
+
+			else
+
+				flash[:notice] = "Action not allowed"
+
+				return false
+
+	    		end
+
+		end
+
   def ensure_user_access
     if current_user.admin? || (current_user.stages.include?(@stage) && !current_user.read_only(@stage))
       true

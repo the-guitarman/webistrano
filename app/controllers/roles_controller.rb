@@ -73,6 +73,23 @@ class RolesController < ApplicationController
   end
 
   protected
+
+		def ensure_user_access
+
+			if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
+ 
+			return true
+
+			else
+
+					flash[:notice] = "Action not allowed"
+
+					return false
+
+			end
+
+		end
+
   def load_host_choices
     @host_choices = Host.find(:all, :order => "name ASC").collect {|h| [ h.name, h.id ] }
   end
