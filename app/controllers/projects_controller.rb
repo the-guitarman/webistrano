@@ -12,7 +12,10 @@ class ProjectsController < ApplicationController
       @deployments = Deployment.find(:all, :limit => 3, :order => 'created_at DESC')
     elsif !self.current_user.stage_ids.empty?
       @deployments = Deployment.find(:all, :conditions => ["stage_id IN (?)", self.current_user.stage_ids], :limit => 3, :order => 'created_at DESC')
+    else
+      @deployments = []
     end
+
 
     respond_to do |format|
       format.html # dashboard.rhtml
