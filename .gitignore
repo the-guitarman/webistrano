@@ -10,5 +10,4 @@ vendor/bundler
 .DS_Store
 *.tmproj
 .idea
-.rvmrc
 nbproject
