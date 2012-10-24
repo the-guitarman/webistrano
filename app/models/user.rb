@@ -1,11 +1,26 @@
 class User < ActiveRecord::Base
   include LogicallyDeletable
-  has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
-  has_and_belongs_to_many :projects
-    
-	has_many :stages_user
 
-	has_many :stages , :through => :stages_user
+  # Virtual attribute for the unencrypted password
+  attr_accessor :password
+
+  has_many :stages_user
+  has_many :stages, :through => :stages_user
+  has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
+  has_many :activities, :as => :target, :dependent => :destroy
+  has_and_belongs_to_many :projects
+
+    attr_accessible :login, :email, :password, :password_confirmation, :time_zone, :tz
+
+  validates_presence_of     :login, :email
+  validates_presence_of     :password,                   :if => :password_required?
+  validates_presence_of     :password_confirmation,      :if => :password_required?
+  validates_length_of       :password, :within => 4..40, :if => :password_required?
+  validates_confirmation_of :password,                   :if => :password_required?
+  validates_length_of       :login,    :within => 3..40
+  validates_length_of       :email,    :within => 3..100
+  validates_uniqueness_of   :login, :email, :case_sensitive => false
+      
 
 	def read_only(stage)
     su = stages_user.find_by_stage_id(stage.id)
@@ -22,26 +37,9 @@ class User < ActiveRecord::Base
     stages.select{|stage| stage.project.id == project.id}
 	end
 
-  has_many :stages_user
-  has_many :stages, :through => :stages_user
-  has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
-  has_many :activities, :as => :target, :dependent => :destroy
 
 
-  # Virtual attribute for the unencrypted password
-  attr_accessor :password
 
-  attr_accessible :login, :email, :password, :password_confirmation, :time_zone, :tz
-
-  validates_presence_of     :login, :email
-  validates_presence_of     :password,                   :if => :password_required?
-  validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 4..40, :if => :password_required?
-  validates_confirmation_of :password,                   :if => :password_required?
-  validates_length_of       :login,    :within => 3..40
-  validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :login, :email, :case_sensitive => false
-  before_save :encrypt_password
 
   def validate_on_update
     if User.find(self.id).admin? && !self.admin?

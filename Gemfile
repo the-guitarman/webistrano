@@ -1,10 +1,10 @@
 source "http://rubygems.org"
 
 gem 'bundler', "1.2.1"
-gem "mysql2", "0.2.17"
+gem "mysql2", "0.3.11"
 gem 'rails', '3.2.8'
 gem "erubis"
-gem "rake", "~>0.8.7"
+gem "rake", "0.9.2.2"
 gem "rdoc"
 gem "syntax",     '1.0.0'
 gem "capistrano", '~> 2.13'
@@ -16,7 +16,10 @@ gem 'devise-encryptable'
 gem 'haml'
 
 group :development do
-  gem "ruby-debug"
+  gem "debugger"
+  gem 'guard-bundler'
+  gem 'guard-livereload'
+  gem 'rack-livereload'
 end
 
 group :test do
@@ -30,6 +33,7 @@ group :test do
   gem 'capybara'
 
   gem 'guard'
+
   gem 'spork'
   gem 'rb-fsevent'
   gem 'guard-test'
@@ -38,7 +42,6 @@ group :test do
 end
 
 group :production do
-  gem 'mysql2'
   gem 'unicorn'
 end
 
