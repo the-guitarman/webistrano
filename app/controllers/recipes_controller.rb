@@ -71,7 +71,7 @@ class RecipesController < ApplicationController
   # DELETE /recipes/1.xml
   def destroy
     @recipe = Recipe.find(params[:id])
-    @recipe.destroy
+    @recipe.delete_logically_with_asscociation
     flash[:notice] = 'Recipe was successfully deleted.'
 
     respond_to do |format|
@@ -83,11 +83,8 @@ class RecipesController < ApplicationController
   def preview
     @recipe = Recipe.new(params[:recipe])
     respond_to do |format|
-      format.js {
-        render :update do |page|
-          page.replace_html :preview, :partial => "preview", :locals => {:recipe => @recipe}
-          page.show :preview_fieldset
-        end
+      format.html {
+        render :partial => "preview", :locals => {:recipe => @recipe}
       }
     end
   end

@@ -1,34 +1,45 @@
-<% flashed_errors(:user) %>
-<p>
-  <b>Login</b><br />
-  <%= text_field 'user', 'login', :style =>'width:330px;' %>
-</p>
+<%= flashed_errors(:user) %>
 
-<p>
-  <b>Email</b><br />
-  <%= text_field 'user', 'email', :style =>'width:330px;' %>
-</p>
+<div class="control-group">
+  <%= form.label :login, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :login, class: "text_field" %>
+  </div>
+</div>
 
-<% unless WebistranoConfig[:authentication_method] == :cas -%>
-<p>
-  <b>Password</b><br />
-  <%= password_field 'user', 'password', :style =>'width:330px;' %>
-</p>
+<div class="control-group">
+  <%= form.label :email, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :email, class: "text_field" %>
+  </div>
+</div>
 
-<p>
-  <b>Password confirmation</b><br />
-  <%= password_field 'user', 'password_confirmation', :style =>'width:330px;' %>
-</p>
-<% end -%>
+<div class="control-group">
+  <%= form.label :password, class: "control-label" %>
+  <div class="controls">
+    <%= form.password_field :password, class: "text_field" %>
+  </div>
+</div>
 
-<p>
-  <b>Timezone</b><br />
-  <%= time_zone_select 'user', :time_zone, ActiveSupport::TimeZone.all, {},{:style => "width:330px;"} %>
-</p>
+<div class="control-group">
+  <%= form.label :password_confirmation, class: "control-label" %>
+  <div class="controls">
+    <%= form.password_field :password_confirmation, class: "text_field" %>
+  </div>
+</div>
 
-<% if logged_in? && current_user.admin? -%>
-  <p>
-    <b>Admin?</b><br />
-    <%= check_box 'user', 'admin', :class => 'noframe' %>
-  </p>
-<% end -%>
+<div class="control-group">
+  <%= form.label :time_zone, class: "control-label" %>
+  <div class="controls">
+    <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all %>
+  </div>
+</div>
+
+<% if user_signed_in? && current_user.admin? %>
+  <div class="control-group">
+    <%= form.label :admin, class: "control-label" %>
+    <div class="controls">
+      <%= form.check_box :admin %>
+    </div>
+  </div>
+<% end %>

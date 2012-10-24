@@ -1,41 +1,26 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
-class NotificationTest < ActiveSupport::TestCase
+class NotificationTest < ActionMailer::TestCase
+  tests Notification
+  
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
-  CHARSET = "utf-8"
 
-  include ActionMailer::Quoting
-
-  def setup
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
-    @expected = TMail::Mail.new
-    @expected.set_content_type "text", "plain", { "charset" => CHARSET }
-    @expected.mime_version = '1.0'
-  end
-
-  def test_sender_address
+  test "sender_address" do
     Notification.webistrano_sender_address = "FooBar"
     
-    stage = create_new_stage
-    role = create_new_role(:stage => stage, :name => 'app')
+    stage = FactoryGirl.create(:stage)
+    role = FactoryGirl.create(:role, :stage => stage, :name => 'app')
     assert stage.deployment_possible?, stage.deployment_problems.inspect
-    deployment = create_new_deployment(:stage => stage, :task => 'deploy')
+    deployment = FactoryGirl.create(:deployment, :stage => stage, :task => 'deploy')
     
-    mail = Notification.create_deployment(deployment, 'foo@bar.com')
+    email = Notification.deployment(deployment, 'foo@bar.com').deliver
+    assert !ActionMailer::Base.deliveries.empty?
     
-    assert_equal ['FooBar'], mail.from
-    assert_equal ['foo@bar.com'], mail.to
+    assert_equal ['foo@bar.com'], email.to
+    assert_equal ["FooBar"], email.from
+    assert_equal "Deployment of #{stage.project.name}/#{stage.name} finished: running", email.subject
+    # assert_match /<h1>Welcome to example.com, #{user.name}<\/h1>/, email.encoded
+    # assert_match /Welcome to example.com, #{user.name}/, email.encoded
   end
 
-  private
-    def read_fixture(action)
-      IO.readlines("#{FIXTURES_PATH}/notification/#{action}")
-    end
-
-    def encode(subject)
-      quoted_printable(subject, CHARSET)
-    end
 end

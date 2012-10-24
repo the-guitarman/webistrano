@@ -9,16 +9,16 @@
     <tr>
       <td colspan="3">
         <b>Value</b><br />
-	  </td>
-	</tr>
-	<tr>
-	  <td>
+    </td>
+  </tr>
+  <tr>
+    <td>
         <% disabled = @configuration.prompt? ? {:disabled =>'disabled'} : {} %>
         <%= text_field 'configuration', 'value', disabled.merge(:style =>'width: 330px') %>
       </td>
       <td style="padding:0px;">&nbsp;<b>or</b>&nbsp;</td>
       <td valign="bottom">
-		<%= check_box 'configuration', 'prompt_on_deploy', :style =>'' %>
+    <%= check_box 'configuration', 'prompt_on_deploy', :style =>'' %>
         Prompt for value on deployment
       </td>
     </tr>
@@ -26,18 +26,14 @@
 
 <% content_for(:page_scripts) do %>
   <script type="text/javascript">
-
-   Event.observe(window, 'load', function(){
-      Event.observe('configuration_prompt_on_deploy', 'change', function(){
-
-        if( $F('configuration_prompt_on_deploy') == '1' ){
-          $('configuration_value').disable();
+    $(function() {
+      $('#configuration_prompt_on_deploy').on('change', function(ev) {
+        if ($(this).attr('checked')) {
+          $('#configuration_value').attr('disabled', 'disabled');
         } else {
-          $('configuration_value').enable();
+          $('#configuration_value').removeAttr('disabled');
         }
-
       });
     });
-
   </script>
 <% end %>

@@ -31,9 +31,6 @@ module Webistrano
         @logger = Capistrano::Logger.new
       end
     end
-
-    # validates this instance
-    # raises on ArgumentError if not valid
     def validate
       raise ArgumentError, 'The given deployment has no roles and thus can not be deployed!' if deployment.roles.empty?
     end
@@ -250,9 +247,9 @@ module Webistrano
         $1.split(',').map{|subval| type_cast(subval)}
       when /\A\{(.*)\}/
         $1.split(',').collect{|pair| pair.split('=>')}.inject({}) do |hash, (key, value)|
-	        hash[type_cast(key)] = type_cast(value)
-	        hash
-	      end
+          hash[type_cast(key)] = type_cast(value)
+          hash
+        end
       else # symbol or string
         if cvs_root_defintion?(val)
           val.to_s

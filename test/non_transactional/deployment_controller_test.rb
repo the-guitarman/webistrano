@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../non_transactional_test_helper'
+require 'non_transactional_test_helper'
 require 'deployments_controller'
 
 # Re-raise errors caught by the controller.
@@ -11,15 +11,15 @@ class DeploymentsControllerTest < Test::Unit::TestCase
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
     
-    @project = create_new_project(:name => 'Project X')
-    @stage = create_new_stage(:name => 'Prod', :project => @project)
-    @role = create_new_role(:name => 'web', :stage => @stage)
-    @deployment = create_new_deployment(:task => 'deploy:setup', :stage => @stage)
+    @project = FactoryGirl.create(:project, :name => 'Project X')
+    @stage = FactoryGirl.create(:stage, :name => 'Prod', :project => @project)
+    @role = FactoryGirl.create(:role, :name => 'web', :stage => @stage)
+    @deployment = FactoryGirl.create(:deployment, :task => 'deploy:setup', :stage => @stage)
     
     @user = login
   end
 
-  def test_locking_checked
+  test "locking_checked" do
     @stage.lock
     assert_no_difference "Deployment.count" do
       post :create, :deployment => { :task => 'deploy:default', :description => 'update to newest' }, :project_id => @project.id, :stage_id => @stage.id
@@ -28,7 +28,7 @@ class DeploymentsControllerTest < Test::Unit::TestCase
     assert_response :success
   end
   
-  def test_locking_override
+  test "locking_override" do
     @stage.lock
     assert_difference "Deployment.count" do
       post :create, :deployment => { :task => 'deploy:default', :description => 'update to newest', :override_locking => 1 }, :project_id => @project.id, :stage_id => @stage.id
@@ -37,7 +37,7 @@ class DeploymentsControllerTest < Test::Unit::TestCase
     assert_response :redirect
   end
   
-  def test_stage_locked_after_deploy
+  test "stage_locked_after_deploy" do
     assert !@stage.locked?
     assert_difference "Deployment.count" do
       post :create, :deployment => { :task => 'deploy:default', :description => 'update to newest' }, :project_id => @project.id, :stage_id => @stage.id

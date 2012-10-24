@@ -1,50 +1,44 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle host_box"></div>
-  <div class="special_box_bottom"></div>
-</div>
+<% content_for :page_title do %>
+  <% @page_title = "Host #{@host.name}" %>
+  <h1>Host <%= @host.name %></h1>
+<% end %>
 
-<div class="box">
-  <div class="box_top"></div>
-  <div class="box_middle">
-		<p>
-		  <b>Name:</b>
-		  <%=h @host.name %>
-		</p>
-		<p>
-		  <b>#Stages:</b>
-		  <%=h @host.stages.uniq.size %>
-		</p>
-		<p>
-		  <b>#Roles:</b>
-		  <%=h @host.roles.count %>
-		</p>
-		<% if current_user.admin? %>
-  		<br />
-	  	<%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> | 
-		  <%= link_to 'Delete', host_path(@host), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link'  %>
-		<% end %>
-  </div>
-  <div class="box_bottom"></div>
-</div>
-
-<div class="clear"></div>
-<br>
-
-<fieldset class="fieldset">
-  <legend>Stages</legend>
-  <%= render(:partial => 'stages')%>
-</fieldset>
-
-<% content_for(:breadcrumb) do %>
-  <% breadcrumb_box do %>
-    <%= link_to "Manage hosts", hosts_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Hosts", hosts_path %> &gt; 
-    Host <%= link_to @host.name, host_path(@host) %> 
+<% content_for :breadcrumb do %>
+  <%= breadcrumb_box do %>
+    <%= link_to "Hosts", hosts_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @host.name, host_path(@host) %>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Host #{h(@host.name)}" %>
-  <h2>Host <%=h @host.name %></h2>
-<% end %>
+<section>
+  <dl class="dl-horizontal">
+    <dt>Name:</dt>
+    <dd><%= @host.name %></dd>
+
+    <dt>Stages:</dt>
+    <dd><%= @host.stages.uniq.size %></dd>
+
+    <dt>Roles:</dt>
+    <dd><%= @host.roles.count %></dd>
+  </dl>
+
+  <% if current_user.admin? %>
+    <div>
+      <%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> |
+      <%= link_to 'Delete', host_path(@host), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'arrow_link'  %>
+    </div>
+  <% end %>
+</section>
+
+<section>
+  <h2>Stages</h2>
+  <%= render partial: 'stages' %>
+</section>
+
+
+<section>
+  <h2>Recent Activities</h2>
+  <%= render partial: 'activities/list', locals: { activities: @host.activities } %>
+  <br />
+</section>

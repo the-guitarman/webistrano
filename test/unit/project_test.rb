@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
 
-  def test_creation
+  test "creation" do
     assert_equal 0, Project.count
     
     assert_nothing_raised{
@@ -12,20 +12,20 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 1, Project.count
   end
   
-  def test_validation
+  test "validation" do
     p = Project.create(:name => "Project Alpha", :template => 'rails')
     assert p.save, p.errors.inspect + p.attributes.inspect
     
     # try to create another project with the same name
     p = Project.new(:name => "Project Alpha")
     assert !p.valid?
-    assert_not_nil p.errors.on("name")
+    assert_not_empty p.errors["name"]
     
     # try to create a project with a name that is too long
     name = "x" * 251
     p = Project.new(:name => name, :template => 'rails')
     assert !p.valid?
-    assert_not_nil p.errors.on("name")
+    assert_not_empty p.errors["name"]
     
     # make it pass
     name = name.chop
@@ -36,15 +36,15 @@ class ProjectTest < ActiveSupport::TestCase
     p = Project.new(:name => "Project XXXX")
     p.template = 'bla_bla'
     assert !p.valid?
-    assert_not_nil p.errors.on("template")
-    assert_match /is not/, p.errors.on("template")
+    assert_not_empty p.errors["template"]
+    assert_match /is not/, p.errors["template"].first
     
     # fix template validation
     p.template = 'rails'
     assert p.valid?
   end
   
-  def test_default_config
+  test "default_config" do
     # choose a template on project creation
     p = Project.new(:name => "Project Alpha")
     p.template = 'rails'
@@ -67,7 +67,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'project_alpha', p.configuration_parameters.find_by_name('application').value
   end
   
-  def test_tasks
+  test "tasks" do
     # choose a template on project creation
     p = Project.new(:name => "Project Alpha")
     p.template = 'mongrel_rails'
@@ -78,14 +78,14 @@ class ProjectTest < ActiveSupport::TestCase
     assert_match /namespace/, p.tasks
   end
   
-  def test_webistrano_project_name
-    project = create_new_project(:name => '&my_ Project')
+  test "webistrano_project_name" do
+    project = FactoryGirl.create(:project, :name => '&my_ Project')
     assert_equal '_my__project', project.webistrano_project_name
   end
   
-  def test_prepare_cloning
-    original = create_new_project(:name => 'Some Project', :template => 'mod_rails', :description => "Dr. Foo")
-    my = create_new_project(:template => 'mongrel_rails')
+  test "prepare_cloning" do
+    original = FactoryGirl.create(:project, :name => 'Some Project', :template => 'mod_rails', :description => "Dr. Foo")
+    my = FactoryGirl.create(:project, :template => 'mongrel_rails')
     
     my.prepare_cloning(original)
     assert_equal "Clone of Some Project", my.name
@@ -93,17 +93,17 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal original.template, my.template
   end
   
-  def test_clone
+  test "clone" do
     # setup
-    original = create_new_project(:name => 'Some Project', :template => 'mod_rails')
+    original = FactoryGirl.create(:project, :name => 'Some Project', :template => 'mod_rails')
     3.times do |i|
-      create_new_project_configuration(:project => original, :name => "#{i}-project-conf", :value => "value-#{i}")
+      FactoryGirl.create(:project_configuration, :project => original, :name => "#{i}-project-conf", :value => "value-#{i}")
     end
-    stage_1 = create_new_stage(:project => original, :name => 'test')
-      create_new_stage_configuration(:stage => stage_1, :name => "stage1-conf", :value => "stage1-value")
-    stage_2 = create_new_stage(:project => original, :name => 'prod')
-      create_new_stage_configuration(:stage => stage_2, :name => "stage2-conf", :value => "stage2-value")
-    recipe = create_new_recipe
+    stage_1 = FactoryGirl.create(:stage, :project => original, :name => 'test')
+      FactoryGirl.create(:stage_configuration, :stage => stage_1, :name => "stage1-conf", :value => "stage1-value")
+    stage_2 = FactoryGirl.create(:stage, :project => original, :name => 'prod')
+      FactoryGirl.create(:stage_configuration, :stage => stage_2, :name => "stage2-conf", :value => "stage2-value")
+    recipe = FactoryGirl.create(:recipe)
     stage_1.recipes << recipe
     
     host = Host.new(:name => '192.168.0.1')
@@ -112,7 +112,7 @@ class ProjectTest < ActiveSupport::TestCase
     r.host = host
     r.save!
       
-    new_project = create_new_project
+    new_project = FactoryGirl.create(:project)
     new_project.clone(original)
     
     # check project configuration
@@ -144,24 +144,24 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal host, cloned_stage_1.roles.first.host
   end
   
-  def test_recent_deployments
-    project = create_new_project
+  test "recent_deployments" do
+    project = FactoryGirl.create(:project)
     
-    stage_1 = create_new_stage(:project => project)
-    role = create_new_role(:stage => stage_1)
+    stage_1 = FactoryGirl.create(:stage, :project => project)
+    role = FactoryGirl.create(:role, :stage => stage_1)
     5.times do 
-      deployment = create_new_deployment(:stage => stage_1)
+      deployment = FactoryGirl.create(:deployment, :stage => stage_1)
     end
     
-    stage_2 = create_new_stage(:project => project)
-    role = create_new_role(:stage => stage_2)
+    stage_2 = FactoryGirl.create(:stage, :project => project)
+    role = FactoryGirl.create(:role, :stage => stage_2)
     5.times do 
-      deployment = create_new_deployment(:stage => stage_2)
+      deployment = FactoryGirl.create(:deployment, :stage => stage_2)
     end
     
     assert_equal 10, project.deployments.count
-    assert_equal 3, project.recent_deployments.size
-    assert_equal 2, project.recent_deployments(2).size
+    assert_equal 3,  project.deployments.recent.length
+    assert_equal 2,  project.deployments.recent(2).length
   end
   
 end

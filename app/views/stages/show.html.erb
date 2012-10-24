@@ -1,161 +1,102 @@
-<div class="special_box">
-  <!--alimaher-->
-  <%if !current_user.read_only(@stage) || current_user.admin? %>
-  <!--end alimaher-->
-  <div class="special_box_top"></div>
-  <div class="special_box_middle deployments_box">
-   <p><%= link_to 'Deploy', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy', :class => 'arrow_link' %></p>
-   <p><%= link_to 'Deploy and migrate', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:migrations', :class => 'arrow_link' %></p>
-   <p><%= link_to 'Restart app servers', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:restart', :class => 'arrow_link' %></p>
-   <p><%= link_to 'Setup', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:setup', :class => 'arrow_link' %></p>
-   <p>
-     <%= select_tag('task', options_for_select(@task_list)) %>
-   </p>
-   <p>
-     <%= link_to 'Execute', new_project_stage_deployment_path(current_project, @stage), :class => 'arrow_link', 
-         :onclick => "location.href='#{new_project_stage_deployment_path(current_project, @stage)}?task=' + $F('task'); return false" %> |
-     <%= link_to 'Info', tasks_project_stage_path(current_project, @stage), :class => 'arrow_link',
-         :onclick => "location.href='#{tasks_project_stage_path(current_project, @stage)}#' + $F('task'); return false" %>
-   </p>
-    </div>
-  
-  <div class="special_box_bottom"></div>
-  <!--alimaher-->
-  <%end%>
-  <!--end alimaher-->
-</div>
-
-<div class="box">
-  <div class="box_top"></div>
-  <div class="box_middle">
-	  <p>
-	    <b>Name:</b>
-		   <%=h @stage.name %>
-		</p>
-		<p>
-		  <b>Project:</b>
-		  <%= link_to h(@stage.project.name), project_url(current_project) %>
-		</p>
-		<p>
-		  <b>Alert on deploy:</b>
-		  <%=h @stage.alert_emails %>
-		</p>
-		<p>
-		  <b>#Hosts:</b>
-		  <%=h @stage.hosts.count %>
-		</p>
-		<!--alimaher-->
-		<%if !current_user.read_only(@stage) || current_user.admin? %>
-		<!--end alimaher-->
-		<br />
-		<%= link_to 'Edit stage', edit_project_stage_path(current_project, @stage), :class => 'arrow_link' %> | 
-		<%= link_to 'Delete stage', project_stage_path(current_project, @stage), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link'  %> | 
-		<%= link_to 'Export capfile', {:action => 'capfile', :project_id => current_project, :id => @stage}, {:onclick => "loadWindow('#{url_for(:action => 'capfile', :project_id => current_project, :id => @stage)}'); return false", :class => 'arrow_link'} %>
-		<!--alimaher-->
-		<%end%>
-		<!--end alimaher-->
-	</div>	
-  <div class="box_bottom"></div>
-</div>
-
-
-<div class="clear"></div>
-<br>
-
-<fieldset class="fieldset">
-  <legend>Stage specific configuration</legend>
-  <%= render(:partial => 'configs')%>
-  <br />
-  <div id="effective_config" style="display:none;">
-    <%= render(:partial => 'effective_config')%>
-    <br />
-  </div>
-  <!--alimaher-->
-  <%if !current_user.read_only(@stage) || current_user.admin? %>
-  <!--end alimaher-->
-  <%= link_to 'New configuration', new_project_stage_stage_configuration_path(current_project, @stage), :class => 'arrow_link' %> | 
-  <a id="s_e_c" href="#" onclick="show_effective_config(); return false" class="arrow_link">Show effective configuration</a>
-  <a id="h_e_c" href="#" onclick="hide_effective_config(); return false" class="arrow_link" style="display:none;">Hide effective configuration</a>
-  <!--alimaher-->
-  <%end%>
-  <!--end alimaher-->
-</fieldset>
-
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Used recipes</legend>
-  <%= render(:partial => 'recipes')%>
-  <!--alimaher-->
-  <%if !current_user.read_only(@stage) || current_user.admin? %>
-  <!--end alimaher-->
-  <br />
-  <%= link_to 'Manage stage recipes', {:action => 'recipes', :project_id => current_project, :id => @stage} , :class => 'arrow_link'%>
-  <!--alimaher-->
-  <%end%>
-  <!--end alimaher-->
-</fieldset>
-
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Deployed hosts</legend>
-  <%= render(:partial => 'roles')%>
-  <!--alimaher-->
-  <%if !current_user.read_only(@stage) || current_user.admin? %>
-  <!--end alimaher-->
-  <br />
-  <%= link_to 'Add host', new_project_stage_role_path(current_project, @stage) , :class => 'arrow_link'%>
-  <!--alimaher-->
-  <%end%>
-  <!--end alimaher-->
-</fieldset>
-
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Recent deployment history</legend>
-  <%= render(:partial => 'deployments')%>
-</fieldset>
-
-<!--alimaher-->
-<br /><br />
-<fieldset class="fieldset">
-  <legend>Privileged users</legend>
-  <%= render(:partial => 'users')%>
-  <br />
-</fieldset>
-<!--end alimaher-->
-
-<br />
-<% content_for(:page_scripts) do %>
- <script type="text/javascript">
- 
-   function show_effective_config(){
-     $('h_e_c').show();
-     $('s_e_c').hide();
-     $('effective_config').show();
-   }
-   
-   function hide_effective_config(){
-      $('h_e_c').hide();
-      $('s_e_c').show();
-      $('effective_config').hide();
-    }
- </script>
+<% content_for(:page_title) do %>
+  <% @page_title = "Project #{@project.name} - Stage #{@stage.name}"%>
+  <h1>Stage <%= link_to @stage.name, project_stage_path(current_project, @stage) %></h1>
 <% end %>
 
 <% content_for(:breadcrumb) do %>
-  <% breadcrumb_box do %>
-    <%= link_to "Back to project", project_path(@project), :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Projects", projects_path %> &gt; 
-    Project <%= link_to current_project.name, project_path(current_project) %> &gt; 
-    Stage <%= link_to current_stage.name, project_stage_path(current_project, current_stage) %>
+  <%= breadcrumb_box do %>
+    <%= link_to "Projects", projects_path %>
+    <span class="divider">&raquo;</span>
+    <%= link_to @project.name, project_path(@project) %>
+    <span class="divider">&raquo;</span>
+    <%= link_to current_stage.name, project_stage_path(@project, current_stage) %>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Project #{h(current_project.name)} - Stage #{h(@stage.name)}"%>
-  <h2>Stage <%= link_to h(@stage.name), project_stage_path(current_project, @stage) %></h2>
-<% end %>
+<section>
+  <div class="row-fluid">
+    <div class="span5">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <td><%= @stage.name %></td>
+          </tr>
+          <tr>
+            <th>Project</th>
+            <td><%= link_to @stage.project.name, project_url(current_project) %></td>
+          </tr>
+          <tr>
+            <th>Alert on deploy</th>
+            <td><%= @stage.alert_emails %></td>
+          </tr>
+          <tr>
+            <th>Hosts</th>
+            <td><%= @stage.hosts.count %></td>
+          </tr>
+        </tbody>
+      </table>
 
+      <p class="pull-right">
+        <%= link_to 'Edit stage', edit_project_stage_path(current_project, @stage) %> |
+        <%= link_to 'Delete stage', project_stage_path(current_project, @stage), data: { confirm: 'Are you sure?' }, method: :delete  %> |
+        <%= link_to 'Export capfile', { action: 'capfile', project_id: current_project, id: @stage, format: 'text' } %>
+      </p>
+    </div>
+
+    <div class="span4">
+      <ul class="unstyled">
+        <li><%= link_to 'Deploy', new_project_stage_deployment_path(current_project, @stage, task: 'deploy') %></li>
+        <li><%= link_to 'Deploy and migrate', new_project_stage_deployment_path(current_project, @stage, task: 'deploy:migrations') %></li>
+        <li><%= link_to 'Restart app servers', new_project_stage_deployment_path(current_project, @stage, task: 'deploy:restart') %></li>
+        <li><%= link_to 'Setup', new_project_stage_deployment_path(current_project, @stage, task: 'deploy:setup') %></li>
+        <li><%= select_tag('task', options_for_select(@task_list)) %></li>
+      </ul>
+
+      <p>
+        <%= link_to 'Execute',
+            new_project_stage_deployment_path(current_project, @stage),
+            onclick: "location.href='#{new_project_stage_deployment_path(current_project, @stage)}?task=' + $('#task').val(); return false" %> |
+        <%= link_to 'Info',
+            tasks_project_stage_path(current_project, @stage),
+            onclick: "location.href='#{tasks_project_stage_path(current_project, @stage)}#' + $('#task').val(); return false" %>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Stage specific configuration</h2>
+  <%= render partial: 'configs' %>
+  <div id="effective_config" style="display:none;">
+    <%= render partial: 'effective_config' %>
+  </div>
+  <p>
+    <%= link_to 'New configuration', new_project_stage_stage_configuration_path(current_project, @stage) %> |
+    <a id="s_e_c" href="#">Show effective configuration</a>
+    <a id="h_e_c" href="#" style="display:none;">Hide effective configuration</a>
+  </p>
+</section>
+
+<section>
+  <h2>Used recipes</h2>
+  <%= render partial: 'recipes' %>
+  <%= link_to 'Manage stage recipes', { action: 'recipes', project_id: current_project, id: @stage } %>
+</section>
+
+<section>
+  <h2>Deployed hosts</h2>
+  <%= render partial: 'roles' %>
+  <%= link_to 'Add host', new_project_stage_role_path(current_project, @stage) %>
+</section>
+
+<section>
+  <h2>Recent deployment history</h2>
+  <%= render partial: 'deployments' %>
+</section>
+
+<section>
+  <h2>Recent Activities</h2>
+  <%= render partial: 'activities/list', locals: { activities: @stage.activities } %>
+  <br />
+</section>

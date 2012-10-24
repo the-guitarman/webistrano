@@ -1,25 +1,23 @@
-<% form_for(:recipe, :url => recipes_path) do |f| %>
+<% content_for(:page_title) do %>
+  <% @page_title = "New recipe" %>
+  <h1>New recipe</h1>
+<% end %>
 
-  <%= render(:partial => 'form')%>
+<% content_for(:breadcrumb) do %>
+  <%= breadcrumb_box do %>
+    <%= link_to "Recipes", recipes_path %>
+    <span class="divider">&raquo;</span>
+    New
+  <% end %>
+<% end %>
+
+<%= form_for(:recipe, :url => recipes_path) do |f| %>
+
+  <%= render("form", { :form => f }) %>
 
   <%= link_to 'Back to recipes', recipes_path, :class => 'arrow_link ontheright' %>
 
   <p>
     <%= submit_tag "Create recipe" %>
   </p>
-<% end %>
-
-
-
-<% content_for(:breadcrumb) do %>
-  <% breadcrumb_box do %>
-    <%= link_to "Manage recipes", recipes_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Recipes", recipes_path %> &gt; 
-    New
-  <% end %>
-<% end %>
-
-<% content_for(:page_title) do %>
-  <% @page_title = "New recipe" %>
-  <h2>New recipe</h2>
 <% end %>

@@ -1,113 +1,87 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle" style="min-height: 175px; height: 163px;">
-  	<div style="padding: 7px 50px 0px 50px; *padding: 0px 50px;"><%= image_tag('peritor_theme/status_' + @deployment.status + '.gif', :title => @deployment.status) %></div>
+<div id="status_info">
+  <div class="row-fluid">
+    <div class="span5">
+      <dl class="dl-horizontal">
+        <dt>Task:</dt>
+        <dd><%= @deployment.task %></dd>
+
+        <dt>Stage:</dt>
+        <dd><%= link_to @deployment.stage.name, [@project, @stage] %></dd>
+
+        <dt>Deployed by:</dt>
+        <dd><%= user_info(@deployment.user) rescue '' %></dd>
+
+        <dt>Revision:</dt>
+        <dd><%= @deployment.revision %></dd>
+
+        <dt>Started:</dt>
+        <dd><%= @deployment.created_at.to_s(:log) %> (<%= current_user.time_zone rescue 'UTC' %>)</dd>
+
+        <dt>Completed:</dt>
+        <dd><%= "#{@deployment.completed_at.to_s(:log)} (#{current_user.time_zone})" rescue nil %></dd>
+      </dl>
+    </div>
+
+    <div class="span4" style="text-align: center">
+      <div><%= image_tag('peritor_theme/status_' + @deployment.status + '.gif', :title => @deployment.status) %></div>
       <div class="deployment_status">
-        <b>Status:</b> <%=h @deployment.status %>
+        <b>Status:</b> <%= @deployment.status %>
         <% if @deployment.cancelling_possible? %>
-          &nbsp; &nbsp;
-          <%= link_to "Cancel", cancel_project_stage_deployment_path(current_project, current_stage, @deployment), :confirm => "Are you sure? Killing this deployment will not cleanup and rollback.", :method => "post", :class => 'arrow_link' %>
+          <%= link_to "Cancel", [:cancel, current_project, current_stage, @deployment], data: { confirm: "Are you sure? Killing this deployment will not cleanup and rollback." }, method: "post" %>
         <% end %>
-    	  <% if @deployment.completed? %>
-          &nbsp; &nbsp;
-      	  <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage) + '?repeat=' + h(@deployment.id), :class => 'arrow_link'  %>
+        <% if @deployment.completed? %>
+          <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage, repeat: @deployment.id) %>
         <% end %>
       </div>
+    </div>
   </div>
-  <div class="special_box_bottom"></div>
-</div>
 
-<div class="box">
-  <div class="box_top"></div>
-  <div class="box_middle" style="height: 156px;">
-	<p>
-    <b>Task:</b>
-	  <%=h @deployment.task %>
-	</p>
-	<p>
-	  <b>Stage:</b>
-	  <%= link_to @deployment.stage.name, project_stage_path(@project, @stage) %> 
-	</p>
-	<p>
-	  <b>Deployed by:</b> 
-	  <%= user_info(@deployment.user) rescue '' %>
-	</p>
-	<p>
-	  <b>Revision:</b> 
-	  <%= @deployment.revision %>
-	</p>
-	<p>
-	  <b>Started:</b>
-	  <%=h @deployment.created_at.to_s(:log) %> (<%=h current_user.time_zone rescue 'UTC' %>)
-	</p>
-  <p>
-	  <b>Completed:</b>
-	  <%=h "#{@deployment.completed_at.to_s(:log)} (#{current_user.time_zone})" rescue nil %>
-	</p>
+  <section>
+    <h2>Comment</h2>
+    <%= @deployment.description %>
+</sectin>
+
+<section>
+  <h2>Log</h2>
+  <div>
+    <input type="checkbox" class="noframe" id="auto_scroll_log" <%= @auto_scroll ? 'checked="checked"' : ''%> >
+    <label for="auto_scroll_log" class="redtext">auto scroll</label>
   </div>
-  <div class="box_bottom"></div>
-</div>
 
-<div class="clear"></div>
-
-<br />
-
-<fieldset class="fieldset">
-  <legend>Comment</legend>
-  <%=web_friendly_text @deployment.description %>
-</fieldset>
-<br /> <br />
-
-<fieldset class="fieldset">
-  <legend>Log</legend>
-  <div style="float:right; padding: 0px 5px 10px 0px; *padding: 0px"><input type="checkbox" class="noframe" id="auto_scroll_log" <%=h @auto_scroll ? 'checked="checked"' : ''%> > <label for="auto_scroll_log" class="redtext"><b>auto scroll</b></label></div>
-	<div class="log_output">
-		<pre><%=h @deployment.log.gsub('\n', "\n") rescue '' %></pre>
+  <div class="log_output">
+    <pre><%= @deployment.log.gsub('\n', "\n") rescue '' %></pre>
   </div>
-</fieldset>
 
-<br />
-
-<table width="100%">
-  <tr>
-    <td width="">
-      <%= link_to_function 'Scroll to top', "scroll_to_top()", :class => 'arrow_link' %> | <%= link_to 'Back to stage', project_stage_path(@project, @stage), :class => 'arrow_link', :id => 'back_link_at_the_bottom' %>
-    </td>
-    <td align="right" width="120px">
-      <%= image_tag('peritor_theme/status_' + @deployment.status + '_small.gif', :title => @deployment.status, :width => 20, :heigth => 15, :style => 'vertical-align:middle;') %>
-      <b>Status:</b> <%=h @deployment.status %>
-    </td>
-    <td align="right" width="70px">
-      <% if @deployment.completed? %>
-      &nbsp; &nbsp;
-      <%= link_to "Repeat", new_project_stage_deployment_path(current_project, current_stage) + '?repeat=' + h(@deployment.id), :class => 'arrow_link'  %>
-      <% end %>
-      <% if @deployment.cancelling_possible? %>
-        &nbsp; &nbsp;
-        <%= link_to "Cancel", cancel_project_stage_deployment_path(current_project, current_stage, @deployment), :confirm => "Are you sure? Killing this deployment will not cleanup and rollback.", :method => "post", :class => 'arrow_link' %>
-      <% end %>
-    </td>
-  </tr>
-</table>
-
-
-
+  <div>
+    <a href="#" onclick="scroll_to_top()" class="arrow_link">Scroll to top</a>
+  </div>
+</section>
 
 <% unless @deployment.completed? %>
   <script type="text/javascript">
-    
-    function update_status(){
-      new Ajax.Updater('status_info','<%=h project_stage_deployment_path(@project, @stage, @deployment) %>.js',{
-        method: 'get',
-        evalScripts: true,
-        parameters: {
-          random_differentiator: Math.floor(Math.random()*50000), // work around IE caching bug
-          auto_scroll: $('auto_scroll_log').checked
-        }
+    function update_status () {
+      $.ajax({
+         type:     "GET",
+         url:      "<%= project_stage_deployment_path(@project, @stage, @deployment) %>.js",
+         dataType: "html",
+         success: function (res) {
+           var needScroll = $('#auto_scroll_log').is(':checked');
+
+           if (needScroll) {
+             $('body').animate({ scrollTop: document.height }, 'fast');
+
+           }
+
+           $('#status_info').html(res);
+
+           if (needScroll) {
+             $('#auto_scroll_log').attr({checked: "checked"});
+           }
+         }
       });
     }
-    
+
     setTimeout(update_status, 3000);
-    check_auto_scroll_log();
   </script>
 <% end %>
+</div>

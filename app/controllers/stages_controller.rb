@@ -1,10 +1,10 @@
 class StagesController < ApplicationController
+  respond_to :html, :xml, :json
 
   before_filter :load_project
     
-		before_filter :ensure_user, :only => [:show]
 
-		before_filter :ensure_user_access, :only => [:edit, :update, :destroy, :capfile, :recipes]
+  before_filter :ensure_user_access, :only => [:edit, :update, :destroy, :capfile, :recipes]
 
   before_filter :ensure_admin, :only => [:new, :edit, :destroy, :create, :update]
   before_filter :ensure_user, :only => [:index, :show]
@@ -12,9 +12,7 @@ class StagesController < ApplicationController
   # GET /projects/1/stages.xml
   def index
     @stages = current_project.stages
-    respond_to do |format|
-      format.xml  { render :xml => @stages.to_xml }
-    end
+    respond_with(@stages)
   end
 
   # GET /projects/1/stages/1
@@ -22,21 +20,19 @@ class StagesController < ApplicationController
   def show
     @stage = current_project.stages.find(params[:id])
     @task_list = [['All tasks: ', '']] + @stage.list_tasks.collect{|task| [task[:name], task[:name]]}.sort()
-
-    respond_to do |format|
-      format.html # show.rhtml
-      format.xml  { render :xml => @stage.to_xml }
-    end
+    respond_with(@stage)
   end
 
   # GET /projects/1/stages/new
   def new
     @stage = current_project.stages.new
+    respond_with(@stage)
   end
 
   # GET /projects/1/stages/1;edit
   def edit
     @stage = current_project.stages.find(params[:id])
+    respond_with(@stage)
   end
 
   # GET /projects/1/stages/1/tasks
@@ -45,26 +41,24 @@ class StagesController < ApplicationController
     @stage = current_project.stages.find(params[:id])
     @tasks = @stage.list_tasks
 
-    respond_to do |format|
-      format.html # tasks.rhtml
-      format.xml  { render :xml => @tasks.to_xml }
-    end
+    respond_with(@tasks)
   end
 
   # POST /projects/1/stages
   # POST /projects/1/stages.xml
   def create
-    @stage = current_project.stages.build(params[:stage])
+    @stage = Stage.unscoped.where(
+      params[:stage].merge(:project_id => current_project.id)
+    ).first_or_create
 
-    respond_to do |format|
-      if @stage.save
-        flash[:notice] = 'Stage was successfully created.'
-        format.html { redirect_to project_stage_url(current_project, @stage) }
-        format.xml  { head :created, :location => project_stage_url(current_project, @stage) }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @stage.errors.to_xml }
-      end
+    if @stage
+      @stage.tap { |s| s.deleted_at = nil }.save
+
+      add_activity_for(@stage, 'created')
+      flash[:notice] = 'Stage was successfully created.'
+      respond_with(@stage, :location => [current_project, @stage])
+    else
+      respond_with(@stage)
     end
   end
 
@@ -73,15 +67,12 @@ class StagesController < ApplicationController
   def update
     @stage = current_project.stages.find(params[:id])
 
-    respond_to do |format|
-      if @stage.update_attributes(params[:stage])
-        flash[:notice] = 'Stage was successfully updated.'
-        format.html { redirect_to project_stage_url(current_project, @stage) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @stage.errors.to_xml }
-      end
+    if @stage.update_attributes(params[:stage])
+      add_activity_for(@stage, 'updated')
+      flash[:notice] = 'Stage was successfully updated.'
+      respond_with(@stage, :location => [current_project, @stage])
+    else
+      respond_with(@stage)
     end
   end
 
@@ -89,13 +80,10 @@ class StagesController < ApplicationController
   # DELETE /projects/1/stages/1.xml
   def destroy
     @stage = current_project.stages.find(params[:id])
-    @stage.destroy
+    @stage.delete_logically_with_asscociation
+    add_activity_for(@stage, 'deleted')
 
-    respond_to do |format|
-      flash[:notice] = 'Stage was successfully deleted.'
-      format.html { redirect_to project_url(current_project) }
-      format.xml  { head :ok }
-    end
+    respond_with(@stage, :location => current_project, :notice => 'Stage was successfully deleted.')
   end
 
   # GET /projects/1/stages/1/capfile
@@ -103,48 +91,28 @@ class StagesController < ApplicationController
   def capfile
     @stage = current_project.stages.find(params[:id])
 
-    respond_to do |format|
-      format.html { render :layout => false, :content_type => 'text/plain' }
-      format.xml  { render :xml => @stage.to_xml }
+    respond_with(@stage) do |format|
+      format.text do
+        send_file_headers! \
+          :disposition  => "attachment",
+          :filename     => 'Capfile.rb'
+        render :layout       => false,
+          :content_type => 'text/plain'
+      end
     end
   end
 
   # GET | PUT /projects/1/stages/1/recipes
   # GET /projects/1/stages/1/recipes.xml
   
-    
-	def ensure_user
-
-		if current_user.stages.include?( Stage.find(params[:id])) || ensure_admin
- 
-			return true
-
-		else
-     	
-			flash[:notice] = "Action not allowed"
-
-			return false
-
-		end
-
-	end
-
 	def ensure_user_access
-
 		@stage = Stage.find(params[:id])
-
 		if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
- 
 			return true
-
 		else
-     	
-				flash[:notice] = "Action not allowed"
-
-				return false
-
+      flash[:notice] = "Action not allowed"
+      return false
 		end
-
 	end
 
 	def recipes
@@ -171,5 +139,4 @@ class StagesController < ApplicationController
       false
     end
   end
-
 end

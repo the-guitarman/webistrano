@@ -1,107 +1,90 @@
 class UsersController < ApplicationController
+  respond_to :html, :xml, :json
+  
   before_filter :ensure_admin, :only => [:new, :destroy, :create, :enable]
   before_filter :ensure_admin_or_my_entry, :only => [:edit, :update]
 
   # GET /users
   # GET /users.xml
   def index
-    @users = User.find(:all, :order => 'login ASC')
+    @users = User.order('login ASC')
+    respond_with(@users)
   end
 
   # GET /users/new
   def new
-    # render new.rhtml
     @user = User.new
+    respond_with(@user)
   end
 
   # POST /users
   # POST /users.xml
   def create
     @user = User.new(params[:user])
-    if current_user.admin?
-      @user.admin = params[:user][:admin].to_i rescue 0
+
+    if @user.save
+      add_activity_for(@user, 'created')
+      flash[:notice] = "Account created"
+      respond_with(@user, :location => @user)
+    else
+      respond_with(@user)
     end
-    
-    respond_to do |format|
-      if @user.save
-        flash[:notice] = "Account created"
-        format.html { redirect_to user_url(@user) }
-        format.xml  { head :created, :location => user_url(@user) }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @user.errors.to_xml }
-      end
-    end
-    
   end
-  
+
   # GET /users/1
   # GET /users/1.xml
   def show
     @user = User.find(params[:id])
-    @deployments = @user.recent_deployments
-
-    respond_to do |format|
-      format.html # show.rhtml
-      format.xml  { render :xml => @user.to_xml }
-    end
+    @deployments = @user.deployments.recent
+    respond_with(@user)
   end
-  
+
   # GET /users/edit/1
   def edit
     @user = User.find(params[:id])
+    respond_with(@user)
   end
-  
+
   # PUT /users/1
   # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
-    @user.attributes = params[:user]
-    
-    if current_user.admin?
-      @user.admin = params[:user][:admin].to_i rescue 0
+
+    unless current_user.admin?
+      params[:user].delete(:admin)
     end
-    
-    respond_to do |format|
-      if @user.save
-        flash[:notice] = 'User was successfully updated.'
-        format.html { redirect_to user_url(@user) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @user.errors.to_xml }
-      end
+
+    if @user.update_attributes(params[:user])
+      add_activity_for(@user, 'updated')
+      flash[:notice] = 'User was successfully updated.'
+      respond_with(@user, :location => @user)
+    else
+      respond_with(@user)
     end
   end
-  
+
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
     @user = User.find(params[:id])
-    
-    if @user.admin? && User.admin_count == 1
-      message = 'Can not disable last admin user.'
+
+    if @user.admin? && User.admins.count == 1
+      flash[:notice] = 'Can not disable last admin user.'
     else
-      @user.disable
-      message = 'User was successfully disabled.'
+      @user.disable!
+      flash[:notice] = 'User was successfully disabled.'
+      add_activity_for(@user, 'deleted')
     end
 
-    respond_to do |format|
-      flash[:notice] = message
-      format.html { redirect_to users_url }
-      format.xml  { head :ok }
-    end
+    respond_with(@user)
   end
-  
+
   def enable
     @user = User.find(params[:id])
-    @user.enable
+    @user.enable!
+
     flash[:notice] = "The user was enabled"
-    
-    respond_to do |format|
-      format.html { redirect_to users_path }
-      format.xml  { head :ok }
-    end
+    respond_with(@user, :location => users_path)
   end
 
   # GET /users/1/deployments
@@ -110,18 +93,16 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @deployments = @user.deployments
 
-    respond_to do |format|
-      format.html # deployments.rhtml
-      format.xml  { render :xml => @user.deployments.to_xml }
-    end
+    respond_with(@deployments)
   end
+
+private
   
-  protected
   def ensure_admin_or_my_entry
     if current_user.admin? || current_user.id == User.find(params[:id]).id
       return true
     else
-      redirect_to home_url
+      redirect_to root_url
       return false
     end
   end
