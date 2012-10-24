@@ -1,51 +1,125 @@
-ActionController::Routing::Routes.draw do |map|
-  # The priority is based upon order of creation: first created -> highest priority.
+Webistrano::Application.routes.draw do
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
 
   # Sample of regular route:
-  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
 
   # Sample of named route:
-  # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  # You can have the root of your site routed by hooking up ''
-  # -- just remember to delete public/index.html.
-  map.home '', :controller => "projects", :action => 'dashboard'
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   resources :products
 
-  # Allow downloading Web Service WSDL as a file with an extension
-  # instead of a file named 'wsdl'
-  map.connect ':controller/service.wsdl', :action => 'wsdl'
+  # Sample resource route with options:
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
+  #   end
 
-  map.resources :hosts
-  map.resources :recipes, :collection => {:preview => :get}
-  map.resources :projects, :member => {:dashboard => :get} do |projects|
-    projects.resources :project_users
-    projects.resources :project_configurations
+  # Sample resource route with sub-resources:
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
 
-    projects.resources :stages, :member => {:capfile => :get, :recipes => :any, :tasks => :get} do |stages|
-      stages.resources :stage_users
+  # Sample resource route with more complex sub-resources
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
+  #   end
+
+  # Sample resource route within a namespace:
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
+  #   end
+
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  # root :to => 'welcome#index'
+
+  # See how all your routes lay out with "rake routes"
+
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  # match ':controller(/:action(/:id))(.:format)'
+
+  root :to => "projects#dashboard"
+
+  get "home" => "projects#dashboard"
+  get "stylesheets" => "stylesheets#application"
+
+#  match ':controller/service.wsdl', :action => 'wsdl'
+
+  resources :hosts
+  resources :recipes do
+    collection do
+      get :preview
+    end
+  end
+  resources :projects do
+    member do
+      get :dashboard
+    end
+    resources :project_users
+    resources :project_configurations
+
+    resources :stages do
+      member do
+        get :capfile
+        match :recipes
+        get :tasks
+      end
+      resources :stage_users
       
-stages.resources :stage_users
+      resources :stage_users
 
-stages.resources :stage_users
-stages.resources :stage_configurations
-      stages.resources :roles
-      stages.resources :deployments, :collection => {:latest => :get}, :member => {:cancel => :post}
+      resources :stage_users
+      resources :stage_configurations
+      resources :roles
+      resources :deployments do
+        collection do
+          get :latest
+        end
+        member do
+          post :cancel
+        end
+      end
     end
   end
 
   # RESTful auth
-  map.resources :users, :member => {:deployments => :get, :enable => :post}
-  map.resources :sessions, :collection => {:version => :get}
-  map.signup '/signup', :controller => 'users', :action => 'new'
-  map.login  '/login', :controller => 'sessions', :action => 'new'
-  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  resources :users do
+    member do
+      get :deployments
+      post :enable
+    end
+  end
+  resources :sessions do
+    collection do
+      get :version
+    end
+  end
+  get '/signup', :controller => 'users', :action => 'new'
+  get  '/login', :controller => 'sessions', :action => 'new'
+  delete '/logout', :controller => 'sessions', :action => 'destroy'
 
   # stylesheet
-  map.stylesheet '/stylesheets/application.css', :controller => 'stylesheets', :action => 'application'
+  #stylesheet '/stylesheets/application.css', :controller => 'stylesheets', :action => 'application'
 
   # Install the default route as the lowest priority.
-  map.connect ':controller/:action/:id.:format'
-  map.connect ':controller/:action/:id'
+  match ':controller/:action/:id.:format'
+  match ':controller/:action/:id'
 end

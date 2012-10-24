@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include ExceptionNotification::Notifiable
   include AuthenticatedSystem
 
   before_filter CASClient::Frameworks::Rails::Filter if WebistranoConfig[:authentication_method] == :cas
