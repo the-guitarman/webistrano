@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
   before_filter :ensure_not_disabled
-  around_filter :set_timezone
+  #around_filter :set_timezone
 
   layout 'application'
 

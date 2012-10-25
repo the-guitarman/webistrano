@@ -1,4 +1,3 @@
-
 class StageUsersController < ApplicationController
   
   protect_from_forgery :except => [:create, :destroy]
@@ -12,7 +11,7 @@ class StageUsersController < ApplicationController
 		stages_user = StagesUser.new
 		stages_user.stage_id = @stage.id
 		stages_user.user_id = user.id
-		stages_user.read_only = (read_only.to_i != 0)?true:false
+		stages_user.read_only = (read_only.to_i != 0) ? true : false
 		stages_user.save
 	end
     redirect_to project_stage_path(@stage.project.id,@stage)

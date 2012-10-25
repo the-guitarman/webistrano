@@ -4,7 +4,7 @@ class ProjectUsersController < ApplicationController
   before_filter :ensure_admin, :only => [:destroy, :create]
 
   def create
-    @project_user = User.find params[:project_user][:id]
+    @project_user = User.find params[:project_user]
     current_project.users << @project_user unless current_project.user_ids.include?(@project_user.id)
     redirect_to project_url(current_project)
   end

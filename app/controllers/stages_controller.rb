@@ -102,18 +102,43 @@ class StagesController < ApplicationController
     end
   end
 
-  # GET | PUT /projects/1/stages/1/recipes
-  # GET /projects/1/stages/1/recipes.xml
-  
-	def ensure_user_access
-		@stage = Stage.find(params[:id])
-		if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
-			return true
-		else
+	def ensure_user
+    if current_user.stages.include?( Stage.find(params[:id])) || ensure_admin
+      return true
+    else
       flash[:notice] = "Action not allowed"
       return false
-		end
-	end
+    end
+  end
+
+  def ensure_user_access
+    @stage = Stage.find(params[:id])
+    if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
+      return true
+    else
+      flash[:notice] = "Action not allowed"
+      return false
+    end
+  end
+
+  #  def ensure_user
+  #    if current_user.admin? || current_user.stages.include?(Stage.find(params[:id]))
+  #      true
+  #    else
+  #      flash[:notice] = "Action not allowed"
+  #      false
+  #    end
+  #  end
+  #
+  #	def ensure_user_access
+  #		@stage = Stage.find(params[:id])
+  #		if (current_user.stages.include?(@stage) && !current_user.read_only(@stage)) || ensure_admin
+  #			return true
+  #		else
+  #      flash[:notice] = "Action not allowed"
+  #      return false
+  #		end
+  #	end
 
 	def recipes
     @stage = current_project.stages.find(params[:id])
@@ -129,14 +154,4 @@ class StagesController < ApplicationController
     end
   end
 
-  protected
-
-  def ensure_user
-    if current_user.admin? || current_user.stages.include?(Stage.find(params[:id]))
-      true
-    else
-      flash[:notice] = "Action not allowed"
-      false
-    end
-  end
 end
