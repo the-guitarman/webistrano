@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include LogicallyDeletable
 
   # Virtual attribute for the unencrypted password
-  attr_accessor :password
+  #attr_accessor :password
 
   has_many :stages_user
   has_many :stages, :through => :stages_user
@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :activities, :as => :target, :dependent => :destroy
   has_and_belongs_to_many :projects
 
-    attr_accessible :login, :email, :password, :password_confirmation, :time_zone, :tz
+  attr_accessible :login, :email, :password, :password_confirmation, :time_zone, :tz
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -76,6 +76,10 @@ class User < ActiveRecord::Base
   def make_admin!
     self.admin = true
     self.save!
+  end
+
+  def self.admin?
+    self.admin
   end
 
   def disabled?
