@@ -19,8 +19,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :login, :email, :case_sensitive => false
-      
+  validates_uniqueness_of   :login, :email, :case_sensitive => false 
 
 	def read_only(stage)
     su = stages_user.find_by_stage_id(stage.id)
@@ -36,10 +35,6 @@ class User < ActiveRecord::Base
 		return stages if !stages
     stages.select{|stage| stage.project.id == project.id}
 	end
-
-
-
-
 
   def validate_on_update
     if User.find(self.id).admin? && !self.admin?
@@ -58,9 +53,10 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :remember_me, :time_zone, :tz, :admin
 
 
-  scope :enabled,  where(:disabled_at => nil)
-  scope :disabled, where("disabled_at IS NOT NULL")
-  scope :admins,   where(:admin => true, :disabled_at => nil)
+  scope :enabled,    where(:disabled_at => nil)
+  scope :disabled,   where("disabled_at IS NOT NULL")
+  scope :non_admins, where(:admin => false, :disabled_at => nil)
+  scope :admins,     where(:admin => true, :disabled_at => nil)
 
   validate :guard_last_admin, :on => :update
 
