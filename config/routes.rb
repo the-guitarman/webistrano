@@ -16,6 +16,7 @@ Webistrano::Application.routes.draw do
 
   resources :projects do
     resources :project_configurations
+    resources :project_users, :only => [:create, :destroy]
     resources :stages do
       member do
         get  :tasks
@@ -23,6 +24,7 @@ Webistrano::Application.routes.draw do
         get  :recipes
         put  :recipes
       end
+      resources :stage_users
       resources :stage_configurations
       resources :roles
       resources :deployments do
