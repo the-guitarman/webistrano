@@ -14,4 +14,4 @@ Funcionalidade: Login
     Quando o usuário preenche o campo de senha com uma senha incorreta
     E o usuário clica no botão "Sign in"
     Então o usuário deve estar na página de login
-    E o usuário deverá ver uma mensagem de login ou senha inválidos
+    E o usuário deve ver uma mensagem de login ou senha inválidos

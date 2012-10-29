@@ -26,6 +26,6 @@ Então /^o usuário deve estar na página de login$/ do
   page.should have_content "Webistrano login"
 end
 
-Então /^o usuário deverá ver uma mensagem de login ou senha inválidos$/ do
+Então /^o usuário deve ver uma mensagem de login ou senha inválidos$/ do
   page.should have_content "Invalid email or password."
 end
