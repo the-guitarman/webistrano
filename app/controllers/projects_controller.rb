@@ -56,9 +56,8 @@ class ProjectsController < ApplicationController
       action_to_render = 'new'
     end
 
-    if @project
-      @project.clone(@original) if load_clone_original
-      @project.tap { |p| p.deleted_at = nil }.save
+    @project.clone(@original) if load_clone_original
+    if @project.tap { |p| p.deleted_at = nil }.save
 
       add_activity_for(@project, 'created')
       flash[:notice] = 'Project was successfully created.'
