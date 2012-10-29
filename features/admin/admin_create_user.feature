@@ -29,7 +29,7 @@ Funcionalidade: Administrador cria um novo usuário
   Cenário: erro de criação de usuário com campo de e-mail vazio
     Quando o administrador preenche o campo de e-mail vazio
     E o administrador clica no botão "criar usuário"
-    Então a apĺicação continua na página de criação de usuários
+    Então a aplicação continua na página de criação de usuários
     E a aplicação mostra erro por campo de e-mail vazio
 
   Cenário: erro de criação de usuário com campo de e-mail repetido
