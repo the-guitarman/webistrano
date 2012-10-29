@@ -48,7 +48,10 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.xml
   def create
-    @project = Project.unscoped.where(params[:project]).first_or_create
+    @project = Project.unscoped.where(params[:project]).first
+    if @project.nil? || @project.deleted_at.nil?
+      @project = Project.new(params[:project])
+    end
 
     if load_clone_original
       action_to_render = 'clone'
