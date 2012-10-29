@@ -61,6 +61,10 @@
             <%= error_flash(flash[:error]) %>
           <% end %>
 
+          <% unless flash[:alert].blank? %>
+            <%= error_flash(flash[:alert]) %>
+          <% end %>
+
           <%= yield :action_box %>
 
           <%= yield  %>

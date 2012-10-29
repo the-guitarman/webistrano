@@ -1,6 +1,6 @@
 <% content_for(:page_title) do %>
   <% @page_title = "Welcome to Webistrano" %>
-  <h1>Welcome to Webistrano</h1>
+  <h1>Welcome to Webistrano, <%= current_user.login %>  </h1>
 <% end %>
 
 <section>
