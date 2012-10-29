@@ -1,10 +1,5 @@
 # encoding: utf-8
 
-Dado /^que um administrador esteja logado$/ do
-  admin = FactoryGirl.create :admin
-  login admin
-end
-
 Dado /^que o administrador visite a página de criação de usuários$/ do
   visit new_user_path
 end
