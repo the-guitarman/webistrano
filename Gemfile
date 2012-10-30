@@ -23,6 +23,7 @@ group :development do
 end
 
 group :test do
+  gem "debugger"
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'test-unit'
   gem 'mocha'
