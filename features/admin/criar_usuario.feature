@@ -8,7 +8,7 @@ Funcionalidade: Administrador cria um novo usuário
   Cenário: Sucesso na criação de um usuário
     Quando o administrador preenche todos os campos com dados coerentes
     E o administrador clica no botão "Create User"
-    Então a aplicação direciona para a plágina do perfil do usuário criado
+    Então a aplicação direciona para a página do perfil do usuário criado
 
   Cenário: Desistência
     Quando o administrador clica em "Back to users"
