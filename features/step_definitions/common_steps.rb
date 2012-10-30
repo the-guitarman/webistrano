@@ -1,11 +1,12 @@
 # encoding: utf-8
 
-Dado /^que um (usuário|administrador) esteja logado$/ do |agente|
-  if agente == "usuário"
+Dado /^que um (usuário não administrador|administrador) esteja logado$/ do |agente|
+  if agente == "usuário não administrador"
     agente = FactoryGirl.create :user
   else
     agente = FactoryGirl.create :admin
   end
+  @agente = agente
   login agente
 end
 
@@ -17,6 +18,6 @@ Quando /^o (usuário|administrador) clica em "([^']*)"$/ do |obj, link|
   click_link link
 end
 
-Dado /^que o usuário esteja logado$/ do
-  login @usuario
+Dado /^que exista um projeto$/ do
+  @projeto = FactoryGirl.create :project
 end
