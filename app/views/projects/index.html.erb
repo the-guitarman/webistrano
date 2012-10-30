@@ -13,7 +13,6 @@
 
   <% if @projects.empty? %>
     No projects configured yet.<br />
-    <%= link_to 'New project', new_project_path %>
   <% else %>
     <table class="table table-striped">
       <thead>
@@ -41,6 +40,8 @@
       </tbody>
     </table>
   <% end %>
-
-  <p><%= link_to 'New project', new_project_path, :class => 'arrow_link' %></p>
+  <% if current_user.admin? -%>
+      <p><%= link_to 'New project', new_project_path, :class => 'arrow_link' %></p>
+  <%  end -%>
+  
 </section>
