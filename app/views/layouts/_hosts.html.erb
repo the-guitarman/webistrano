@@ -1,10 +1,13 @@
-<% if Host.count > 0 %>
-  <% for host in Host.find(:all, :order => "name ASC") %>
-    <li><%= link_to host.name, host_path(host) %></li>
+<% if current_user %>
+  <% if Host.count > 0 %>
+    <% for host in Host.find(:all, :order => "name ASC") %>
+      <li><%= link_to host.name, host_path(host) %></li>
+    <% end %>
+  <% else %>
+    <li>
+      No host created yet<br />
+    </li>
   <% end %>
-<% else %>
-  <li>
-    No host created yet<br />
-    <%= link_to 'New host', new_host_path%>
-  </li>
+  <br/>
+  <%= link_to 'New host', new_host_path%>
 <% end %>

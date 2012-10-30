@@ -1,10 +1,13 @@
-<% if User.count > 0 %>
-  <% for user in User.find(:all, :order => "login ASC") %>
-    <li><%= link_to user.login, user_path(user) %></li>
+<% if current_user %>
+  <% if User.count > 0 %>
+    <% for user in User.find(:all, :order => "login ASC") %>
+      <li><%= link_to user.login, user_path(user) %></li>
+    <% end %>
+  <% else %>
+    <li>
+      No user created yet<br />
+    </li>
   <% end %>
-<% else %>
-  <li>
-    No user created yet<br />
-    <%= link_to 'New user', new_user_path%>
-  </li>
+  <br/>
+  <%= link_to 'New user', new_user_path%>
 <% end %>
