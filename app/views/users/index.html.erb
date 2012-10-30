@@ -40,7 +40,7 @@
             <% if current_user.admin? || current_user == user -%>
               <td><%= link_to 'Edit', edit_user_path(user) %></td>
             <% end -%>
-            <% if current_user.admin? -%>
+            <% if current_user.admin? && user != current_user -%>
               <td><%= link_to 'Delete', user_path(user), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
             <% end -%>
           </tr>

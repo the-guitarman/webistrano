@@ -67,7 +67,7 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     @user = User.find(params[:id])
-
+    
     if @user.admin? && User.admins.count == 1
       flash[:notice] = 'Can not disable last admin user.'
     else
