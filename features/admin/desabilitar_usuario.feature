@@ -9,6 +9,6 @@ Funcionalidade: Administrador desabilita um usuário
   @javascript
   Cenário: Desabilitação de um usuário
     Quando o administrador clica em "Delete"
-    E o administrador confirma que quer desabilitar o usuário
+    E o administrador confirma
     Então o administrador deve estar na página de visualização dos detalhes do usuário desabilitado
     E o administrador deve ver uma mensagem de usuário desabilitado com sucesso

@@ -18,6 +18,10 @@ Quando /^o (usuário|administrador) clica em "([^']*)"$/ do |obj, link|
   click_link link
 end
 
+Quando /^o administrador confirma$/ do
+  page.driver.browser.switch_to.alert.accept
+end
+
 Dado /^que exista um usuário$/ do
   @usuario = FactoryGirl.create :user
 end
