@@ -11,7 +11,7 @@ Quando /^o administrador preenche todos os campos com dados coerentes$/ do
   fill_in "user_email", with: "nao@existe.com"
 end
 
-Então /^a aplicação direciona para a plágina do perfil do usuário criado$/ do
+Então /^a aplicação direciona para a página do perfil do usuário criado$/ do
   current_path.should == user_path(User.last)
 end
 

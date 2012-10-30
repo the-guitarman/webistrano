@@ -20,3 +20,7 @@ end
 Dado /^que o usuário esteja logado$/ do
   login @usuario
 end
+
+Dado /^que exista um usuário$/ do
+  @usuario = FactoryGirl.create :user
+end
