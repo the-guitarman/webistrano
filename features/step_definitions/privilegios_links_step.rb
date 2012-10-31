@@ -20,7 +20,7 @@ Dado /^que o usuário esteja alocado no projeto$/ do
   @projeto.users << @agente
 end
 
-Quando /^o usuário estiver na página um projeto$/ do
+Quando /^o usuário estiver na página do projeto$/ do
   visit project_path(@projeto)
 end
 

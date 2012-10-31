@@ -29,3 +29,13 @@ end
 Dado /^que exista um projeto$/ do
   @projeto = FactoryGirl.create :project
 end
+
+Dado /^que exista um stage alocado ao projeto$/ do
+  @stage = @projeto.stages.new
+  @stage.name = "stage_test"
+  @stage.save
+end
+
+Dado /^que o usuário esteja alocado no stage$/ do
+  @stage.users << @agente
+end
