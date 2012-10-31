@@ -9,6 +9,7 @@ Cenário: Sucesso na criação de um host
     Quando o administrador preenche os campos de criação de hosts com dados coerentes
     E o administrador clica no botão "Create Host"
     Então o aplicação direciona para a página do novo host
+    E deve ser registrada uma atividade recente de criação do objeto
 
 Cenário: Falha na criação de um host (campo vazio)
     Quando o administrador deixa o campo de host vazio

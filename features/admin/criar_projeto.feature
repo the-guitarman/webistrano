@@ -10,6 +10,7 @@ Funcionalidade: Administrador cria um novo projeto
     E o administrador clica no botão "Create Project"
     Então o administrador deve estar na página de visualização daquele projeto
     E o administrador deve ver uma mensagem de sucesso na criação do projeto
+    E deve ser registrada uma atividade recente de criação do objeto
 
   Cenário: Falha na criação do projeto (sem nome)
     Quando o administrador preenche os campos de criação de projeto sem preencher o nome
