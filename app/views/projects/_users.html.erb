@@ -14,9 +14,10 @@
     <% end %>
   </table>
 <% end %>
-
-<%= form_tag(project_project_users_path(@project), :method => :post) do |f| %>
-  <%= label_tag "Add User" %>
-  <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>
-  <%= submit_tag "Add" %>
+  <% if current_user.admin? -%>
+  <%= form_tag(project_project_users_path(@project), :method => :post) do |f| %>
+    <%= label_tag "Add User" %>
+    <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>
+    <%= submit_tag "Add" %>
+  <% end %>
 <% end %>
