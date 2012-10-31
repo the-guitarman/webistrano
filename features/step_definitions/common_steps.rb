@@ -22,7 +22,7 @@ Quando /^o administrador confirma$/ do
   page.driver.browser.switch_to.alert.accept
 end
 
-Dado /^que exista (?:um|uma) ([^']*)$/ do |obj|
+Dado /^que exista (?:um|uma) (usuário|projeto|host|recipe)$/ do |obj|
   if obj == "usuário"
     @usuario = FactoryGirl.create :user
   elsif obj == "projeto"
@@ -36,9 +36,9 @@ Dado /^que exista (?:um|uma) ([^']*)$/ do |obj|
   end
 end
 
-Dado /^que exista um projeto$/ do
-  @projeto = FactoryGirl.create :project
-end
+#Dado /^que exista um projeto$/ do
+#  @projeto = FactoryGirl.create :project
+#end
 
 Dado /^que exista um stage alocado ao projeto$/ do
   @stage = @projeto.stages.new
