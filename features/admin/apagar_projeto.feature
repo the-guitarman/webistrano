@@ -11,4 +11,5 @@ Funcionalidade: Apagar um projeto
     Quando o administrador clica em "Delete"
     E o administrador confirma
     Então o administrador deve estar na página de listagem de projetos
+    E o administrador deve ver uma mensagem de projeto removido com sucesso
     E o nome do projeto removido não deve mais existir na listagem

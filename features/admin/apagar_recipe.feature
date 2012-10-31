@@ -11,4 +11,5 @@ Funcionalidade: Apagar uma recipe
     Quando o administrador clica em "Delete"
     E o administrador confirma
     Então o administrador deve estar na página de listagem de recipes
+    E o administrador deve ver uma mensagem de recipe removida com sucesso
     E o nome da recipe removida não deve mais existir na listagem
