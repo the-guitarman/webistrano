@@ -2,7 +2,7 @@
 Funcionalidade: Login
 
   Contexto:
-    Dado que exista um usuário no sistema
+    Dado que exista um usuário
     E que o usuário esteja na página de login
 
   Cenário: Sucesso no login

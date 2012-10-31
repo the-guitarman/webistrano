@@ -22,10 +22,20 @@ Quando /^o administrador confirma$/ do
   page.driver.browser.switch_to.alert.accept
 end
 
-Dado /^que exista um usuário$/ do
-  @usuario = FactoryGirl.create :user
+Dado /^que exista um ([^']*)$/ do |obj|
+  if obj == "usuário"
+    @usuario = FactoryGirl.create :user
+  elsif obj == "projeto"
+    @projeto = FactoryGirl.create :project
+  elsif obj == "host"
+    @host = FactoryGirl.create :host
+  else
+    fail('Este objeto não existe!')
+  end
 end
 
-Dado /^que exista um projeto$/ do
-  @projeto = FactoryGirl.create :project
+Então /^deve ser registrada uma atividade recente de criação do objeto$/ do
+  page.should have_content "Recent Activities"
+  page.should have_content "Tag"
+  page.should have_content "created"
 end
