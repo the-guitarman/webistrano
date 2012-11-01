@@ -1,100 +1,108 @@
 # encoding: utf-8
 
-Dado /^que o administrador visite a página de criação de usuários$/ do
+Dado /^que o administrador esteja na página de criação de um usuário$/ do
   visit new_user_path
 end
 
-Quando /^o administrador preenche todos os campos com dados coerentes$/ do
-  fill_in "user_login", with: "naoExiste"
-  fill_in "user_password", with: "naoExiste"
-  fill_in "user_password_confirmation", with: "naoExiste"
-  fill_in "user_email", with: "nao@existe.com"
+Quando /^o administrador preenche todos os campos de (?:criação|edição) de usuário corretamente$/ do
+  fill_in "user_login", with: "novo_usuario"
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "123456"
+  fill_in "user_email", with: "novo@usuario.com"
 end
 
-Então /^a aplicação direciona para a página do perfil do usuário criado$/ do
-  current_path.should == user_path(User.last)
+Então /^o administrador deve estar na página do perfil do usuário criado$/ do
+  page.should have_content "User novo_usuario"
 end
 
-Então /^a aplicação direciona para a página dos usuários$/ do
-  current_path.should == users_path
+Então /^o administrador deve ver uma mensagem de sucesso na criação do usuário$/ do
+  page.should have_content "Account created"
 end
 
-Quando /^o administrador preenche o campo de login vazio$/ do
-  admin = User.new(login: "admin",
-                      password: "123456",
-                      password_confirmation: "123456",
-                      email: "admin@teste.com")
-  fill_in "user_password", with: admin.password
-  fill_in "user_password_confirmation", with: admin.password
-  fill_in "user_email", with: admin.email
+Quando /^o administrador preenche os campos de (?:criação|edição) de usuário com login vazio$/ do
+  fill_in "user_login", with: ""
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "123456"
+  fill_in "user_email", with: "usuario@teste.com"
 end
 
-Então /^a aplicação continua na página de criação de usuários$/ do
+Então /^o administrador deve estar na página de criação de um usuário$/ do
+  page.should have_content "New user"
   page.should have_button "Create User"
 end
 
-Então /^a aplicação mostra erro por campo de login vazio$/ do
+Então /^o administrador deve ver uma mensagem de login não preenchido$/ do
   page.should have_content "Login can't be blank"
 end
 
 Quando /^o administrador preenche o campo de login com um login existente$/ do
-  user = User.create(login: "usuario",
-                     password: "123456",
-                     password_confirmation: "123456",
-                     email: "usuario@teste.com")
+  user = FactoryGirl.create :user
   fill_in "user_login", with: user.login
-  fill_in "user_password", with: user.password
-  fill_in "user_password_confirmation", with: user.password
-  fill_in "user_email", with: user.email
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "123456"
+  fill_in "user_email", with: "invalido@usuario.com"
 end
 
-Então /^a aplicação mostra erro de login existente$/ do
+Então /^o administrador deve ver uma mensagem de login já existente$/ do
   page.should have_content "Login has already been taken"
 end
 
-Quando /^o administrador preenche o campo de e-mail vazio$/ do
-  user = FactoryGirl.build :user
-  fill_in "user_login", with: user.login
-  fill_in "user_password", with: user.password
-  fill_in "user_password_confirmation", with: user.password
+Quando /^o administrador preenche os campos de (?:criação|edição) de usuário com e-mail vazio$/ do
+  fill_in "user_login", with: "novo_usuario"
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "123456"
+  fill_in "user_email", with: ""
 end
 
-Então /^a aplicação mostra erro por campo de e-mail vazio$/ do
+Então /^o administrador deve ver uma mensagem de e-mail não preenchido$/ do
   page.should have_content "Email can't be blank"
 end
 
-Quando /^o administrador preenche o campo de e-mail com um e-mail existente$/ do
-# User.create para salvar no banco
-  user_criado = User.create(login: "usuario_antigo",
-                password: "123456",
-                password_confirmation: "123456",
-                email: "usuarioantigo@teste.com")
-# User.new para não salvar no banco
-  user = User.new(login: "usuario_novo",
-                password: "123456",
-                password_confirmation: "123456",
-                email: "usuario@teste.com")
-  fill_in "user_login", with: user.login
-  fill_in "user_password", with: user.password
-  fill_in "user_password_confirmation", with: user.password
-  fill_in "user_email", with: user_criado.email
-end
-
-Então /^a aplicação mostra erro de e-mail existente$/ do
-  page.should have_content "Email has already been taken"
-end
-
-Quando /^o administrador preenche o campo de senha e confirmação de senha diferentes$/ do
-  user = User.new(login: "usuario_antigo",
-                password: "123456",
-                password_confirmation: "123456",
-                email: "usuarioantigo@teste.com")
-  fill_in "user_login", with: user.login
-  fill_in "user_password", with: user.password
-  fill_in "user_password_confirmation", with: user.password<<'1'
+Quando /^o administrador preenche o campo de e-mail com um e-mail já existente$/ do
+  user = FactoryGirl.create :user
+  fill_in "user_login", with: "usuario_invalido"
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "123456"
   fill_in "user_email", with: user.email
 end
 
-Então /^a aplicação mostra erro de senha e confirmação de senha diferentes$/ do
+Então /^o administrador deve ver uma mensagem de e-mail já existente$/ do
+  page.should have_content "Email has already been taken"
+end
+
+Quando /^o administrador preenche o campo de e-mail com um e-mail inválido$/ do
+  fill_in "user_login", with: "usuario_invalido"
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "654321"
+  fill_in "user_email", with: "invalido.usuario"
+end
+
+Então /^o administrador deve ver uma mensagem de e-mail inválido$/ do
+  page.should have_content "Email is invalid"
+end
+
+Quando /^o administrador preenche os campos de (?:criação|edição) de usuário com senha vazia$/ do
+  fill_in "user_login", with: "usuario_invalido"
+  fill_in "user_password", with: ""
+  fill_in "user_password_confirmation", with: "654321"
+  fill_in "user_email", with: "invalido@usuario.com"
+end
+
+Então /^o administrador deve ver uma mensagem de senha não preenchida$/ do
+  page.should have_content "Password can't be blank"
+end
+
+Quando /^o administrador preenche os campos de senha e confirmação de senha com valores diferentes$/ do
+  fill_in "user_login", with: "usuario_invalido"
+  fill_in "user_password", with: "123456"
+  fill_in "user_password_confirmation", with: "654321"
+  fill_in "user_email", with: "invalido@usuario.com"
+end
+
+Então /^o administrador deve ver uma mensagem de senha e confirmação diferentes$/ do
   page.should have_content "Password doesn't match confirmation"
+end
+
+Então /^o administrador deve estar na página de listagem de usuários$/ do
+  page.should have_content "Users"
 end

@@ -1,43 +1,50 @@
 # encoding: utf-8
 
-Dado /^que o administrador visite a página de criação de recipes$/ do
+Dado /^que o administrador esteja na página de criação de recipes$/ do
   visit new_recipe_path
 end
-Quando /^o administrador preenche os campos de criação de recipes com dados coerentes$/ do
-  fill_in "recipe_name", with: "novo_recipe"
-  fill_in "recipe_body",with: "abc"
+Quando /^o administrador preenche os campos de (?:criação|edição) de recipe corretamente$/ do
+  fill_in "recipe_name", with: "nova_recipe"
+  fill_in "recipe_body", with: "abc"
 end
 
-Então /^o aplicação direciona para a página do novo recipe$/ do
-  visit recipe_path(Recipe.last)
+Então /^o administrador deve estar na página de visualização da nova recipe$/ do
+  page.should have_content "Recipe: nova_recipe"
 end
 
-Quando /^o administrador deixa o campo nome recipe vazio$/ do
-  fill_in "recipe_body",with: "abc"
+Então /^o administrador deve ver uma mensagem de sucesso na criação da recipe$/ do
+  page.should have_content "Recipe was successfully created."
 end
 
-Quando /^o administrador deixa o campo body de recipe vazio$/ do
-  fill_in "recipe_name",with: "novo_recipe"
+Quando /^o administrador deixa o campo de nome da recipe vazio$/ do
+  fill_in "recipe_name", with: ""
+  fill_in "recipe_body", with: "abc"
 end
 
-Então /^o aplicativo continua na página de criação de recipes/ do
+Quando /^o administrador deixa o campo de body da recipe vazio$/ do
+  fill_in "recipe_name", with: "nova_recipe"
+  fill_in "recipe_body", with: ""
+end
+
+Então /^o administrador deve estar na página de criação de recipes/ do
+  page.should have_content "New recipe"
   page.should have_button "Create recipe"
 end
 
-Então /^o aplicação mostra erro por campo de name do recipe vazio$/ do
+Então /^o administrador deve ver uma mensagem de nome da recipe não preenchido$/ do
   page.should have_content "Name can't be blank"
 end
 
-Então /^o aplicação mostra erro por campo de body do recipe vazio$/ do
+Então /^o administrador deve ver uma mensagem de body da recipe não preenchido$/ do
   page.should have_content "Body can't be blank"
 end
 
-Quando /^o administrador preenche o campo de recipe com dado existente$/ do
-  recipe = Recipe.create(name: "recipe_teste",body:"abc")
-  fill_in "recipe_name", with: "recipe_teste"
-  fill_in "recipe_body",with: "abc"
+Quando /^o administrador preenche o campo de nome da recipe com um nome já existente$/ do
+  recipe = FactoryGirl.create :recipe
+  fill_in "recipe_name", with: recipe.name
+  fill_in "recipe_body", with: "abc"
 end
 
-Então /^o aplicação mostra erro de recipe existente$/ do
+Então /^o administrador deve ver uma mensagem de nome já existente$/ do
   page.should have_content "Name has already been taken"
 end

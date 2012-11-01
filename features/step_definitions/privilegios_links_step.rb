@@ -1,37 +1,45 @@
 # encoding: utf-8
 
-Quando /^o usuário estiver na página de usuários$/ do
+Quando /^o usuário visita a página de listagem de usuários$/ do
   visit users_path
 end
 
-Então /^não aparece o link de criação de novos usuários$/ do
+Então /^o usuário não deve ver o link de criação de novos usuários$/ do
   page.should_not have_content "New user"
 end
 
-Quando /^o usuário estiver na página de hosts$/ do
+Quando /^o usuário visita a página de listagem de hosts$/ do
   visit hosts_path
 end
 
-Então /^não aparece o link de criação de novos hosts$/ do
+Então /^o usuário não deve ver o link de criação de novos hosts$/ do
   page.should_not have_content "New host"
 end
 
-Dado /^que o usuário esteja alocado no projeto$/ do
+Quando /^o usuário visita a página de listagem de projetos$/ do
+  visit projects_path
+end
+
+Então /^o usuário não deve ver o link de criação de novos projetos$/ do
+  page.should_not have_content "New project"
+end
+
+Dado /^que o usuário esteja alocado ao projeto$/ do
   @projeto.users << @agente
 end
 
-Quando /^o usuário estiver na página do projeto$/ do
+Quando /^o usuário visitar a página do projeto$/ do
   visit project_path(@projeto)
 end
 
-Então /^não aparece o link de criação de novos stages?/ do
+Então /^o usuário não deve ver o link de criação de novos stages$/ do
   page.should_not have_content "New stage"
 end
 
-Quando /^o usuário estiver na página de recipes$/ do
+Quando /^o usuário visitar a página de listagem de recipes$/ do
   visit recipes_path
 end
 
-Então /^não aparece o link de criação de novos recipes$/ do
+Então /^o usuário não deve ver o link de criação de novas recipes$/ do
   page.should_not have_content "New recipe"
 end

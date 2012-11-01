@@ -2,12 +2,11 @@
 
 Dado /^que um (usuário não administrador|administrador) esteja logado$/ do |agente|
   if agente == "usuário não administrador"
-    agente = FactoryGirl.create :user
+    @agente = FactoryGirl.create :user
   else
-    agente = FactoryGirl.create :admin
+    @agente = FactoryGirl.create :admin
   end
-  @agente = agente
-  login agente
+  login @agente
 end
 
 Quando /^o (?:usuário|administrador) clica no botão "([^']*)"$/ do |botao|
@@ -36,17 +35,13 @@ Dado /^que exista (?:um|uma) (usuário|projeto|host|recipe)$/ do |obj|
   end
 end
 
-#Dado /^que exista um projeto$/ do
-#  @projeto = FactoryGirl.create :project
-#end
-
 Dado /^que exista um stage alocado ao projeto$/ do
   @stage = @projeto.stages.new
   @stage.name = "stage_test"
   @stage.save
 end
 
-Dado /^que o usuário esteja alocado no stage$/ do
+Dado /^que o usuário esteja alocado ao stage$/ do
   @stage.users << @agente
 end
 

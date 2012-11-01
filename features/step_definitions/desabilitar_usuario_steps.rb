@@ -5,7 +5,7 @@ Dado /^que o administrador esteja na página de usuários$/ do
 end
 
 Então /^o administrador deve estar na página de visualização dos detalhes do usuário desabilitado$/ do
-  page.should have_content @usuario.login
+  page.should have_content "User #{@usuario.login}"
   page.should have_content "Edit & change password"
 end
 

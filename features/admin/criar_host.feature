@@ -1,24 +1,25 @@
 # language: pt
 Funcionalidade: Administrador cria um novo host
 
-Contexto:
+  Contexto:
     Dado que um administrador esteja logado
-    E que o administrador visite a página de criação de hosts
+    E que o administrador esteja na página de criação de hosts
 
-Cenário: Sucesso na criação de um host
-    Quando o administrador preenche os campos de criação de hosts com dados coerentes
+  Cenário: Sucesso na criação de um host
+    Quando o administrador preenche os campos de criação de hosts corretamente
     E o administrador clica no botão "Create Host"
-    Então o aplicação direciona para a página do novo host
+    Então o administrador deve estar na página de visualização do novo host
+    E o administrador deve ver uma mensagem de sucesso na criação do host
     E deve ser registrada uma atividade recente de criação do objeto
 
-Cenário: Falha na criação de um host (campo vazio)
+  Cenário: Falha na criação de um host (campo vazio)
     Quando o administrador deixa o campo de host vazio
     E o administrador clica no botão "Create Host"
-    Então o aplicativo continua na página de criação de hosts
-    E o aplicação mostra erro por campo de name vazio
+    Então o administrador deve estar na página de criação de host
+    E o administrador deve ver uma mensagem de campo de nome do host obrigatório
 
-Cenário: Falha na criação de um host (host já existente)
-    Quando o administrador preenche o campo de host com dado existente
+  Cenário: Falha na criação de um host (host já existente)
+    Quando o administrador preenche o campo de host com um nome já existente
     E o administrador clica no botão "Create Host"
-    Então o aplicativo continua na página de criação de hosts
-    E o aplicação mostra erro de host existente
+    Então o administrador deve estar na página de criação de host
+    E o administrador deve ver uma mensagem de campo de nome do host já existente
