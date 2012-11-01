@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <% @page_title = "User #{@user.login}" %>
-  <h1>User <%= user_info(@user)%></h1>
+  <h1>User <%= @user.login%></h1>
 <% end %>
 
 <% content_for :breadcrumb do %>
