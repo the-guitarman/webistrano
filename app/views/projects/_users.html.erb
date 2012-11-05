@@ -1,23 +1,25 @@
-<% if @project.users.empty? %>
-  <br/>
-    <strong>No users added yet.</strong>
-  <br/>
-<% else %>
-  <table class="sortable" id="project_users_table">
-    <% for user in @project.users %>
-      <tr class="<%= cycle :even, :odd, :name => 'users' %>">
-        <td nowrap><%= link_to h(user.login), user_path(user) %></td>
-        <% if current_user.admin? -%>
-          <td><%= link_to 'Remove', project_project_user_path(@project, user), :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end -%>
-      </tr>
-    <% end %>
-  </table>
-<% end %>
-  <% if current_user.admin? -%>
-  <%= form_tag(project_project_users_path(@project), :method => :post) do |f| %>
-    <%= label_tag "Add User" %>
-    <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>
-    <%= submit_tag "Add" %>
+<div id="project_users_list">
+  <% if @project.users.empty? %>
+    <br/>
+      <strong>No users added yet.</strong>
+    <br/>
+  <% else %>
+    <table class="sortable">
+      <% for user in @project.users %>
+        <tr class="<%= cycle :even, :odd, :name => 'users' %>">
+          <td nowrap><%= link_to h(user.login), user_path(user) %></td>
+          <% if current_user.admin? -%>
+            <td><%= link_to 'Remove', project_project_user_path(@project, user), :confirm => 'Are you sure?', :method => :delete %></td>
+          <% end -%>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
-<% end %>
+    <% if current_user.admin? -%>
+    <%= form_tag(project_project_users_path(@project), :method => :post) do |f| %>
+      <%= label_tag "Add User" %>
+      <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>
+      <%= submit_tag "Add" %>
+    <% end %>
+  <% end %>
+</div>

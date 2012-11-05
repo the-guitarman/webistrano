@@ -24,10 +24,6 @@ Então /^o usuário não deve ver o link de criação de novos projetos$/ do
   page.should_not have_content "New project"
 end
 
-Dado /^que o usuário esteja alocado ao projeto$/ do
-  @projeto.users << @agente
-end
-
 Quando /^o usuário visitar a página do projeto$/ do
   visit project_path(@projeto)
 end
