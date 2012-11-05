@@ -16,7 +16,7 @@ Funcionalidade: Administrador cria um novo projeto
     Quando o administrador preenche os campos de criação de projeto sem preencher o nome
     E o administrador clica no botão "Create Project"
     Então o administrador deve estar na página de criação de projetos
-    E o administrador deve ver uma mensagem de nome do projeto obrigatório
+    E o administrador deve ver uma mensagem de nome do projeto não preenchido
 
   Cenário: Falha na criação do projeto (nome já existente)
     Quando o administrador preenche os campos de criação de projeto com um nome já existente

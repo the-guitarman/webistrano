@@ -1,6 +1,6 @@
 <% content_for(:page_title) do %>
   <% @page_title = "Project #{current_project.name}" %>
-  <h1>Project <%= link_to current_project.name, project_path(current_project) %></h1>
+  <h1>Project <%= current_project.name %></h1>
 <% end %>
 
 <% content_for(:breadcrumb) do %>

@@ -16,7 +16,7 @@ Funcionalidade: Administrador cria um novo host
     Quando o administrador deixa o campo de host vazio
     E o administrador clica no botão "Create Host"
     Então o administrador deve estar na página de criação de host
-    E o administrador deve ver uma mensagem de campo de nome do host obrigatório
+    E o administrador deve ver uma mensagem de nome do host não preenchido
 
   Cenário: Falha na criação de um host (host já existente)
     Quando o administrador preenche o campo de host com um nome já existente

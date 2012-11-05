@@ -27,7 +27,7 @@ Então /^o administrador deve estar na página de criação de host/ do
   page.should have_button "Create Host"
 end
 
-Então /^o administrador deve ver uma mensagem de campo de nome do host obrigatório$/ do
+Então /^o administrador deve ver uma mensagem de nome do host não preenchido$/ do
   page.should have_content "Name can't be blank"
 end
 
