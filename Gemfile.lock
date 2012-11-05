@@ -163,6 +163,8 @@ GEM
       thor (~> 0.14)
     json (1.7.4)
     kgio (2.7.4)
+    launchy (2.1.2)
+      addressable (~> 2.3)
     less (2.2.1)
       commonjs (~> 0.2.6)
     less-rails (2.2.3)
@@ -325,6 +327,7 @@ DEPENDENCIES
   guard-test
   haml
   jquery-rails
+  launchy
   mocha
   mysql2 (= 0.3.11)
   open4 (= 0.9.3)

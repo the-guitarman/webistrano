@@ -20,6 +20,7 @@ group :development do
   gem 'guard-bundler'
   gem 'guard-livereload'
   gem 'rack-livereload'
+
 end
 
 group :test do
@@ -29,6 +30,7 @@ group :test do
   gem 'mocha'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'launchy'
 
   gem 'rspec-rails'
   gem 'cucumber-rails'
