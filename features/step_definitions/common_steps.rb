@@ -50,3 +50,7 @@ Então /^deve ser registrada uma atividade recente de criação do objeto$/ do
   page.should have_content "Tag"
   page.should have_content "created"
 end
+
+Dado /^que o administrador está na página do projeto$/ do
+  visit project_path(@projeto)
+end

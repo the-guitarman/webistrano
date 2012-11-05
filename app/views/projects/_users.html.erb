@@ -3,7 +3,7 @@
     <strong>No users added yet.</strong>
   <br/>
 <% else %>
-  <table class="sortable">
+  <table class="sortable" id="project_users_table">
     <% for user in @project.users %>
       <tr class="<%= cycle :even, :odd, :name => 'users' %>">
         <td nowrap><%= link_to h(user.login), user_path(user) %></td>
