@@ -30,7 +30,7 @@ Então /^o administrador deve estar na página de criação de projetos$/ do
   page.should have_content "New project"
 end
 
-Então /^o administrador deve ver uma mensagem de nome do projeto obrigatório$/ do
+Então /^o administrador deve ver uma mensagem de nome do projeto não preenchido$/ do
   page.should have_content "Name can't be blank"
 end
 
