@@ -33,7 +33,7 @@ Funcionalidade: Privilégios de Visualização de hosts, recipes, stages e users
 
   Cenário: o usuário não pode adicionar outro usuário no projeto
     Dado que exista um projeto
-    E que o usuário esteja alocado ao projeto
+    E que o usuário logado esteja alocado ao projeto
     Quando o usuário visitar a página do projeto
     Então o usuário não deve ver a opção de adicionar outro usuário
 

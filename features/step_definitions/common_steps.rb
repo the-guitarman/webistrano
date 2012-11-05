@@ -42,7 +42,7 @@ Dado /^que exista um stage alocado ao projeto$/ do
 end
 
 Dado /^que o usuário (logado )?esteja alocado ao stage$/ do |logado|
-  @stage.users << logado ? @agente : @usuario
+  logado ? (@stage.users << @agente) : (@stage.users << @usuario)
 end
 
 Então /^deve ser registrada uma atividade recente de criação do objeto$/ do
