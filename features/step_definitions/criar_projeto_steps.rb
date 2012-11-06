@@ -12,9 +12,9 @@ end
 
 Então /^o administrador deve estar na página de visualização daquele projeto$/ do
   page.should have_content "Project Teste"
-  page.should have_content "Edit project"
-  page.should have_content "Clone project"
-  page.should have_content "Delete project"
+  page.should have_content "Description"
+  page.should have_content "Project Type"
+  page.should have_content "Deployments"
 end
 
 Então /^o administrador deve ver uma mensagem de sucesso na criação do projeto$/ do
