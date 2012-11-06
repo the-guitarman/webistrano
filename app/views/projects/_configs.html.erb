@@ -4,8 +4,8 @@
     Project configuration is overridden by stage configurations.
   </p>
 <% else %>
-  <div class="custom-table">
-    <table class="table table-striped">
+  <div class="custom-table large">
+    <table>
       <tr>
         <td>Name</td>
         <td>Value</td>
@@ -18,8 +18,8 @@
           <td><%= truncate(config.name, length: 25) %></td>
           <td><%= truncate(hide_password_in_value(config), length: 45) %></td>
           <td><%= config.prompt_status_in_html %></td>
-          <td><%= link_to image_tag('icons/buttons/edit.png', :border => '0', :width => "25", :height => "25", :title => "Edit"), edit_project_project_configuration_path(@project, config) %></td>
-          <td><%= link_to image_tag('icons/buttons/delete.png', :border => '0', :width => "25", :height => "25", :title => "Delete"), project_project_configuration_path(@project, config), data: { confirm: 'Are you sure?' }, method: :delete %></td>
+          <td><%= link_to image_tag('icons/buttons/edit.png', :width => "25", :height => "25", :title => "Edit"), edit_project_project_configuration_path(@project, config) %></td>
+          <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete"), project_project_configuration_path(@project, config), data: { confirm: 'Are you sure?' }, method: :delete %></td>
         </tr>
       <% end %>
     </table>

@@ -1,16 +1,14 @@
 <% if activities.empty? %>
   <p>No recent activities.</p>
 <% else %>
-  <table class="table table-striped">
-    <thead>
+  <div class="custom-table large">
+    <table>
       <tr>
-        <th>Tag</th>
-        <th>User</th>
-        <th>Date</th>
-        <th>Changes</th>
+        <td>Tag</td>
+        <td>User</td>
+        <td>Date</td>
+        <td>Changes</td>
       </tr>
-    </thead>
-    <tbody>
       <% activities.each do |activity| %>
         <tr>
           <td><%= activity.tag %></td>
@@ -32,6 +30,6 @@
           </td>
         </tr>
       <% end %>
-    </tbody>
-  </table>
+    </table>
+  </div>
 <% end %>

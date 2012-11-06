@@ -5,10 +5,10 @@
 
 <section>
   <%= form_for @user, html: { class: "form-horizontal" } do |f| -%>
-  <%= render partial: 'form', locals: { form: f } %>
-  <div class="form-actions">
-    <%= f.submit class: "btn btn-primary" %>
-    <%= link_to 'Back to users', users_path, :class => 'btn' %>
-  </div>
-<% end -%>
+    <%= render partial: 'form', locals: { form: f } %>
+    <div class="form-actions">
+      <%= f.submit class: "btn btn-primary" %>
+      <%= link_to 'Back to users', users_path, :class => 'btn' %>
+    </div>
+  <% end -%>
 </section>
