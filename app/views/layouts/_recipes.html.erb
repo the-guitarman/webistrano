@@ -1,7 +1,11 @@
 <% if current_user %>
   <% if Recipe.count > 0 %>
-    <% for recipe in Recipe.find(:all, :order => "name ASC") %>
-      <li><%= link_to recipe.name, recipe_path(recipe) %></li>
+    <% for recipe in Recipe.all(:order => "name ASC") %>
+      <li>
+        <a href="<%= recipe_path(recipe) %>" class="menu_link <%=h active_link_class(recipe) %>">
+          <%=h recipe.name %>
+        </a>
+      </li>
     <% end %>
   <% else %>
     <li>
