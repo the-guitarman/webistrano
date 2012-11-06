@@ -15,9 +15,12 @@ module ApplicationHelper
   def flashed_errors(object_name)
     obj = instance_variable_get("@#{object_name}")
     return nil if obj.errors.blank?
+    
+    error_messages = ""
+    obj.errors.full_messages.map {|msg| error_messages<<content_tag(:li, msg)}
+#    debugger
+#    puts ""
 
-
-    error_messages = obj.errors.full_messages.map {|msg| content_tag(:li, msg)}
 
     html = content_tag(:p,"#{pluralize(obj.errors.size, 'error')} prohibited this #{object_name.to_s.gsub('_', ' ')} from being saved")
     html << content_tag(:div,

@@ -19,7 +19,6 @@
 <% end %>
 
 <% if current_user.admin? %>
-  <%#debugger%>
   <form action='<%=project_stage_stage_users_path(@stage.project,@stage)%>' method='post'>
     <label>Add user: </label>
     <%=select 'stage_user', 'id', @stage.project.users.reject{|u| @stage.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]}%>
