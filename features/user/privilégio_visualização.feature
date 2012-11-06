@@ -18,7 +18,7 @@ Funcionalidade: Privilégios de Visualização de hosts, recipes, stages e users
 
   Cenário: o usuário não pode ver o link de criação de stages
     Dado que exista um projeto
-    E que o usuário esteja alocado ao projeto
+    E que o usuário logado esteja alocado ao projeto
     Quando o usuário visitar a página do projeto
     Então o usuário não deve ver o link de criação de novos stages
 
@@ -31,16 +31,30 @@ Funcionalidade: Privilégios de Visualização de hosts, recipes, stages e users
     Quando o usuário visita a página de listagem de projetos
     Então o usuário não deve ver o projeto na lista
 
+  Cenário: o usuário não pode visualizar uma stage em que não está alocado
+    Dado que exista um projeto
+    E que exista um stage alocado ao projeto
+    Quando o usuário visitar a página do projeto
+    Então o usuário não deve visualizar a stage
+
+  Cenário: o usuário pode visualizar uma stage em que está alocado
+    Dado que exista um projeto
+    E que exista um stage alocado ao projeto
+    E que o usuário logado esteja alocado ao projeto
+    E que o usuário logado esteja alocado ao stage
+    Quando o usuário visitar a página do projeto
+    Então o usuário deve visualizar a stage
+
   Cenário: o usuário não pode adicionar outro usuário no projeto
     Dado que exista um projeto
-    E que o usuário esteja alocado ao projeto
+    E que o usuário logado esteja alocado ao projeto
     Quando o usuário visitar a página do projeto
     Então o usuário não deve ver a opção de adicionar outro usuário
 
   Cenário: o usuário não pode adicionar outro usuário no stage
     Dado que exista um projeto
     E que exista um stage alocado ao projeto
-    E que o usuário esteja alocado ao projeto
-    E que o usuário esteja alocado ao stage
+    E que o usuário logado esteja alocado ao projeto
+    E que o usuário logado esteja alocado ao stage
     Quando o usuário visitar a página do stage
     Então o usuário não deve ver a opção de adicionar outro usuário

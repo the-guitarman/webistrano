@@ -9,14 +9,26 @@ Funcionalidade: Permissões de projeto
 
   Cenário: Os usuários não administradores podem ser alocados a um projeto
     Então o seletor deve conter o usuário
-    Então a página deve conter o link do usuário inserido na sessão de usuários do projeto
-    Então a página não deve conter o link do usuário inserido na sessão de usuários do projeto
 
   Cenário: O administrador insere um usuário no projeto
-    Quando o administrador insere o usuário no projeto
+    Quando o administrador seleciona o usuário
+    E o administrador clica no botão "Add"
     Então a página deve conter o link do usuário inserido na sessão de usuários do projeto
 
+  @javascript
   Cenário: O administrador exclui um usuário do projeto
     E que o usuário esteja alocado ao projeto
-    Quando o administrador clica no link "remover" ao lado do usuário alocado no projeto
+    Quando o administrador atualiza a página
+    E o administrador clica em "Remove"
+    E o administrador confirma
     Então a página não deve conter o link do usuário inserido na sessão de usuários do projeto
+
+  Cenário: Os Administradores não podem ser alocados a um projeto
+    Dado que exista outro administrador
+    Quando o administrador atualiza a página
+    Então o seletor não deve conter o administrador
+
+  Cenário: Os Administradores não podem estar alocados a um projeto
+    Dado que exista outro administrador
+    Quando o administrador atualiza a página
+    Então a página não deve conter o link do administrador inserido na sessão de usuários do projeto

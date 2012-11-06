@@ -41,8 +41,8 @@ Dado /^que exista um stage alocado ao projeto$/ do
   @stage.save
 end
 
-Dado /^que o usuário esteja alocado ao stage$/ do
-  @stage.users << @agente
+Dado /^que o usuário (logado )?esteja alocado ao stage$/ do |logado|
+  logado ? (@stage.users << @agente) : (@stage.users << @usuario)
 end
 
 Então /^deve ser registrada uma atividade recente de criação do objeto$/ do
@@ -53,4 +53,16 @@ end
 
 Dado /^que o administrador está na página do projeto$/ do
   visit project_path(@projeto)
+end
+
+Dado /^que o usuário (logado )?esteja alocado ao projeto$/ do |logado|
+  logado ? (@projeto.users << @agente) : (@projeto.users << @usuario)
+end
+
+Quando /^o (?:administrador|usuário) atualiza a página$/ do
+  visit current_path
+end
+
+Dado /^que exista outro administrador$/ do
+  @outro_admin = FactoryGirl.create :admin
 end

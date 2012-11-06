@@ -24,16 +24,16 @@ Então /^o usuário não deve ver o link de criação de novos projetos$/ do
   page.should_not have_content "New project"
 end
 
-Dado /^que o usuário esteja alocado ao projeto$/ do
-  @projeto.users << @agente
-end
-
 Quando /^o usuário visitar a página do projeto$/ do
   visit project_path(@projeto)
 end
 
 Então /^o usuário não deve ver o link de criação de novos stages$/ do
   page.should_not have_content "New stage"
+end
+
+Então /^o usuário (não )?deve visualizar a stage$/ do |negacao|
+  negacao ? (page.should_not have_content @stage.name) : (page.should have_content @stage.name)
 end
 
 Quando /^o usuário visitar a página de listagem de recipes$/ do
