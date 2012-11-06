@@ -64,11 +64,11 @@ module ApplicationHelper
 
     # check each stage
     project.stages.each do |stage|
-      a_stage_active = true unless active_link_class(stage).blank?
+      a_stage_active = true unless active_link_class(stage) != 'active_menu_link'
     end
 
     # check project
-    a_stage_active = true unless active_link_class(project).blank?
+    a_stage_active = true unless active_link_class(project) != 'active_menu_link'
 
     a_stage_active ? '' : 'display:none;'
   end
@@ -97,6 +97,7 @@ module ApplicationHelper
   # returns a CSS class if the current item is an active item
   def active_link_class(item)
     active_class = 'active_menu_link'
+    inactive_class = 'inactive_menu_link'
     found = false
     case item.class.to_s
     when 'Project'
@@ -114,7 +115,7 @@ module ApplicationHelper
     if found
       active_class
     else
-      ''
+      inactive_class
     end
   end
 
