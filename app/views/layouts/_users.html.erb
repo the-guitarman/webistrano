@@ -1,11 +1,11 @@
 <% if current_user %>
   <% if User.count > 0 %>
     <% for user in User.find(:all, :order => "login ASC") %>
-      <li>
+      <div class="menu_link_title has_submenu">
         <a href="<%= user_path(user) %>" class="menu_link <%=h active_link_class(user) %>">
           <%=h user.name %>
         </a>
-      </li>
+      </div>
     <% end %>
   <% else %>
     <li>
@@ -13,7 +13,7 @@
     </li>
   <% end %>
   <% if current_user.admin? -%>
-  <br/>
-  <%= link_to 'New user', new_user_path%>
+    <br/>
+    <%= link_to 'New user', new_user_path%>
   <%  end %>
 <% end %>

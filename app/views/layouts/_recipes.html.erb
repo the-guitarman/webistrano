@@ -1,11 +1,11 @@
 <% if current_user %>
   <% if Recipe.count > 0 %>
     <% for recipe in Recipe.all(:order => "name ASC") %>
-      <li>
+      <div class="menu_link_title has_submenu">
         <a href="<%= recipe_path(recipe) %>" class="menu_link <%=h active_link_class(recipe) %>">
           <%=h recipe.name %>
         </a>
-      </li>
+      </div>
     <% end %>
   <% else %>
     <li>

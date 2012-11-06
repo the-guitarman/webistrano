@@ -1,12 +1,12 @@
 <% if current_user %>
-  <% projects = current_user.admin? ? Project.find(:all) : current_user.projects %>
+  <% projects = current_user.admin? ? Project.all : current_user.projects %>
   <div id="projects_open_content" style="<%=h show_if_opened(status) %>">
     <% if projects.length > 0 %>
       <% for project in projects.sort{|a,b| a.name <=> b.name} %>
         <a href="<%= project_path(project) %>" class="menu_link <%=h active_link_class(project) %>">
           <div class="menu_link_title has_submenu">
             <%=h project.name %>
-            
+
             <%= image_tag('icons/gif/cyan/16x16/arrow2_e.gif', :border => '0', :style => "#{h( do_not_show_stages_of_project(project))}", :id => "#{h(dom_id(project))}_arrow_right", :onclick => "open_menu('#{h( dom_id(project))}'); return false;" )%>
 
             <%= image_tag('icons/gif/cyan/16x16/arrow2_s.gif', :border => '0', :style => "#{h( show_stages_of_project(project))}", :id => "#{h(dom_id(project))}_arrow_down", :onclick => "close_menu('#{h( dom_id(project))}'); return false;" )%>
@@ -31,9 +31,9 @@
     <% else %>
       <div class="menu_item">No projects for you</div>
     <% end %>
-      <% if current_user.admin? -%>
+    <% if current_user.admin? -%>
       <br/>
-    <a href="<%= new_project_path %>" class="menu_link menu_link_create">New project</a>
+      <a href="<%= new_project_path %>" class="menu_link menu_link_create">New project</a>
     <%end -%>
   </div>
   <div id="projects_closed_content" style="<%=h show_if_closed(status) %>">
