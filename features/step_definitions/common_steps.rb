@@ -62,3 +62,7 @@ end
 Quando /^o (?:administrador|usuário) atualiza a página$/ do
   visit current_path
 end
+
+Dado /^que exista outro administrador$/ do
+  @outro_admin = FactoryGirl.create :admin
+end

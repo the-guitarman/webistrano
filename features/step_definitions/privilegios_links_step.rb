@@ -32,6 +32,10 @@ Então /^o usuário não deve ver o link de criação de novos stages$/ do
   page.should_not have_content "New stage"
 end
 
+Então /^o usuário (não )?deve visualizar a stage$/ do |negacao|
+  negacao ? (page.should_not have_content @stage.name) : (page.should have_content @stage.name)
+end
+
 Quando /^o usuário visitar a página de listagem de recipes$/ do
   visit recipes_path
 end
