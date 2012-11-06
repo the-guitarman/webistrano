@@ -11,15 +11,12 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :projects
 
   attr_accessible :login, :email, :password, :password_confirmation, :time_zone, :tz
-
-  validates_presence_of     :login, :email
-  validates_presence_of     :password,                   :if => :password_required?
-  validates_presence_of     :password_confirmation,      :if => :password_required?
+  
   validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :login, :email, :case_sensitive => false 
+  validates_uniqueness_of   :login, :email, :case_sensitive => false
 
 	def read_only(stage)
     su = stages_user.find_by_stage_id(stage.id)
