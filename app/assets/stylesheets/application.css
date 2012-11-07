@@ -243,3 +243,10 @@ a:hover.button{
 .welcome{
     padding:11px;
 }
+
+.primeirarow{
+    height: 10em;
+}
+.segundarow{
+    height: 100%;
+}
