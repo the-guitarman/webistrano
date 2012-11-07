@@ -1,0 +1,4 @@
+- title  = "Projects"
+- status = controller_in_use_or(ProjectsController, :open, Project)
+- locals = { :title => title, :status => status, :path => projects_path }
+= render(:partial => 'layouts/projects', :locals => locals, :layout => 'layouts/menu_box')
