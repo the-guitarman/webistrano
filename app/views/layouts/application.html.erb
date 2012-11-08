@@ -45,9 +45,11 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
+        <% if current_user %>
         <div class="span3">
           <%= render "layouts/menu" %>
         </div>
+        <% end  %>
         <div class="span9">
           <%= yield :breadcrumb %>
           <%= yield :flash_content %>
@@ -66,8 +68,7 @@
           <% end %>
 
           <%= yield :action_box %>
-
-          <%= yield  %>
+          <%= yield %>
         </div>
       </div>
 
