@@ -1,9 +1,9 @@
 <% content_for(:page_title) do %>
   <% @page_title = "Welcome to Webistrano" %>
-  <h1>Welcome to Webistrano, <%= current_user.login %>  </h1>
+  <h1 class="text-center">Welcome to Webistrano, <%= current_user.login %>  </h1>
 <% end %>
 
-<section>
+<section class="text-center">
   <h2>Recent deployments</h2>
   <% if @deployments.empty? %>
     <p>No recent deployments.</p>
@@ -12,7 +12,7 @@
   <% end %>
 </section>
 
-<section>
+<section class="text-center">
   <h2>Recent activities</h2>
   <% if @activities.empty? %>
     <p>No recent activities.</p>
@@ -21,8 +21,10 @@
       <thead>
         <tr>
           <th>Model</th>
+          <th>Name</th>
+          <th>View</th>
           <th>Tag</th>
-          <th>User</th>
+          <th>Author</th>
           <th>Date</th>
           <th>Changes</th>
         </tr>
@@ -31,10 +33,28 @@
         <% @activities.each do |activity| %>
         <tr>
           <td>
-            <%= activity.target_type %> (<% if activity.target.deleted? %><%= activity.target.name %><% else %><%= link_to truncate(activity.target.name, :length => 21), any_path(activity.target) %><% end %>)
+            <%= activity.target_type %> 
           </td>
-          <td><%= activity.tag %></td>
-          <td><%= link_to activity.user.login, user_path(activity.user) %></td>
+          <td><%= activity.target.name %></td>
+          <td>
+            <% if activity.target.deleted? %>
+              <%= image_tag('icons/png/red/32x32/close.png', :width => '25',:height => '25', :title => "Deleted!") %>
+            <% else %>
+              <%= link_to image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "View"), any_path(activity.target) %>
+            <% end %>
+          </td>
+          <td>
+            <% color = "" %>
+            <% if activity.tag == 'created' %>
+              <% color = "green" %>
+            <% elsif activity.tag == 'updated' %>
+              <% color = "blue" %>
+            <% else %>
+              <% color = "red" %>
+            <% end %>
+            <span style="color:<%= color %>"><strong><%= activity.tag %></strong></span>
+          </td>
+          <td><strong><%= link_to activity.user.login, user_path(activity.user) %></strong></td>
           <td><%= activity.created_at.to_s(:log) %></td>
           <td>
             <%- if activity.tag !~ /created\Z/ && activity.data['changes'] %>
@@ -42,8 +62,8 @@
                 <%- activity.data['changes'].keys.each do |key| %>
                   <li><%= key %>
                     <ul>
-                      <li>Old: <%= activity.data['changes'][key][0] || 'nil' %></li>
-                      <li>New: <%= activity.data['changes'][key][1] || 'nil' %></li>
+                      <li>Old: <%= truncate(activity.data['changes'][key][0], length: 20) || 'nil' %></li>
+                      <li>New: <%= truncate(activity.data['changes'][key][1], length: 20) || 'nil' %></li>
                     </ul>
                   </li>
                 <%- end %>
