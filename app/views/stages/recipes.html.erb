@@ -20,13 +20,13 @@
         <% end %>
       </table>
       
-      <br />
+      <br/>
       <p>
         <%= submit_tag "Update used recipes" %>
       </p>
       
     <% else %>
-     No recipes present<br /><br />
+     No recipes present<br/><br/>
     <% end %>
   
   </fieldset>    
@@ -35,12 +35,12 @@
   
   
 <% end %>
-<br />
-<%= link_to 'Back to stage', project_stage_path(current_project, current_stage), :class => 'arrow_link'  %>
+<br/>
+<%= link_to 'Back to stage', project_stage_path(current_project, current_stage), class: 'arrow_link'  %>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to stage", project_stage_path(current_project, current_stage), :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Back to stage", project_stage_path(current_project, current_stage), :style => "float:right", class: "arrow_link" %>
     <%= link_to "Projects", projects_path %> &gt; 
     Project <%= link_to current_project.name, project_path(current_project) %> &gt; 
     Stage <%= link_to current_stage.name, project_stage_path(current_project, current_stage) %>  &gt; 

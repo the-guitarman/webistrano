@@ -3,7 +3,7 @@
   <%= render(:partial => 'form')%>
   <br/>
 
-  <%= link_to 'Back to project', project_path(current_project), :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
+  <%= link_to 'Back to project', project_path(current_project), class: 'arrow_link ontheright', :style => 'margin-right: 330px' %>
 
   <p>
     <%= submit_tag "Update" %>
@@ -13,7 +13,7 @@
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
-    <%= link_to "Back to project", project_path(current_project), :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Back to project", project_path(current_project), :style => "float:right", class: "arrow_link" %>
     <%= link_to "Projects", projects_path %> &gt; 
     Project <%= link_to current_project.name, project_path(current_project) %> &gt; 
     Edit

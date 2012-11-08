@@ -25,8 +25,8 @@
 
   <% if current_user.admin? %>
     <div>
-      <%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> |
-      <%= link_to 'Delete', host_path(@host), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'arrow_link'  %>
+      <%= link_to 'Edit Host', edit_host_path(@host), class: 'arrow_link' %> |
+      <%= link_to 'Delete', host_path(@host), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'arrow_link'  %>
     </div>
   <% end %>
 </section>
@@ -40,5 +40,5 @@
 <section>
   <h2>Recent Activities</h2>
   <%= render partial: 'activities/list', locals: { activities: @host.activities } %>
-  <br />
+  <br/>
 </section>

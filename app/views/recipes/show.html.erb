@@ -30,11 +30,11 @@
     <div class="span5">
       <%= select_tag "version", options_for_select(all_recipe_versions, params[:version]), :id => "recipe_version" %>
       <%= link_to_function 'show', "location.href='#{recipe_path(@recipe)}?version=' + $('#recipe_version').val(); return false;", class: 'arrow_link' %>
-      <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), :class => "arrow_link" if not_latest_version and current_user.admin? %>
+      <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), class: "arrow_link" if not_latest_version and current_user.admin? %>
       <% if current_user.admin? %>
       <p>
-        <%= link_to 'Edit latest version', edit_recipe_path(@recipe), :class => 'arrow_link' %> |
-        <%= link_to 'Delete all versions', recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'arrow_link' %>
+        <%= link_to 'Edit latest version', edit_recipe_path(@recipe), class: 'arrow_link' %> |
+        <%= link_to 'Delete all versions', recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'arrow_link' %>
       </p>
       <% end %>
     </div>
@@ -46,7 +46,7 @@
     <div class="span5">
       <h3>Description</h3>
       <%= simple_format @recipe.description %>
-      <%= link_to 'Edit', edit_recipe_path(@recipe), :class => 'arrow_link' %>
+      <%= link_to 'Edit', edit_recipe_path(@recipe), class: 'arrow_link' %>
     </div>
     <div class="span5">
       <h3>Used by stage</h3>

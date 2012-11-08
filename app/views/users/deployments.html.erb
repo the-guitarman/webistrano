@@ -18,5 +18,5 @@
 <section>
   <h2>Complete deployment history</h2>
   <%= render partial: 'deployments', locals: { deployments: @deployments, user: @user } %>
-  <%= link_to 'Back to user', user_path(@user), :class => 'arrow_link' %>
+  <%= link_to 'Back to user', user_path(@user), class: 'arrow_link' %>
 </section>

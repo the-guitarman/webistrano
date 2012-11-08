@@ -1,7 +1,7 @@
 <!--alimaher-->
 <% if @stage.users.empty? %>
   <br/>
-  No users added yet.<br />
+  No users added yet.<br/>
   <br/>
 <% else %>
   <table class="sortable">
@@ -23,7 +23,7 @@
     <label>Add user: </label>
     <%=select 'stage_user', 'id', @stage.project.users.reject{|u| @stage.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]}%>
     <!--alimaher-->
-    <%= check_box 'stage_user','read_only', {:checked => false, :class => 'noframe'} %>
+    <%= check_box 'stage_user','read_only', {:checked => false, class: 'noframe'} %>
     <label for="read_only">read only</label>
     <!--end alimaher-->
     <input type='submit' value='Add' />

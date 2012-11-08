@@ -4,22 +4,24 @@
     <strong>No users added yet.</strong>
     <br/>
   <% else %>
-    <div class="custom-table small">
-      <table>
+      <table class="table table-striped">
         <tr>
-          <td>Name</td>
-          <td>Remove</td>
+          <th>Name</th>
+          <th>E-mail</th>
+          <th>Profile</th>
+          <th>Remove</th>
         </tr>
         <% for user in @project.users %>
           <tr>
-            <td><%= h(user.login) + " ( #{link_to "Profile", user_path(user), :class => "bold"} )".html_safe %></td>
+            <td><%= user.login %></td>
+            <td><%= user.email %></td>
+            <td><%= link_to image_tag('icons/png/blue/32x32/user.png', :width => '25',:height => '25', :title => "View user's profile"), user_path(user) %></td>
             <% if current_user.admin? -%>
               <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete"), project_project_user_path(@project, user), :confirm => 'Are you sure?', :method => :delete %></td>
             <% end -%>
           </tr>
         <% end %>
       </table>
-    </div>
   <% end %>
   <br/>
   <% if current_user.admin? -%>
@@ -27,7 +29,7 @@
       <%= label_tag "Add User"%>
       <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>
       <br/>
-      <%= submit_tag "Add", :class => "custom-button-add" %>
+      <%= submit_tag "Add", class: "custom-button-add" %>
     <% end %>
   <% end %>
 </div>

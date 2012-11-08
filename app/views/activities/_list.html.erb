@@ -1,18 +1,17 @@
 <% if activities.empty? %>
   <p>No recent activities.</p>
 <% else %>
-  <div class="custom-table large">
-    <table>
+    <table class="table table-striped">
       <tr>
-        <td>Tag</td>
-        <td>User</td>
-        <td>Date</td>
-        <td>Changes</td>
+        <th>Tag</th>
+        <th>User</th>
+        <th>Date</th>
+        <th>Changes</th>
       </tr>
       <% activities.each do |activity| %>
         <tr>
           <td><%= activity.tag %></td>
-          <td><%= link_to activity.user.login, user_path(activity.user) %></td>
+          <td><%= link_to activity.user.login, user_path(activity.user), class: "bold" %></td>
           <td><%= activity.created_at.to_s(:log) %></td>
           <td>
             <%- if activity.tag !~ /created\Z/ && activity.data['changes'] %>
@@ -31,5 +30,4 @@
         </tr>
       <% end %>
     </table>
-  </div>
 <% end %>

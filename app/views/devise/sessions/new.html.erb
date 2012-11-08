@@ -11,7 +11,7 @@
       <p><%= f.label :password %><br/>
       <%= f.password_field :password %></p>
       <% if devise_mapping.rememberable? -%>
-      <p><%= f.check_box :remember_me, :class => 'noframe' %>
+      <p><%= f.check_box :remember_me, class: 'noframe' %>
       <%= f.label :remember_me %></p>
       <p>
       <% end -%>

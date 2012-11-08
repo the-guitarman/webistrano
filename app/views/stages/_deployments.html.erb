@@ -7,7 +7,7 @@
   <%= link_to 'New deployment', new_project_stage_deployment_path(current_project, @stage) %> <%= (@stage.deployments.count > 1) ? '|' : '' %>
 <% else %>
   <p>
-    A deployment is currently not possible:<br />
+    A deployment is currently not possible:<br/>
     <%= display_deployment_problems(@stage) %>
   </p>
 <% end %>

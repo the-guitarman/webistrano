@@ -1,17 +1,16 @@
 <% if @project.configuration_parameters.empty? %>
   <p>
-    No project wide configuration added yet.<br />
+    No project wide configuration added yet.<br/>
     Project configuration is overridden by stage configurations.
   </p>
 <% else %>
-  <div class="custom-table large">
-    <table>
+    <table class="table table-striped">
       <tr>
-        <td>Name</td>
-        <td>Value</td>
-        <td>Prompt?</td>
-        <td>Edit</td>
-        <td>Delete</td>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Prompt?</th>
+        <th>Edit</th>
+        <th>Delete</th>
       </tr>
       <% for config in @project.configuration_parameters %>
         <tr>
@@ -23,5 +22,4 @@
         </tr>
       <% end %>
     </table>
-  </div>
 <% end %>

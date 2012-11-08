@@ -1,20 +1,19 @@
 <% if @project.stages.empty? %>
   <p>
-    No stages configured yet.<br />
+    No stages configured yet.<br/>
     Stages represent one deployment scenario of a project. Typical stages are a 'Prod', 'Test' and 'Dev' stage.</p>
 <% else %>
-  <div class="custom-table large">
-    <table>
+    <table class="table table-striped">
         <tr>
-          <td>Name</td>
-          <td>Hosts</td>
-          <td>Deployments</td>
-          <td>Edit</td>
-          <td>Remove</td>
+          <th>Name</th>
+          <th>Hosts</th>
+          <th>Deployments</th>
+          <th>Edit</th>
+          <th>Remove</th>
         </tr>
         <% @project.stages.each do |stage| %>
           <tr>
-            <td><%= link_to stage.name, project_stage_path(@project, stage) %></td>
+            <td><%= link_to stage.name, project_stage_path(@project, stage), class: "bold" %></td>
             <td><%= stage.hosts.count  %></td>
             <td><%= stage.deployments.count  %></td>
             <td><%= link_to image_tag('icons/buttons/edit.png', :width => "25", :height => "25", :title => "Edit"), edit_project_stage_path(@project, stage) %></td>
@@ -22,5 +21,4 @@
           </tr>
         <% end %>
     </table>
-  </div>
 <% end %>

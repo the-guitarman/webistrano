@@ -1,12 +1,13 @@
 <% content_for(:page_title) do %>
   <% @page_title = "Project #{current_project.name}" %>
-  <h1>
-
+  <h1 class="text-center">
     Project <%= current_project.name %>
-    <%= link_to image_tag('icons/buttons/edit.png', :border => '0', :title => "Edit Project"), edit_project_path(@project), :class => 'spaced' %>
-    <%= link_to image_tag('icons/buttons/save.png', :border => '0', :title => "Clone Project"), clone_form_path(@project), :class => 'spaced' %>
-    <%= link_to image_tag('icons/buttons/delete.png', :border => '0', :title => "Delete Project"), project_path(@project), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'spaced' %>
   </h1>
+  <div class="text-center">
+    <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit Project"), edit_project_path(@project), class: 'spaced' %>
+    <%= link_to image_tag('icons/buttons/save.png', :width => '16',:height => '16', :title => "Clone Project"), clone_form_path(@project), class: 'spaced' %>
+    <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete Project"), project_path(@project), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
+  </div>
 <% end %>
 
 <% content_for(:breadcrumb) do %>
@@ -17,44 +18,41 @@
   <% end %>
 <% end %>
 
-<section>
-  <div class="row-fluid">
-    <div class="span5">
+<section class="text-center">
+  <table class="table table-striped">
+      <tr>
+        <td><strong>Description</strong></td>
+        <td><%= @project.description %></td>
+      </tr>
+      <tr>
+        <td><strong>Project Type</strong></td>
+        <td><%= @project.template %></td>
+      </tr>
+      <tr>
+      <td><strong>Deployments</strong></td>
+        <td><%= @project.deployments.count %></td>
+      </tr>
+  </table>
+  <br/><br/>
+  <div class="text-center">
+    <% if @project.stages.count > 0 %>
       <table class="table table-striped">
-        <tbody>
+        <tr>
+          <th>Stages</th>
+        </tr>
+        <% for stage in @project.stages %>
           <tr>
-            <th>Description</th>
-            <td><%= @project.description %></td>
+            <td><%= link_to stage.name, project_stage_path(@project, stage), class: 'bold'  %></td>
           </tr>
-          <tr>
-            <th>Project Type</th>
-            <td><%= @project.template %></td>
-          </tr>
-          <tr>
-            <th>Deployments</th>
-            <td><%= @project.deployments.count %></td>
-          </tr>
-        </tbody>
+        <% end %>
       </table>
-
-    </div>
-
-    <div class="span4">
-      <% if @project.stages.count > 0 %>
-        <dl class="dl-horizontal">
-          <dt>Choose a stage:</dt>
-          <% for stage in @project.stages %>
-            <dd><%= link_to stage.name, project_stage_path(@project, stage), :class => 'arrow_link'  %></dd>
-          <% end %>
-        </dl>
-      <% else %>
-        <p>No stage configured yet.</p>
-        <% if current_user.admin? -%>
-          <br/>
-          <%= link_to 'New stage', new_project_stage_path(@project), class: "button-link" %>
-        <%  end -%>
-      <% end %>
-    </div>
+    <% else %>
+      <p>No stage configured yet.</p>
+      <% if current_user.admin? -%>
+        <br/>
+        <%= link_to 'New stage', new_project_stage_path(@project), class: "custom-button-new" %>
+      <%  end -%>
+    <% end %>
   </div>
 </section>
 
@@ -65,7 +63,7 @@
       <%= render(:partial => 'configs')%>
     </div>
     <br/><br/>
-    <%= link_to 'New configuration', new_project_project_configuration_path(@project), class: "button-link" %>
+    <%= link_to 'New configuration', new_project_project_configuration_path(@project), class: "custom-button-new" %>
   </section>
 </div>
 
@@ -84,7 +82,7 @@
     <%= render(:partial => 'stages')%>
     <% if current_user.admin? -%>
       <br/><br/>
-      <%= link_to 'New stage', new_project_stage_path(@project), class: "button-link" %>
+      <%= link_to 'New stage', new_project_stage_path(@project), class: "custom-button-new" %>
     <%  end -%>
   </section>
 </div>
@@ -93,7 +91,7 @@
   <section class="text-center">
     <h2>Recent Deployments</h2>
     <%= render(:partial => 'deployments')%>
-    <br />
+    <br/>
   </section>
 </div>
 
@@ -101,6 +99,6 @@
   <section class="text-center">
     <h2>Recent Activities</h2>
     <%= render partial: 'activities/list', locals: { activities: @project.activities } %>
-    <br />
+    <br/>
   </section>
 </div>

@@ -1,5 +1,5 @@
-<table class="table table-striped">
-  <thead>
+
+  <table class="table table-striped">
     <tr>
       <th>Result</th>
       <th>Project</th>
@@ -11,8 +11,6 @@
       <th>Time</th>
       <th>Comment</th>
     </tr>
-  </thead>
-  <tbody>
     <% deployments.each do |deployment| %>
       <tr>
         <td>
@@ -28,5 +26,4 @@
         <td><%= deployment.description %></td>
       </tr>
     <% end -%>
-  </tbody>
-</table>
+  </table>

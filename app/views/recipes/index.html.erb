@@ -3,7 +3,7 @@
 
 <% if @recipes.empty? %>
   <br/>
-    No recipes configured yet.<br />
+    No recipes configured yet.<br/>
     Recipes are custom Capistrano tasks and variables that can be used across stages.
   <br/>
 <% else %>
@@ -30,8 +30,8 @@
 <% end %>
 
 <% if current_user.admin? %>
-  <br />
-  <%= link_to 'New recipe', new_recipe_path, :class => 'arrow_link' %>
+  <br/>
+  <%= link_to 'New recipe', new_recipe_path, class: 'arrow_link' %>
 <% end %>
 
 </fieldset>
