@@ -145,4 +145,15 @@ EOS
       send("#{model_class}_path", target)
     end
   end
+
+  def color(tag)
+    if tag == 'created'
+      color = "green"
+    elsif tag == 'updated'
+      color = "blue"
+    else
+      color = "red"
+    end
+    color
+  end
 end

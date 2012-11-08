@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <% @page_title = "Hosts" %>
-  <h1>Hosts</h1>
+  <h1 class="text-center">Hosts</h1>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -10,11 +10,12 @@
 <% end %>
 
 <section>
-  <h2><%= pluralize(Host.count, 'Host')%> listed</h2>
+  <h2 class="text-center"><%= pluralize(Host.count, 'Host')%> listed</h2>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Name</th>
+        <th>View</th>
         <th>Stages</th>
         <th>Roles</th>
       </tr>
@@ -22,12 +23,13 @@
     <tbody>
       <% @hosts.each do |host| %>
         <tr>
-          <td><%= link_to host.name, host %></td>
+          <td><%= host.name %></td>
+          <td><%= link_to image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "View Host"), host %></td>
           <td><%= host.stages.count %></td>
           <td><%= host.roles.count %></td>
           <% if current_user.admin? %>
-            <td><%= link_to 'Edit', [:edit, host] %></td>
-            <td><%= link_to 'Delete', host, data: { confirm: 'Are you sure?' }, method: :delete %></td>
+            <td><%= link_to image_tag('icons/buttons/edit.png', :width => "25", :height => "25", :title => "Edit Host"), [:edit, host] %></td>
+            <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete Host"), host, data: { confirm: 'Are you sure?' }, method: :delete %></td>
           <% end %>
         </tr>
       <% end %>
@@ -35,6 +37,6 @@
   </table>
 
   <% if current_user.admin? %>
-    <p><%= link_to 'New host', new_host_path %></p>
+    <p><%= link_to 'New host', new_host_path, class: "custom-button-new" %></p>
   <% end %>
 </section>

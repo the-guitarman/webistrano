@@ -34,9 +34,9 @@
               <td><%= project.stages.count %></td>
               <td><%= project.deployments.count %></td>
               <td><%= project.created_at.to_s(:date_with_day) %></td>
-              <td><%= link_to image_tag('icons/buttons/edit.png', :width => "25", :height => "25", :title => "Edit"), edit_project_path(project) %></td>
+              <td><%= link_to image_tag('icons/buttons/edit.png', :width => "25", :height => "25", :title => "Edit Project"), edit_project_path(project) %></td>
               <td><%= link_to image_tag('icons/buttons/save.png', :width => "25", :height => "25", :title => "Clone Project"), clone_form_path(project) %></td>
-              <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete"), project_path(project), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+              <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete Project"), project_path(project), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
             </tr>
           <% end %>
       </table>

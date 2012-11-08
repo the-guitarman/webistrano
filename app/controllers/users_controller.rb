@@ -73,7 +73,7 @@ class UsersController < ApplicationController
     else
       @user.disable!
       flash[:notice] = 'User was successfully disabled.'
-      add_activity_for(@user, 'deleted')
+      add_activity_for(@user, 'disabled')
     end
 
     respond_with(@user)
