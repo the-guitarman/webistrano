@@ -12,7 +12,7 @@
       No user created yet<br/>
     </li>
   <% end %>
-  <% if current_user.admin? -%>
+  <% if current_user.admin? %>
     <br/>
     <%= link_to 'New user', new_user_path%>
   <%  end %>

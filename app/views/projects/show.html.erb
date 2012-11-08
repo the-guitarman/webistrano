@@ -50,10 +50,10 @@
       </table>
     <% else %>
       <p>No stage configured yet.</p>
-      <% if current_user.admin? -%>
+      <% if current_user.admin? %>
         <br/>
         <%= link_to 'New stage', new_project_stage_path(@project), class: "custom-button-new" %>
-      <%  end -%>
+      <%  end %>
     <% end %>
   </div>
 </section>
@@ -80,10 +80,10 @@
   <section class="text-center">
     <h2>Stages</h2>
     <%= render(:partial => 'stages')%>
-    <% if current_user.admin? -%>
+    <% if current_user.admin? %>
       <br/><br/>
       <%= link_to 'New stage', new_project_stage_path(@project), class: "custom-button-new" %>
-    <%  end -%>
+    <%  end %>
   </section>
 </div>
 

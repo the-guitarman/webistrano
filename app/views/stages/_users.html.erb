@@ -10,9 +10,9 @@
         <!--alimaher-->
         <td nowrap><%= link_to h("#{user.login} (#{user.access(@stage)})"), user_path(user) %></td>
         <!--end alimaher-->
-        <% if current_user.admin? -%>
+        <% if current_user.admin? %>
           <td><%= link_to 'Remove', project_stage_stage_user_path(@stage.project, @stage, user), :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end -%>
+        <% end %>
       </tr>
     <% end %>
   </table>

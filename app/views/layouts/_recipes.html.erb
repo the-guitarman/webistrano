@@ -12,8 +12,8 @@
       No recipe created yet<br/>
     </li>
   <% end %>
-  <% if current_user.admin? -%>
+  <% if current_user.admin? %>
     <br/>
     <%= link_to 'New recipe', new_recipe_path%>
-  <%end -%>
+  <%end %>
 <% end %>

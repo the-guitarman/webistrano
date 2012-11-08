@@ -16,15 +16,15 @@
             <td><%= user.login %></td>
             <td><%= user.email %></td>
             <td><%= link_to image_tag('icons/png/blue/32x32/user.png', :width => '25',:height => '25', :title => "View user's profile"), user_path(user) %></td>
-            <% if current_user.admin? -%>
+            <% if current_user.admin? %>
               <td><%= link_to image_tag('icons/buttons/delete.png', :width => "25", :height => "25", :title => "Delete"), project_project_user_path(@project, user), :confirm => 'Are you sure?', :method => :delete %></td>
-            <% end -%>
+            <% end %>
           </tr>
         <% end %>
       </table>
   <% end %>
   <br/>
-  <% if current_user.admin? -%>
+  <% if current_user.admin? %>
     <%= form_tag(project_project_users_path(@project), :method => :post) do |f| %>
       <%= label_tag "Add User"%>
       <%= select_tag 'project_user', options_from_collection_for_select(User.non_admins, 'id', 'login') %>

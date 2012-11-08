@@ -4,11 +4,11 @@
 <% end %>
 
 <section>
-  <%= form_for @user, html: { class: "form-horizontal" } do |f| -%>
+  <%= form_for @user, html: { class: "form-horizontal" } do |f| %>
     <%= render partial: 'form', locals: { form: f } %>
     <div class="form-actions">
       <%= f.submit "Register user", class: "custom-button-add" %>
       <%= link_to "◄ Back to users", users_path, class: "custom-button-back" %>
     </div>
-  <% end -%>
+  <% end %>
 </section>

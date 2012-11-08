@@ -5,11 +5,11 @@ load 'deploy'
 # ================================================================
 
 <% @stage.roles.each do |role| %>
-  <% if role.role_attribute_hash.blank? -%>
+  <% if role.role_attribute_hash.blank? %>
   role :<%= role.name %>, <%= raw capfile_cast(role.hostname_and_port) %>
-  <% else -%>
+  <% else %>
   role :<%= role.name %>, <%=  raw capfile_cast(role.hostname_and_port) %>, <%= raw role.role_attribute_hash.inspect %>
-  <% end -%>
+  <% end %>
 <% end %>
 
 # ================================================================

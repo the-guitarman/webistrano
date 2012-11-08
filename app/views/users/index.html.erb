@@ -38,19 +38,19 @@
               <%= user.disabled? ? '<span style="color:red">Disabled</span>'.html_safe : '<span style="color:green">Enabled</span>'.html_safe %>
             </td>
             <td><%= user.created_at.to_s(:date_with_day) %></td>
-            <% if current_user.admin? || current_user == user -%>
+            <% if current_user.admin? || current_user == user %>
               <td><%= link_to image_tag('icons/png/blue/32x32/user.png', :width => '25',:height => '25', :title => "View user's profile"), user_path(user) %></td>
-            <% end -%>
-            <% if current_user.admin? || current_user == user -%>
+            <% end %>
+            <% if current_user.admin? || current_user == user %>
               <td><%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit & change password"), edit_user_path(user) %></td>
-            <% end -%>
-            <% if current_user.admin? && user != current_user -%>
+            <% end %>
+            <% if current_user.admin? && user != current_user %>
               <% if user.disabled? %>
                 <td><%= link_to image_tag('icons/buttons/confirm.png', :width => '25',:height => '25', :title => "Enable"), enable_user_path(user), data: { confirm: 'Are you sure?' }, method: :post %></td>
               <% else %>
                 <td><%= link_to image_tag('icons/png/red/16x16/denied.png', :width => '25',:height => '25', :title => "Disable"), user_path(user), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
               <% end %>
-            <% end -%>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

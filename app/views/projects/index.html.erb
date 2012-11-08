@@ -41,8 +41,8 @@
           <% end %>
       </table>
   <% end %>
-  <% if current_user.admin? -%>
+  <% if current_user.admin? %>
     <p><%= link_to 'New project', new_project_path, class: "custom-button-new" %></p>
-    <%  end -%>
+    <%  end %>
 
   </section>
