@@ -1,5 +1,5 @@
-<fieldset class="fieldset">
-  <legend> <%= pluralize(Recipe.count, 'Recipe')%> listed</legend>
+
+  <legend class="text-center"> <%= pluralize(Recipe.count, 'Recipe')%> listed</legend>
 
 <% if @recipes.empty? %>
   <br/>
@@ -7,22 +7,26 @@
     Recipes are custom Capistrano tasks and variables that can be used across stages.
   <br/>
 <% else %>
-  <table class="sortable">
+  <table class="table table-striped">
     <tr>
-      <th width="39%">Name</th>
-      <th width="59%">Description</th>
-      <th width="1%">#Stages</th>
-      <th width="1%">Created At</th>
+      <th>Name</th>
+      <th>View</th>
+      <th>Description</th>
+      <th>#Stages</th>
+      <th>Created At</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
     <% for recipe in @recipes %>
-      <tr class="<%= cycle :even, :odd, :name => 'recipes'  %>">
-        <td><%= link_to recipe.name, recipe_path(recipe) %></td>
+      <tr>
+        <td><%= recipe.name %></td>
+        <td><%= link_to image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "View Recipe"), recipe_path(recipe) %></td>
         <td><%= recipe.description %></td>
         <td><%= recipe.stages.count %></td>
         <td><%= recipe.created_at.to_s(:date_with_day) rescue nil %></td>
         <% if current_user.admin? %>
-          <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-          <td><%= link_to 'Delete', recipe_path(recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+          <td><%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit Recipe"), edit_recipe_path(recipe) %></td>
+          <td><%= link_to image_tag('icons/buttons/delete.png', :width => '25',:height => '25', :title => "Delete Recipe"), recipe_path(recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
         <% end %>
       </tr>
     <% end %>
@@ -31,10 +35,8 @@
 
 <% if current_user.admin? %>
   <br/>
-  <%= link_to 'New recipe', new_recipe_path, class: 'arrow_link' %>
+    <%= link_to 'New recipe', new_recipe_path, class: "custom-button-new" %>
 <% end %>
-
-</fieldset>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
@@ -44,5 +46,5 @@
 
 <% content_for(:page_title) do %>
   <% @page_title = "Recipes" %>
-  <h2>Recipes</h2>
+  <h2 class="text-center">Recipes</h2>
 <% end %>

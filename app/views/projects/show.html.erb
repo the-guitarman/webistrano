@@ -3,11 +3,13 @@
   <h1 class="text-center">
     Project <%= current_project.name %>
   </h1>
-  <div class="text-center">
-    <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit Project"), edit_project_path(@project), class: 'spaced' %>
-    <%= link_to image_tag('icons/buttons/save.png', :width => '16',:height => '16', :title => "Clone Project"), clone_form_path(@project), class: 'spaced' %>
-    <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete Project"), project_path(@project), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
-  </div>
+  <% if current_user.admin? %>
+    <div class="text-center">
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit Project"), edit_project_path(@project), class: 'spaced' %>
+      <%= link_to image_tag('icons/buttons/save.png', :width => '16',:height => '16', :title => "Clone Project"), clone_form_path(@project), class: 'spaced' %>
+      <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete Project"), project_path(@project), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
+    </div>
+  <% end %>
 <% end %>
 
 <% content_for(:breadcrumb) do %>

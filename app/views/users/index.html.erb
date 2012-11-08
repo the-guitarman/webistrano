@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <% @page_title = "Users" %>
-  <h1>Users</h1>
+  <h1 class="text-center">Users</h1>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -9,7 +9,7 @@
   <% end %>
 <% end %>
 
-<section>
+<section class="text-center">
   <h2> <%= pluralize(User.count, 'User')%> listed</h2>
 
   <% if @users.empty? %>
@@ -21,27 +21,35 @@
           <th>Login</th>
           <th>Email</th>
           <th>Admin</th>
-          <th>Disabled</th>
+          <th>Status</th>
           <th>Created At</th>
+          <th>Profile</th>
+          <th>Edit</th>
+          <th>Disable/Enable</th>
         </tr>
       </thead>
       <tbody>
         <% for user in @users %>
           <tr>
-            <td><%= link_to user.login, user_path(user) %></td>
+            <td><%= user.login %></td>
             <td><%= user.email %></td>
-            <td><%= user.admin? ? 'Admin' : '' %></td>
+            <td><%= user.admin? ? 'Yes' : 'No' %></td>
             <td>
-              <% if user.disabled? %>
-                <span style="color:red">disabled</span>
-              <% end %>
+              <%= user.disabled? ? '<span style="color:red">Disabled</span>'.html_safe : '<span style="color:green">Enabled</span>'.html_safe %>
             </td>
             <td><%= user.created_at.to_s(:date_with_day) %></td>
             <% if current_user.admin? || current_user == user -%>
-              <td><%= link_to 'Edit', edit_user_path(user) %></td>
+              <td><%= link_to image_tag('icons/png/blue/32x32/user.png', :width => '25',:height => '25', :title => "View user's profile"), user_path(user) %></td>
+            <% end -%>
+            <% if current_user.admin? || current_user == user -%>
+              <td><%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit & change password"), edit_user_path(user) %></td>
             <% end -%>
             <% if current_user.admin? && user != current_user -%>
-              <td><%= link_to 'Delete', user_path(user), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+              <% if user.disabled? %>
+                <td><%= link_to image_tag('icons/buttons/confirm.png', :width => '25',:height => '25', :title => "Enable"), enable_user_path(user), data: { confirm: 'Are you sure?' }, method: :post %></td>
+              <% else %>
+                <td><%= link_to image_tag('icons/png/red/16x16/denied.png', :width => '25',:height => '25', :title => "Disable"), user_path(user), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+              <% end %>
             <% end -%>
           </tr>
         <% end %>
@@ -50,6 +58,6 @@
   <% end %>
 
   <% if current_user.admin? %>
-    <%= link_to 'New user', new_user_path, class: 'arrow_link' %>
+    <%= link_to 'New user', new_user_path, class: 'custom-button-new' %>
   <% end %>
 </section>

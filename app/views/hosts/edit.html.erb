@@ -17,10 +17,10 @@
 
 <section>
   <%= form_for @host, html: { class: "form-horizontal" } do |f| %>
-  <%= render partial: 'form', locals: { form: f } %>
-  <div class="form-actions">
-    <%= f.submit class: "btn btn-primary" %>
-    <%= link_to 'Back to host', host_path(@host), class: 'btn' %>
-  </div>
+    <%= render partial: 'form', locals: { form: f } %>
+    <div class="form-actions">
+      <%= f.submit "Update host", class: "custom-button-add" %>
+      <%= link_to "◄ Back to hosts", hosts_path, class: "custom-button-back" %>
+    </div>
   <% end %>
 </section>

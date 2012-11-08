@@ -1,6 +1,12 @@
 <% content_for :page_title do %>
   <% @page_title = "Host #{@host.name}" %>
-  <h1>Host <%= @host.name %></h1>
+  <h1 class="text-center">Host <%= @host.name %></h1>
+  <% if current_user.admin? %>
+    <div class="text-center">
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit Host"), edit_host_path(@host), class: 'spaced' %>
+      <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete Host"), host_path(@host), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
+    </div>
+  <% end %>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -11,33 +17,30 @@
   <% end %>
 <% end %>
 
-<section>
-  <dl class="dl-horizontal">
-    <dt>Name:</dt>
-    <dd><%= @host.name %></dd>
-
-    <dt>Stages:</dt>
-    <dd><%= @host.stages.uniq.size %></dd>
-
-    <dt>Roles:</dt>
-    <dd><%= @host.roles.count %></dd>
-  </dl>
-
-  <% if current_user.admin? %>
-    <div>
-      <%= link_to 'Edit Host', edit_host_path(@host), class: 'arrow_link' %> |
-      <%= link_to 'Delete', host_path(@host), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'arrow_link'  %>
-    </div>
-  <% end %>
+<section class="text-center">
+  <table class="table table-striped">
+    <tr>
+      <td><strong>Name</strong></td>
+      <td><%= @host.name %></td>
+    </tr>
+    <tr>
+      <td><strong>Stages</strong></td>
+      <td><%= @host.stages.uniq.size %></td>
+    </tr>
+    <tr>
+    <td><strong>Roles</strong></td>
+      <td><%= @host.roles.count %></td>
+    </tr>
+  </table>
 </section>
 
-<section>
+<section class="text-center">
   <h2>Stages</h2>
   <%= render partial: 'stages' %>
 </section>
 
 
-<section>
+<section class="text-center">
   <h2>Recent Activities</h2>
   <%= render partial: 'activities/list', locals: { activities: @host.activities } %>
   <br/>

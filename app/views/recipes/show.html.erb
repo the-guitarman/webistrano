@@ -1,6 +1,12 @@
 <% content_for(:page_title) do %>
   <% @page_title = "Recipe #{@recipe.name}" %>
-  <h1>Recipe: <%= @recipe.name %></h1>
+  <h1 class="text-center">Recipe: <%= @recipe.name %></h1>
+  <% if current_user.admin? %>
+    <div class="text-center">
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit latest version"), edit_recipe_path(@recipe), class: 'spaced' %>
+      <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete all versions"), recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
+    </div>
+  <% end %>
 <% end %>
 
 <% content_for(:breadcrumb) do %>
@@ -11,7 +17,7 @@
   <% end %>
 <% end %>
 
-<section>
+<section class="text-center">
   <div class="row-fluid">
     <div class="span5">
       <table class="table table-striped">
@@ -29,24 +35,18 @@
     </div>
     <div class="span5">
       <%= select_tag "version", options_for_select(all_recipe_versions, params[:version]), :id => "recipe_version" %>
-      <%= link_to_function 'show', "location.href='#{recipe_path(@recipe)}?version=' + $('#recipe_version').val(); return false;", class: 'arrow_link' %>
+      <%= link_to_function image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "Show"), "location.href='#{recipe_path(@recipe)}?version=' + $('#recipe_version').val(); return false;", class: 'arrow_link' %>
       <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), class: "arrow_link" if not_latest_version and current_user.admin? %>
-      <% if current_user.admin? %>
-      <p>
-        <%= link_to 'Edit latest version', edit_recipe_path(@recipe), class: 'arrow_link' %> |
-        <%= link_to 'Delete all versions', recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'arrow_link' %>
-      </p>
-      <% end %>
     </div>
   </div>
 </section>
 
-<section>
+<section class="text-center">
   <div class="row-fluid">
     <div class="span5">
       <h3>Description</h3>
       <%= simple_format @recipe.description %>
-      <%= link_to 'Edit', edit_recipe_path(@recipe), class: 'arrow_link' %>
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit description"), edit_recipe_path(@recipe) %>
     </div>
     <div class="span5">
       <h3>Used by stage</h3>
@@ -55,7 +55,7 @@
   </div>
 </section>
 
-<section>
+<section class="text-center">
   <div class="row-fluid">
     <h3>Body</h3>
     <div class="log_output ruby">

@@ -2,11 +2,10 @@
 
   <%= render('form', { :form => f })%>
 
-  <%= link_to 'Back to recipe', recipe_path(@recipe), class: 'arrow_link ontheright'%>
-
-  <p>
-    <%= submit_tag "Update" %>
-  </p>
+  <div class="form-actions">
+    <%= f.submit "Update recipe", class: "custom-button-add" %>
+    <%= link_to "◄ Back to recipes", recipes_path, class: "custom-button-back" %>
+  </div>
 <% end %>
 
 

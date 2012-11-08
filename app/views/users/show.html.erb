@@ -1,6 +1,18 @@
 <% content_for :page_title do %>
   <% @page_title = "User #{@user.login}" %>
-  <h1>User <%= @user.login%></h1>
+  <h1 class="text-center">User <%= @user.login%></h1>
+  <% if current_user.admin? or current_user == @user %>
+    <div class="text-center">
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit & change password"), edit_user_path(@user), class: 'spaced' %>
+      <% if @user.disabled? %>
+        <% if current_user.admin? %>
+          <%= link_to image_tag('icons/buttons/confirm.png', :width => '16',:height => '16', :title => "Enable"), enable_user_path(@user), data: { confirm: 'Are you sure?' }, method: :post, class: 'spaced' %>
+        <% end %>
+      <% else %>
+        <%= link_to image_tag('icons/png/red/16x16/denied.png', :width => '24',:height => '24', :title => "Disable"), user_path(@user), data: { confirm: 'Are you sure? Disabled users can no longer login.' }, method: :delete, class: 'spaced' %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -12,39 +24,31 @@
 <% end %>
 
 <section>
-  <dl class="dl-horizontal">
-    <% if @user.admin? %>
-      <dt>User role:</dt>
-      <dd>Admin User</dd>
-    <% end %>
-
-    <dt>Login:</dt>
-    <dd><%= @user.login %></dd>
-
-    <dt>Email:</dt>
-    <dd><%= @user.email %></dd>
-
-    <dt>Timezone:</dt>
-    <dd><%= @user.time_zone.to_s %></dd>
-
-    <dt>Deployments:</dt>
-    <dd><%= @user.deployments.count %></dd>
-  </dl>
-
-  <div>
-    <% if current_user.admin? or current_user == @user %>
-      <%= link_to 'Edit & change password', [:edit, @user] %> |
-
-      <% if @user.disabled? %>
-        <%= link_to 'Enable', enable_user_path(@user), data: { confirm: 'Are you sure?' }, method: :post %>
-      <% else %>
-        <%= link_to 'Disable', user_path(@user), data: { confirm: 'Are you sure? Disabled users can no longer login.' }, method: :delete %>
-      <% end %>
-    <% end %>
-  </div>
+  <table class="table table-striped">
+      <tr>
+        <td><strong>Admin?</strong></td>
+        <td><%= @user.admin? ? "Yes" : "No" %></td>
+      </tr>
+      <tr>
+        <td><strong>Login</strong></td>
+        <td><%= @user.login %></td>
+      </tr>
+      <tr>
+        <td><strong>E-mail</strong></td>
+        <td><%= @user.email %></td>
+      </tr>
+      <tr>
+        <td><strong>Timezone</strong></td>
+        <td><%= @user.time_zone.to_s %></td>
+      </tr>
+      <tr>
+        <td><strong>Deployments</strong></td>
+        <td><%= @user.deployments.count %></td>
+      </tr>
+  </table>
 </section>
 
-<section>
+<section class="text-center">
   <h2>Recent deployment history</h2>
   <%= render partial: 'deployments', locals: { deployments: @deployments, user: @user } %>
 </section>

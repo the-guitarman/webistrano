@@ -15,8 +15,8 @@
   <%= form_for @project, url: clone_path(@original), html: { class: "form-horizontal" } do |f| %>
     <%= render partial: 'form', locals: { form: f } %>
     <div class="form-actions">
-      <%= f.submit "Clone project", class: "btn btn-primary" %>
-      <%= link_to "Back to project", projects_path, class: "btn" %>
+      <%= f.submit "Clone project", class: "custom-button-add" %>
+      <%= link_to "◄ Back to projects", projects_path, class: "custom-button-back" %>
     </div>
   <% end %>
 </section>
