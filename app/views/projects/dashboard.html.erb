@@ -1,17 +1,8 @@
-<div class="welcome">
-  <% content_for(:page_title) do %>
-    <% @page_title = "Welcome to Webistrano" %>
-    <h1>Welcome to Webistrano, <%= current_user.login %>  </h1>
-  <% end %>
-</div>
-<div class="row-fluid">
-  <%= render "layouts/menu_project" %>
-  <%= render "layouts/menu_host" %>
-</div>
-<div class="row-fluid">
-  <%= render "layouts/menu_user" %>
-  <%= render "layouts/menu_recipe" %>
-</div>
+<% content_for(:page_title) do %>
+  <% @page_title = "Welcome to Webistrano" %>
+  <h1>Welcome to Webistrano, <%= current_user.login %>  </h1>
+<% end %>
+
 <section>
   <h2>Recent deployments</h2>
   <% if @deployments.empty? %>
