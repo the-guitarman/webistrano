@@ -32,7 +32,7 @@ Então /^o administrador deve estar na página de criação de um usuário$/ do
 end
 
 Então /^o administrador deve ver uma mensagem de login não preenchido$/ do
-  page.should have_content "Login can't be blank"
+  page.should have_content "Login is too short (minimum is 3 characters)"
 end
 
 Quando /^o administrador preenche o campo de login com um login existente$/ do

@@ -1,0 +1,4 @@
+- title  = "Users"
+- status = controller_in_use_or(UsersController, :open, User)
+- locals = { :title => title, :status => status, :path => users_path }
+= render(:partial => 'layouts/users', :locals => locals, :layout => 'layouts/menu_box')

@@ -1,0 +1,4 @@
+- title  = "Hosts"
+- status = controller_in_use_or(HostsController, :open, Host)
+- locals = { :title => title, :status => status, :path => hosts_path }
+= render(:partial => 'layouts/hosts', :locals => locals, :layout => 'layouts/menu_box')

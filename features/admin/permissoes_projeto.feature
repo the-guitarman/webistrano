@@ -13,15 +13,15 @@ Funcionalidade: Permissões de projeto
   Cenário: O administrador insere um usuário no projeto
     Quando o administrador seleciona o usuário
     E o administrador clica no botão "Add"
-    Então a página deve conter o link do usuário inserido na sessão de usuários do projeto
+    Então a página deve conter o usuário inserido na sessão de usuários do projeto
 
   @javascript
   Cenário: O administrador exclui um usuário do projeto
     E que o usuário esteja alocado ao projeto
     Quando o administrador atualiza a página
-    E o administrador clica em "Remove"
+    E o administrador clica em Delete sessão de usuários
     E o administrador confirma
-    Então a página não deve conter o link do usuário inserido na sessão de usuários do projeto
+    Então a página não deve conter o usuário inserido na sessão de usuários do projeto
 
   Cenário: Os Administradores não podem ser alocados a um projeto
     Dado que exista outro administrador

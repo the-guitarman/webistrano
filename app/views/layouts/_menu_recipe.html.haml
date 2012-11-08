@@ -1,0 +1,4 @@
+- title  = "Recipes"
+- status = controller_in_use_or(RecipesController, :open, Recipe)
+- locals = { :title => title, :status => status, :path => recipes_path }
+= render(:partial => 'layouts/recipes', :locals => locals, :layout => 'layouts/menu_box')
