@@ -1,14 +1,26 @@
 class Role < ActiveRecord::Base
+  include LogicallyDeletable
+
   belongs_to :stage
   belongs_to :host
   has_and_belongs_to_many :deployments
-  
-  validates_presence_of :stage, :name, :host, :no_release, :primary, :no_symlink
-  validates_length_of :name, :maximum => 250
-  validates_inclusion_of :primary, :in => 0..1
-  validates_inclusion_of :no_release, :in => 0..1
-  validates_inclusion_of :no_symlink, :in => 0..1
-  validates_uniqueness_of :name, :scope => [:host_id, :stage_id, :ssh_port], :message => 'already used with this host.'
+  has_many :activities, :as => :target, :dependent => :destroy
+
+  validates :stage, :host,
+    :presence => true
+  validates :name,
+    :presence   => true,
+    :length     => { :maximum => 250 },
+    :uniqueness => { :scope => [:host_id, :stage_id, :ssh_port], :message => 'already used with this host.' }
+  validates :primary,
+    :presence  => true,
+    :inclusion => { :in => 0..1 }
+  validates :no_release,
+    :presence  => true,
+    :inclusion => { :in => 0..1 }
+  validates :no_symlink,
+    :presence  => true,
+    :inclusion => { :in => 0..1 }
   
   attr_accessible :name, :primary, :host_id, :no_release, :no_symlink, :ssh_port, :custom_name
   
@@ -17,10 +29,6 @@ class Role < ActiveRecord::Base
   DEFAULT_NAMES = %w(app db web)
   
   before_validation :set_name_from_custom_name
-  
-  def set_name_from_custom_name
-    self.name = self.custom_name unless self.custom_name.blank?
-  end
   
   def custom_name
     if @custom_name.blank? && self.custom_name?
@@ -129,6 +137,12 @@ class Role < ActiveRecord::Base
     else
       "#{self.host.name}:#{self.ssh_port}"
     end
+  end
+  
+private
+  
+  def set_name_from_custom_name
+    self.name = self.custom_name unless self.custom_name.blank?
   end
   
 end

@@ -1,69 +1,65 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle recipe_box"></div>
-  <div class="special_box_bottom"></div>
-</div>
-
-<div class="box">
-  <div class="box_top"></div>
-  <div class="box_middle">
-		<p>
-		  <b>#Stages:</b>
-		  <%=h @recipe.stages.count %>
-		</p>
-		<p>
-		  <b>#Versions:</b>
-		  <%=h @recipe.version %>
-		</p>
-    <br/>
-    <p>
-		  <%= select_tag "version", options_for_select(all_recipe_versions, params[:version]), :id => "recipe_version" %>
-		  <%= link_to_function "Show", "location.href='#{recipe_path(@recipe)}?version=' + $F('recipe_version')", :class => "arrow_link" %>
-		  <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), :class => "arrow_link" if not_latest_version and current_user.admin? %>
-    </p>
-		<% if current_user.admin? %>
-	  	<%= link_to 'Edit latest version', edit_recipe_path(@recipe), :class => 'arrow_link' %> |
-	  	<%= link_to 'Delete all versions', recipe_path(@recipe), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
-	  <% end %>
-  </div>
-  <div class="box_bottom"></div>
-</div>
-
-<div class="clear"></div>
-<br />
-
-<fieldset class="fieldset" style="width: 212px; margin-left: 28px; float: right;">
-  <legend>Description</legend>
-  <p>
-    <%=web_friendly_text @recipe.description %>
- 	</p>
-  <%= link_to 'Edit', edit_recipe_path(@recipe), :class => 'arrow_link' %>
-</fieldset>
-
-<fieldset class="fieldset">
-  <legend>Used by stage</legend>
-  <%= render(:partial => 'stages')%>
-</fieldset>
-
-<div class="clear"></div>
-
-<div class="clear"></div>
-<br />
-
-<fieldset class="fieldset">
-  <legend>Body</legend>
-  <%= render :partial => 'preview', :locals => {:recipe => @recipe} %>
-</fieldset>
-
-<% content_for(:breadcrumb) do %>
-  <% breadcrumb_box do %>
-    <%= link_to "Manage recipes", recipes_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Recipes", recipes_path %> &gt; 
-    Recipe <%= link_to @recipe.name, recipe_path(@recipe) %> 
+<% content_for(:page_title) do %>
+  <% @page_title = "Recipe #{@recipe.name}" %>
+  <h1 class="text-center">Recipe: <%= @recipe.name %></h1>
+  <% if current_user.admin? %>
+    <div class="text-center">
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '16',:height => '16', :title => "Edit latest version"), edit_recipe_path(@recipe), class: 'spaced' %>
+      <%= link_to image_tag('icons/buttons/delete.png', :width => '16',:height => '16', :title => "Delete all versions"), recipe_path(@recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete, class: 'spaced' %>
+    </div>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Recipe #{h(@recipe.name)}" %>
-  <h2>Recipe <%= link_to h(@recipe.name), recipe_path(@recipe) %></h2>
+<% content_for(:breadcrumb) do %>
+  <%= breadcrumb_box do %>
+    <%= link_to "Recipes", recipes_path %>
+    <span class="divider">&raquo;</span>
+    Recipe <%= @recipe.name %>
+  <% end %>
 <% end %>
+
+<section class="text-center">
+  <div class="row-fluid">
+    <div class="span5">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th>Stages Connt</th>
+            <td><%= @recipe.stages.count %></td>
+          </tr>
+          <tr>
+            <th>Versions</th>
+            <td><%= @recipe.version %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="span5">
+      <%= select_tag "version", options_for_select(all_recipe_versions, params[:version]), :id => "recipe_version" %>
+      <%= link_to_function image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "Show"), "location.href='#{recipe_path(@recipe)}?version=' + $('#recipe_version').val(); return false;", class: 'arrow_link' %>
+      <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), class: "arrow_link" if not_latest_version and current_user.admin? %>
+    </div>
+  </div>
+</section>
+
+<section class="text-center">
+  <div class="row-fluid">
+    <div class="span5">
+      <h3>Description</h3>
+      <%= simple_format @recipe.description %>
+      <%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit description"), edit_recipe_path(@recipe) %>
+    </div>
+    <div class="span5">
+      <h3>Used by stage</h3>
+      <%= render(:partial => 'stages')%>
+    </div>
+  </div>
+</section>
+
+<section class="text-center">
+  <div class="row-fluid">
+    <h3>Body</h3>
+    <div class="log_output ruby">
+      <%= render :partial => 'preview', :locals => {:recipe => @recipe} %>
+    </div>
+  </div>
+</section>

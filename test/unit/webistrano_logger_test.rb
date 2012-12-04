@@ -1,18 +1,18 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class Webistrano::LoggerTest < ActiveSupport::TestCase
 
   def setup
-    @project = create_new_project(:template => 'rails')
-    @stage = create_new_stage(:project => @project)
-    @host = create_new_host
+    @project = FactoryGirl.create(:project, :template => 'rails')
+    @stage = FactoryGirl.create(:stage, :project => @project)
+    @host = FactoryGirl.create(:host)
     
-    @stage_with_role = create_new_stage(:project => @project)
-    @role = create_new_role(:stage => @stage_with_role, :name => 'web', :host => @host)
+    @stage_with_role = FactoryGirl.create(:stage, :project => @project)
+    @role = FactoryGirl.create(:role, :stage => @stage_with_role, :name => 'web', :host => @host)
 
   end
   
-  def test_initialization
+  test "initialization" do
     
     # no deployment given
     assert_raise(ArgumentError){
@@ -25,22 +25,22 @@ class Webistrano::LoggerTest < ActiveSupport::TestCase
     
     # already completed deployment
     assert_raise(ArgumentError){
-      deployment = create_new_deployment(:stage => @stage_with_role, :task => 'deploy:setup')
+      deployment = FactoryGirl.create(:deployment, :stage => @stage_with_role, :task => 'deploy:setup')
       deployment.complete_with_error!
       logger = Webistrano::Logger.new( deployment )  
     }
     
     # not completed deployment
     assert_nothing_raised{
-      deployment = create_new_deployment(:stage => @stage_with_role, :task => 'deploy:setup')
+      deployment = FactoryGirl.create(:deployment, :stage => @stage_with_role, :task => 'deploy:setup')
       assert !deployment.completed?
       logger = Webistrano::Logger.new( deployment )  
     }
     
   end
   
-  def test_log
-    deployment = create_new_deployment(:stage => @stage_with_role, :task => 'deploy:setup')
+  test "log" do
+    deployment = FactoryGirl.create(:deployment, :stage => @stage_with_role, :task => 'deploy:setup')
     logger = Webistrano::Logger.new( deployment )
     
     logger.level = Webistrano::Logger::TRACE
@@ -62,7 +62,7 @@ class Webistrano::LoggerTest < ActiveSupport::TestCase
     assert_equal "  * schu bi du\n*** schu bi du\n ** schu bi du\n    schu bi du\n", deployment.log
   end
   
-  def test_do_no_log_passwords
+  test "do_no_log_passwords" do
     pw_config = @stage_with_role.configuration_parameters.find_or_create_by_name('scm_password')
     pw_config.value = 'my_secret'
     pw_config.save!
@@ -73,7 +73,7 @@ class Webistrano::LoggerTest < ActiveSupport::TestCase
     
     @stage_with_role.reload
     
-    deployment = create_new_deployment(:stage => @stage_with_role, :task => 'deploy:setup', :prompt_config => {:password => '@$%deploy@$'})
+    deployment = FactoryGirl.create(:deployment, :stage => @stage_with_role, :task => 'deploy:setup', :prompt_config => {:password => '@$%deploy@$'})
     logger = Webistrano::Logger.new( deployment )
     logger.level = Webistrano::Logger::TRACE
 

@@ -1,42 +1,68 @@
-<fieldset class="fieldset">
-  <legend>Introduction and help</legend>
-  <div style="float: right; padding: 10px 5px 5px 5px;">
-    <a href="https://github.com/peritor/webistrano" target="_blank"><%= image_tag('peritor_theme/webistrano_screenshot.png', :border => '0', :width => '200', :height => '151')%></a>
-  </div>
-  <div style="padding-top: 5px;">
-   Welcome to Webistrano. Your first steps should be to create a project with a stage.
-   This stage can then be deployed once you made at least one host known to Webistrano.
-   <br /><br />
-   For help and more documentation, see
-   <br />
-   <ul>
-     <li><a href="https://github.com/peritor/webistrano/wiki">Wiki</a></li>
-     <li><a href="https://github.com/peritor/webistrano/wiki/Configuration-Parameters">Configuration Parameters</a></li>
-     <li><a href="https://github.com/peritor/webistrano/wiki/FAQ---Frequently-Asked-Questions">FAQ</a></li>
-   </ul>
-   <br />
-   Webistrano is Open Source. Paid support is available by <a href="http://www.peritor.com">Peritor Consulting</a>.
-  </div>
-</fieldset>
-
-<br />
-
-<fieldset class="fieldset">
-  <legend>Recent deployments</legend>
-  <% if @deployments.empty? %>
-    <br/>
-      No recent deployments.
-    <br/>
-  <% else %>
-    <% @deployments.each do |deployment| %>
-      <%= render(:partial => 'deployments/list_item', :locals => {:deployment => deployment}) %>
-    <% end %>
-  <% end %>
-</fieldset>
-
-<br />
-
 <% content_for(:page_title) do %>
   <% @page_title = "Welcome to Webistrano" %>
-  <h2>Welcome to Webistrano</h2>
+  <h1 class="text-center">Welcome to Webistrano, <%= current_user.login %>  </h1>
 <% end %>
+
+<section class="text-center">
+  <h2>Recent deployments</h2>
+  <% if @deployments.empty? %>
+    <p>No recent deployments.</p>
+  <% else %>
+    <%= render partial: 'deployments/list', locals: { deployments: @deployments} %>
+  <% end %>
+</section>
+
+<section class="text-center">
+  <h2>Recent activities</h2>
+  <% if @activities.empty? %>
+    <p>No recent activities.</p>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Name</th>
+          <th>View</th>
+          <th>Tag</th>
+          <th>Author</th>
+          <th>Date</th>
+          <th>Changes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @activities.each do |activity| %>
+        <tr>
+          <td>
+            <%= activity.target_type %> 
+          </td>
+          <td><%= activity.target.name %></td>
+          <td>
+            <% if activity.target.deleted? %>
+              <%= image_tag('icons/png/red/32x32/close.png', :width => '25',:height => '25', :title => "Deleted!") %>
+            <% else %>
+              <%= link_to image_tag('icons/png/blue/interrogation.png', :width => '25',:height => '25', :title => "View"), any_path(activity.target) %>
+            <% end %>
+          </td>
+          <td><span style="color:<%= color(activity.tag) %>"><strong><%= activity.tag %></strong></span></td>
+          <td><strong><%= link_to activity.user.login, user_path(activity.user) %></strong></td>
+          <td><%= activity.created_at.to_s(:log) %></td>
+          <td>
+            <%- if activity.tag !~ /created\Z/ && activity.data['changes'] %>
+              <ul class="unstyled">
+                <%- activity.data['changes'].keys.each do |key| %>
+                  <li><%= key %>
+                    <ul>
+                      <li>Old: <%= truncate(activity.data['changes'][key][0], length: 20) || 'nil' %></li>
+                      <li>New: <%= truncate(activity.data['changes'][key][1], length: 20) || 'nil' %></li>
+                    </ul>
+                  </li>
+                <%- end %>
+              </ul>
+            <%- end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</section>

@@ -1,27 +1,30 @@
 <% flashed_errors(:recipe) %>
-<p>
-  <b>Name</b><br />
-  <%= text_field 'recipe', 'name', :style =>'width:300px; ' %>
-</p>
 
-<p>
-  <b>Description</b><br />
-  <%= text_area 'recipe', 'description', :style =>'width:663px; height: 100px;' %>
-</p>
-
-<p>
-  <b>Body</b><br />
-  <%= text_area 'recipe', 'body', :style =>'width:663px; height: 400px;' %>
-</p>
-
-<%= observe_field "recipe_body", :frequency => 2.5, :with => "Form.Element.serialize('recipe_body')", :url => preview_recipes_url%>
-<div id="preview_fieldset">
-  <fieldset class="fieldset" style="width:560px;">
-    <legend>Code-Preview</legend>
-    <div id="preview">
-      <%= render(:partial => 'preview', :locals => {:recipe => @recipe}) %>
-    </div>
-  </fieldset>
-<br/>
+<div class="control-group">
+  <%= form.label :name, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :name, class: "text_field input" %>
+  </div>
 </div>
 
+<div class="control-group">
+  <%= form.label :description, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_area :description, class: "text_field input", :style => "width:663px; height: 100px;"%>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= form.label :body, class: "control-label" %>
+  <div class="controls">
+    <%= form.text_area :body, :id => "recipe_body", class: "text_field input", :style => "width:663px; height: 100px;"%>
+  </div>
+</div>
+
+<%#= observe_field "recipe_body", :frequency => 2.5, :with => "Form.Element.serialize('recipe_body')", :url => preview_recipes_url %>
+<section>
+  <h2>Code Preview</h2>
+  <div id="preview" class="log_output ruby">
+    <%= highlight_syntax(@recipe.body || '') %>
+  </div>
+</section>

@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class ProjectConfigurationTest < ActiveSupport::TestCase
   
-  def test_templates
+  test "templates" do
     assert_not_nil ProjectConfiguration.templates
     assert_not_nil ProjectConfiguration.templates['rails']
     assert_not_nil ProjectConfiguration.templates['mongrel_rails']
@@ -10,7 +10,7 @@ class ProjectConfigurationTest < ActiveSupport::TestCase
     assert_not_nil ProjectConfiguration.templates['mod_rails']
   end
   
-  def test_uniqiness_of_name
+  test "uniqiness_of_name" do
     p = Project.new(:name => 'First')
     p.template = 'rails'
     p.save!
@@ -21,7 +21,7 @@ class ProjectConfigurationTest < ActiveSupport::TestCase
     # try to create such a param and fail
     config = p.configuration_parameters.build(:name => 'scm_username', :value => 'MAMA_MIA')
     assert !config.valid?
-    assert_not_nil config.errors.on('name')
+    assert_not_empty config.errors['name']
     
     # create a new parameter by hand
     config = p.configuration_parameters.build(:name => 'bla_bla', :value => 'blub_blub')
@@ -30,6 +30,6 @@ class ProjectConfigurationTest < ActiveSupport::TestCase
     # try to create 
     config = p.configuration_parameters.build(:name => 'bla_bla', :value => 'MAMA_MIA')
     assert !config.valid?
-    assert_not_nil config.errors.on('name')
+    assert_not_empty config.errors['name']
   end
 end

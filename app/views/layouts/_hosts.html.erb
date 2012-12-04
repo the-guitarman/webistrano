@@ -1,25 +1,19 @@
-<div id="hosts_open_content" style="<%=h show_if_opened(status) %>">
+<% if current_user %>
   <% if Host.count > 0 %>
-    <% for host in Host.find(:all, :order => "name ASC") %>
-      <a href="<%= host_path(host) %>" class="menu_link <%=h active_link_class(host) %>" title="<%=h host.name %>">
-  	    <div class="menu_link_title">
-  	      <%=h host.name %>
-  	    </div>
-      </a>
+    <% for host in Host.all(:order => "name ASC") %>
+      <div class="menu_link_title has_submenu">
+        <a href="<%= host_path(host) %>" class="menu_link <%=h active_link_class(host) %>">
+          <%=h host.name %>
+        </a>
+      </div>
     <% end %>
   <% else %>
-    <div class="menu_item">No host created yet</div>
-    <a href="<%= new_host_path %>" class="menu_link  menu_link_create">
-	    <div class="menu_link_title">
-	      New host
-	    </div>
-	  </a>
+    <li>
+      No host created yet<br/>
+    </li>
   <% end %>
-</div>
-<div id="hosts_closed_content" style="<%=h show_if_closed(status) %>">
-  <a href="javascript:open_menu_box('hosts')" class="menu_link  menu_link_create">
-	  <div class="menu_link_title">
-	    <%=h pluralize(Host.count, 'host')%>
-	  </div>
-  </a>
-</div>  
+  <% if current_user.admin? %>
+    <br/>
+    <%= link_to 'New host', new_host_path%>
+  <%end %>
+<% end %>

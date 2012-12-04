@@ -1,15 +1,15 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class ConfigurationParameterTest < ActiveSupport::TestCase
 
   def setup
-    @project = create_new_project
+    @project = FactoryGirl.create(:project)
     ConfigurationParameter.delete_all # clear default config from template
     @project.reload
-    @stage = create_new_stage(:project => @project)
+    @stage = FactoryGirl.create(:stage, :project => @project)
   end
 
-  def test_creation
+  test "creation" do
     old_count = ConfigurationParameter.count
     
     assert_nothing_raised{
@@ -35,7 +35,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     assert_equal old_count + 2, ConfigurationParameter.count
   end
   
-  def test_validation_on_unique_config_names
+  test "validation_on_unique_config_names" do
     # create a project config
     c = @project.configuration_parameters.build(
       :name => 'scm_username', 
@@ -53,7 +53,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     }
     
     # but creation of this value for another project is ok
-    @second_project = create_new_project
+    @second_project = FactoryGirl.create(:project)
     @second_project.configuration_parameters.delete_all
     assert_nothing_raised{
       c = @second_project.configuration_parameters.build(
@@ -73,7 +73,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     }
   end
   
-  def test_effective_configuration
+  test "effective_configuration" do
     # create a config entry for the project
     c = @project.configuration_parameters.build(
       :name => 'scm_username', 
@@ -89,7 +89,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     c.save!
     
     # create a new stage, that should have the original value
-    stage_2 = create_new_stage(:project => @project)
+    stage_2 = FactoryGirl.create(:stage, :project => @project)
     
     # now check the config values
     assert_equal 'deploy', @project.configuration_parameters.collect(&:value).first
@@ -104,7 +104,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     assert_equal 1, stage_2.effective_configuration.size
   end
   
-  def test_effective_configuration_with_prompt
+  test "effective_configuration_with_prompt" do
     # create a config entry for the project
     c = @project.configuration_parameters.build(
       :name => 'scm_username', 
@@ -121,7 +121,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     c.save!
     
     # create a new stage, that should have the original value
-    stage_2 = create_new_stage(:project => @project)
+    stage_2 = FactoryGirl.create(:stage, :project => @project)
     
     # now check the config values
     assert_equal 'deploy', @project.configuration_parameters.collect(&:value).first
@@ -135,7 +135,7 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     assert !stage_2.effective_configuration(:scm_username).prompt?
   end
   
-  def test_prompt
+  test "prompt" do
     
     # a param can not have a value and prompt
     assert_nothing_raised{
@@ -167,24 +167,24 @@ class ConfigurationParameterTest < ActiveSupport::TestCase
     
   end
   
-  def test_should_not_be_valid_when_name_starts_with_colon
+  test "should_not_be_valid_when_name_starts_with_colon" do
     c = @project.configuration_parameters.build(
       :name => ':password_2', 
       :value => 'abc',
       :prompt_on_deploy => 0
     )
     c.valid?
-    assert_equal "can't contain a colon", c.errors.on(:name)
+    assert_include "can't contain a colon", c.errors[:name]
   end
 
-  def test_should_not_be_valid_when_name_starts_with_spaces_and_colon
+  test "should_not_be_valid_when_name_starts_with_spaces_and_colon" do
     c = @project.configuration_parameters.build(
       :name => '   :password_2', 
       :value => 'abc',
       :prompt_on_deploy => 0
     )
     c.valid?
-    assert_equal "can't contain a colon", c.errors.on(:name)
+    assert_include "can't contain a colon", c.errors[:name]
   end
   
 end

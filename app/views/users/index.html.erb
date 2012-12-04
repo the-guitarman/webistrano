@@ -1,55 +1,63 @@
-<fieldset class="fieldset">
-  <legend> <%=h pluralize(User.count, 'User')%> listed</legend>
-
-<% if @users.empty? %>
-  <br/>
-    No users added yet.<br />
-  <br/>
-<% else %>
-  <table class="sortable">
-    <tr>
-      <th width="1%">Login</th>
-      <th width="96%">Email</th>
-      <th width="1%">Admin</th>
-      <th width="1%">Disabled</th>
-      <th width="1%">Created At</th>
-    </tr>
-    <% for user in @users %>
-      <tr class="<%= cycle :even, :odd, :name => 'users'  %>">
-        <td nowrap><%= link_to h(user.login), user_path(user) %></td>
-        <td><%=h user.email %></td>
-        <td><%=h user.admin? ? 'Admin' : '' %></td>
-        <td>
-          <% if user.disabled? %>
-            <span style="color:red">disabled</span>
-          <% end %>
-        </td>
-        <td><%=h user.created_at.to_s(:date_with_day) %></td>
-        <% if current_user.admin? || current_user == user -%>
-          <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <% end -%>
-        <% if current_user.admin? -%>
-          <td><%= link_to 'Delete', user_path(user), :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end -%>
-      </tr>
-    <% end %>
-  </table>
+<% content_for :page_title do %>
+  <% @page_title = "Users" %>
+  <h1 class="text-center">Users</h1>
 <% end %>
 
-<% if current_user.admin? %>
-  <br />
-  <%= link_to 'New user', new_user_path, :class => 'arrow_link' %>
-<% end %>
-
-</fieldset>
-
-<% content_for(:breadcrumb) do %>
-  <% breadcrumb_box do %>
+<% content_for :breadcrumb do %>
+  <%= breadcrumb_box do %>
     <%= link_to "Users", users_path %>
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Users" %>
-  <h2>Users</h2>
-<% end %>
+<section class="text-center">
+  <h2> <%= pluralize(User.count, 'User')%> listed</h2>
+
+  <% if @users.empty? %>
+    <p>No users added yet.</p>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Login</th>
+          <th>E-mail</th>
+          <th>Admin</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Profile</th>
+          <th>Edit</th>
+          <th>Disable/Enable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for user in @users %>
+          <tr>
+            <td><%= user.login %></td>
+            <td><%= user.email %></td>
+            <td><%= user.admin? ? 'Yes' : 'No' %></td>
+            <td>
+              <%= user.disabled? ? '<span style="color:red"><strong>Disabled</strong></span>'.html_safe : '<span style="color:green"><strong>Enabled</strong></span>'.html_safe %>
+            </td>
+            <td><%= user.created_at.to_s(:date_with_day) %></td>
+            <% if current_user.admin? || current_user == user %>
+              <td><%= link_to image_tag('icons/png/blue/32x32/user.png', :width => '25',:height => '25', :title => "View user's profile"), user_path(user) %></td>
+            <% end %>
+            <% if current_user.admin? || current_user == user %>
+              <td><%= link_to image_tag('icons/buttons/edit.png', :width => '25',:height => '25', :title => "Edit & change password"), edit_user_path(user) %></td>
+            <% end %>
+            <% if current_user.admin? && user != current_user %>
+              <% if user.disabled? %>
+                <td><%= link_to image_tag('icons/buttons/confirm.png', :width => '25',:height => '25', :title => "Enable"), enable_user_path(user), data: { confirm: 'Are you sure?' }, method: :post %></td>
+              <% else %>
+                <td><%= link_to image_tag('icons/png/red/16x16/denied.png', :width => '25',:height => '25', :title => "Disable"), user_path(user), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if current_user.admin? %>
+    <%= link_to 'New user', new_user_path, class: 'custom-button-new' %>
+  <% end %>
+</section>

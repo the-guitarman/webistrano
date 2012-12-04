@@ -1,4 +1,4 @@
-<% form_tag sessions_path do -%>
+<%= form_tag sessions_path do %>
 
   <fieldset class="fieldset">
     <legend>Webistrano login</legend>
@@ -10,14 +10,14 @@
       <%= text_field_tag 'login' %></p>
       <p><label for="password">Password</label><br/>
       <%= password_field_tag 'password' %></p>
-      <p><%= check_box_tag 'remember_me', '1', {}, :class => 'noframe' %>
+      <p><%= check_box_tag 'remember_me', '1', {}, class: 'noframe' %>
       <label for="remember_me">Remember me</label></p>
       <p>
       <%= submit_tag 'Log in' %>
       </p>
     </div>
   </fieldset>
-<% end -%>
+<% end %>
 
 <% content_for(:page_title) do %>
   <% @page_title = "Login" %>
