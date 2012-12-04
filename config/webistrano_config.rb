@@ -18,8 +18,8 @@ WebistranoConfig = {
     :address  => "localhost",
     :port  => 25, 
     #:domain  => "example.com",
-    #:user_name  => "username",
-    #:password  => "passwd",
+    #:user_name  => "root",
+    #:password  => "root",
     #:authentication  => :login
   },
   
