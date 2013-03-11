@@ -56,6 +56,10 @@
     <div class="span3">
       <h3>Deploying hosts</h3>
       <% if @stage.roles.count > 0 %>
+        <div class="checkbox-selectors">
+          <%= link_to('Select All', '#', {:class => 'checkbox-selector select-all'}) %>
+          <%= link_to('Deselect All', '#', {:class => 'checkbox-selector deselect-all'}) %>
+        </div>
         <% for host in @stage.hosts.sort_by{|x| x.name} %>
           <input type="checkbox" value="<%= host.id %>" name="deployment[host_ids][]" id="deployment_host_ids_<%= host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? '' : 'checked="checked"' rescue '')%>/>
           <label for="deployment_host_ids_<%= host.id %>"><%= host.name %></label>

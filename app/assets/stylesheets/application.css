@@ -52,3 +52,12 @@ a.bold {
   margin-left:auto;
   margin-right:auto;
 }
+
+
+
+
+
+input[type="radio"], input[type="checkbox"] { float:left; margin:3px 5px 3px -1px !important; }
+
+.checkbox-selectors { clear:both; }
+.checkbox-selector { display:block; float:left; line-height:30px; margin-right:40px; }
