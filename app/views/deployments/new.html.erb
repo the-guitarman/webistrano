@@ -46,7 +46,7 @@
           <div class="control-group">
             <label for="deployment_prompt_config_<%= conf.name %>">Config: <%= conf.name %></label>
             <div class="controls">
-              <<i></i>nput type="<%= input_type(conf.name) %>" id="deployment_prompt_config_<%= conf.name %>" name="deployment[prompt_config][<%= conf.name %>]" value="<%= @deployment.prompt_config[conf.name.to_sym]%>" />
+              <input type="<%= input_type(conf.name) %>" id="deployment_prompt_config_<%= conf.name %>" name="deployment[prompt_config][<%= conf.name %>]" value="<%= @deployment.prompt_config[conf.name.to_sym]%>" />
             </div>
           </div>
         <% end %>

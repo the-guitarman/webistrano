@@ -114,7 +114,7 @@ class Role < ActiveRecord::Base
   end
   
   def status_in_html
-    "<span class='role_status_#{self.status.gsub(/ /, '_')}'>#{self.status}</span>"
+    "<span class='role_status_#{self.status.gsub(/ /, '_')}'>#{self.status}</span>".html_safe
   end
   
   def role_attribute_hash

@@ -1,7 +1,7 @@
 module DeploymentsHelper
   
   def input_type(name)
-    if name.match(/password/)
+    if name.match(/password|passphrase/)
       "password"
     else
       'text'

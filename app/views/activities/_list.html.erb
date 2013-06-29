@@ -19,8 +19,8 @@
                 <%- activity.data['changes'].keys.each do |key| %>
                   <li><%= key %>
                     <ul>
-                      <li>Old: <%= activity.data['changes'][key][0] || 'nil' %></li>
-                      <li>New: <%= activity.data['changes'][key][1] || 'nil' %></li>
+                      <li>Old: <%= truncate(activity.data['changes'][key][0].to_s, length: 20) || 'nil' %></li>
+                      <li>New: <%= truncate(activity.data['changes'][key][1].to_s, length: 20) || 'nil' %></li>
                     </ul>
                   </li>
                 <%- end %>
