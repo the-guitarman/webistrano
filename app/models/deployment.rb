@@ -98,7 +98,7 @@ class Deployment < ActiveRecord::Base
   end
 
   def status_in_html
-    "<span class='deployment_status_#{self.status.gsub(/ /, '_')}'>#{self.status}</span>"
+    "<span class='deployment_status_#{self.status.gsub(/ /, '_')}'>#{self.status}</span>".html_safe
   end
 
   def complete_with_error!
@@ -122,8 +122,13 @@ class Deployment < ActiveRecord::Base
     unless Rails.env.test?
       Rails.logger.info "Calling other ruby process in the background in order to deploy deployment #{self.id} (stage #{self.stage.id}/#{self.stage.name})"
 
+      command = "deployment = Deployment.find(#{self.id}); "
+      prompt_config = (self.prompt_config || {}).map{|k,v| "#{k.to_s.to_sym.inspect} => #{v.inspect}"}.join(', ')
+      command += "deployment.prompt_config = {#{prompt_config}}; "
+      command += "Webistrano::Deployer.new(deployment).invoke_task!"
+      
       system <<"EOS"
-cd #{Rails.root} && rails runner -e #{Rails.env} 'deployment = Deployment.find(#{self.id}); deployment.prompt_config = #{self.prompt_config.inspect.gsub('"', '\"')} ; Webistrano::Deployer.new(deployment).invoke_task! ' >> #{Rails.root}/log/#{Rails.env}.log 2>&1 &
+cd #{Rails.root} && rails runner -e #{Rails.env} '#{command}' >> #{Rails.root}/log/#{Rails.env}.log 2>&1 &
 EOS
     end
   end
