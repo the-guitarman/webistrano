@@ -21,7 +21,7 @@ class ConfigurationParameter < ActiveRecord::Base
 
   def prompt_status_in_html
     if self.prompt?
-      "<span class='configuration_prompt'>prompt</span>"
+      "<span class='configuration_prompt'>prompt</span>".html_safe
     else
       ''
     end
