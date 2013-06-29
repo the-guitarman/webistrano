@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem "whenever"
 gem "delayed_job"
 gem "daemons"
-gem 'bundler', "1.2.1"
+gem 'bundler', "1.3.5"
 gem "mysql2", "0.3.11"
 gem 'rails', '3.2.8'
 gem "erubis"
@@ -11,6 +11,7 @@ gem "rake", "0.9.2.2"
 gem "rdoc"
 gem "syntax",     '1.0.0'
 gem "capistrano", '~> 2.13'
+gem 'rvm-capistrano'
 gem "open4",      '0.9.3'
 gem "version_fu", :git =>  'git://github.com/jmckible/version_fu.git'
 gem "exception_notification"
@@ -60,6 +61,10 @@ group :assets do
   gem 'compass-rails'
   gem 'sass-rails'
   gem 'coffee-rails'
-
+  
+  gem 'therubyracer'
+  gem 'less'
+  gem 'less-rails'
+  gem 'less-rails-fontawesome'
   gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 end
